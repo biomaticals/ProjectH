@@ -45,9 +45,11 @@
 SourceArt/**/*.png
 SourceArt/**/*.tga
 
-# Binary Files
-Binaries/*
-Plugins/*/Binaries/*
+# Binaries Files / Don't ignore dll files
+!Binaries/*/*.target
+!Binaries/*/*.modules
+!Binaries/*/*.dll
+!Binaries/*/*.pdb
 
 # Builds
 Build/*
