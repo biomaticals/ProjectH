@@ -13,16 +13,20 @@ class PROJECTH_API UHCharacterCustomizingComponent : public UActorComponent
 	GENERATED_BODY()
 
 public:	
-	// Sets default values for this component's properties
 	UHCharacterCustomizingComponent();
 
 protected:
-	// Called when the game starts
 	virtual void BeginPlay() override;
 
-public:	
-	// Called every frame
+public:
+	virtual void InitializeComponent() override;
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
+	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
+protected:
+	UPROPERTY(Replicated)
+	bool bIsLoading;
 
-		
+	UPROPERTY(Replicated)
+	bool bLoaded;
+
 };
