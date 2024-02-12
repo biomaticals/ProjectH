@@ -6,8 +6,11 @@
 #include "Components/ActorComponent.h"
 #include "HCharacterCustomizingComponent.generated.h"
 
+class UPrimaryAssetLabel;
 
-UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
+DECLARE_EVENT(UHCharacterCustomizingComponent, FOnStartLoadAsset);
+
+UCLASS( Blueprintable, ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class PROJECTH_API UHCharacterCustomizingComponent : public UActorComponent
 {
 	GENERATED_BODY()
@@ -22,11 +25,25 @@ public:
 	virtual void InitializeComponent() override;
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
+
+
+#pragma region Load
+public:
+	UFUNCTION(Category = Load)
+	void LoadAsset();
+
 protected:
-	UPROPERTY(Replicated)
+	UPROPERTY(BlueprintReadWrite, EditDefaultsOnly, Category = Load)
+	TArray<UPrimaryAssetLabel*> AssetPackagesToLoad;
+
+protected:
+	UPROPERTY(replicated)
 	bool bIsLoading;
 
-	UPROPERTY(Replicated)
+	UPROPERTY(replicated)
 	bool bLoaded;
 
+private:
+	FOnStartLoadAsset OnStartLoadAsset;
+#pragma endregion
 };

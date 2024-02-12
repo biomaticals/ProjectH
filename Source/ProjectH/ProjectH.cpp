@@ -5,3 +5,5 @@
 
 IMPLEMENT_PRIMARY_GAME_MODULE( FDefaultGameModuleImpl, ProjectH, "ProjectH" );
  
+DEFINE_LOG_CATEGORY(HLog);
+DEFINE_LOG_CATEGORY(HCharacterLog);
