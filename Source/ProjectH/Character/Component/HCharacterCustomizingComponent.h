@@ -26,6 +26,24 @@ public:
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 
+public:
+	UPROPERTY(BlueprintReadOnly, EditAnywhere)
+	UDataTable* AnatomyDataTable;
+
+	UPROPERTY(BlueprintReadOnly, EditAnywhere)
+	UDataTable* PresetDataTable;
+
+	UPROPERTY(BlueprintReadOnly, EditAnywhere)
+	bool Replicate;
+
+	UPROPERTY(BlueprintReadOnly, EditAnywhere)
+	bool MulticastProfileApplication;
+
+	UPROPERTY(BlueprintReadOnly, EditAnywhere)
+	bool ReplicateIndividualChanges;
+
+	UPROPERTY(BlueprintReadOnly, EditAnywhere)
+	bool DebugReplication;
 
 #pragma region Load
 public:
