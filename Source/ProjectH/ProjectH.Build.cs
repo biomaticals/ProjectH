@@ -13,7 +13,5 @@ public class ProjectH : ModuleRules
 
 		PublicIncludePaths.Add(ModuleDirectory);
 		PrivateIncludePaths.Add(ModuleDirectory);
-
-		PrivateIncludePaths.Add("ProjectH.h");
 	}
 }
