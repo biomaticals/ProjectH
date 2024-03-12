@@ -4,19 +4,19 @@
 
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
-#include "HCharacterCustomizingComponent.generated.h"
+#include "HCharacterCustomizationComponent.generated.h"
 
 class UPrimaryAssetLabel;
 
-DECLARE_EVENT(UHCharacterCustomizingComponent, FOnStartLoadAsset);
+DECLARE_EVENT(UHCharacterCustomizationComponent, FOnStartLoadAsset);
 
 UCLASS( Blueprintable, ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
-class PROJECTH_API UHCharacterCustomizingComponent : public UActorComponent
+class PROJECTH_API UHCharacterCustomizationComponent : public UActorComponent
 {
 	GENERATED_BODY()
 
 public:	
-	UHCharacterCustomizingComponent();
+	UHCharacterCustomizationComponent();
 
 protected:
 	virtual void BeginPlay() override;

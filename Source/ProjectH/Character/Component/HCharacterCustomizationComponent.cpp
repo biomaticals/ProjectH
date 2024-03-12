@@ -1,14 +1,14 @@
 // Copy Rigts are in Team UniqueTurtle. 
 
 
-#include "Character/Component/HCharacterCustomizingComponent.h"
+#include "Character/Component/HCharacterCustomizationComponent.h"
 #include "Engine/AssetManager.h"
 #include "Engine/PrimaryAssetLabel.h"
 #include "Kismet/KismetSystemLibrary.h"
 #include "ProjectH.h"
 #include "Net/UnrealNetwork.h"
 
-UHCharacterCustomizingComponent::UHCharacterCustomizingComponent()
+UHCharacterCustomizationComponent::UHCharacterCustomizationComponent()
 {
 	PrimaryComponentTick.bCanEverTick = true;
 	PrimaryComponentTick.bStartWithTickEnabled = false;
@@ -17,14 +17,14 @@ UHCharacterCustomizingComponent::UHCharacterCustomizingComponent()
 	bLoaded = false;
 }
 
-void UHCharacterCustomizingComponent::BeginPlay()
+void UHCharacterCustomizationComponent::BeginPlay()
 {
 	Super::BeginPlay();
 
 
 }
 
-void UHCharacterCustomizingComponent::InitializeComponent()
+void UHCharacterCustomizationComponent::InitializeComponent()
 {
 	Super::InitializeComponent();
 
@@ -40,21 +40,21 @@ void UHCharacterCustomizingComponent::InitializeComponent()
 
 }
 
-void UHCharacterCustomizingComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
+void UHCharacterCustomizationComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
 }
 
-void UHCharacterCustomizingComponent::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
+void UHCharacterCustomizationComponent::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
 {
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 
-	DOREPLIFETIME(UHCharacterCustomizingComponent, bIsLoading);
-	DOREPLIFETIME(UHCharacterCustomizingComponent, bLoaded);
+	DOREPLIFETIME(UHCharacterCustomizationComponent, bIsLoading);
+	DOREPLIFETIME(UHCharacterCustomizationComponent, bLoaded);
 }
 
-void UHCharacterCustomizingComponent::LoadAsset()
+void UHCharacterCustomizationComponent::LoadAsset()
 {
 	bIsLoading = true;
 
