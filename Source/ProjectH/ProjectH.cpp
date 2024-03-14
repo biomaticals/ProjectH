@@ -2,6 +2,7 @@
 
 #include "ProjectH.h"
 #include "Modules/ModuleManager.h"
+#include "Common/CommonStruct.h"
 
 IMPLEMENT_PRIMARY_GAME_MODULE( FDefaultGameModuleImpl, ProjectH, "ProjectH" );
  

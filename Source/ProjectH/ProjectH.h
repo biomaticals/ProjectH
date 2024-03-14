@@ -1,4 +1,4 @@
-// Copyright Epic Games, Inc. All Rights Reserved.
+// Copy Rigts are in Team UniqueTurtle. 
 
 #pragma once
 
