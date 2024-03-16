@@ -8,6 +8,12 @@
 
 #pragma region Character Customizing
 USTRUCT(BlueprintType)
+struct FApparelProfile
+{
+	GENERATED_USTRUCT_BODY()
+};
+
+USTRUCT(BlueprintType)
 struct FCustomizationProfile
 {
 	GENERATED_USTRUCT_BODY()

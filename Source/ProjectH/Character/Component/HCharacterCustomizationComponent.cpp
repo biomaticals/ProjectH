@@ -13,6 +13,8 @@ UHCharacterCustomizationComponent::UHCharacterCustomizationComponent()
 	PrimaryComponentTick.bCanEverTick = true;
 	PrimaryComponentTick.bStartWithTickEnabled = false;
 
+	
+	
 	bIsLoading = false;
 	bLoaded = false;
 }
@@ -28,16 +30,14 @@ void UHCharacterCustomizationComponent::InitializeComponent()
 {
 	Super::InitializeComponent();
 
+	SetIsReplicated(true);
+	
 	check(!bLoaded);
 	check(!bIsLoading);
-
-	SetIsReplicated(true);
 
 	bIsLoading = true;
 
 	LoadAsset();
-
-
 }
 
 void UHCharacterCustomizationComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)

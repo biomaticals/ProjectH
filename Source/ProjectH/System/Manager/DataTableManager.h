@@ -14,4 +14,10 @@ class PROJECTH_API UDataTableManager : public UObject
 {
 	GENERATED_BODY()
 	
+public:
+	void ValidateDataTables();
+
+public:
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "CharacterCustomization")
+	UDataTable* CharacterCustomizationDataTable;
 };

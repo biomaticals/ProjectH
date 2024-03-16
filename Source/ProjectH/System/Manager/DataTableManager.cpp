@@ -2,3 +2,8 @@
 
 
 #include "System/Manager/DataTableManager.h"
+
+void UDataTableManager::ValidateDataTables()
+{
+	ensure(CharacterCustomizationDataTable);
+}

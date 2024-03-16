@@ -9,6 +9,7 @@
 class UPrimaryAssetLabel;
 
 DECLARE_EVENT(UHCharacterCustomizationComponent, FOnStartLoadAsset);
+//DECLARE_EVENT_ThreeParams(UHCharacterCustomizationComponent, FOnBeforeUpdateApparel, UHCharacterCustomizationComponent, FApparelProfile, TArray<USkeletalMeshComponent>);
 
 UCLASS( Blueprintable, ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class PROJECTH_API UHCharacterCustomizationComponent : public UActorComponent
