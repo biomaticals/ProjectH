@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Engine/DataTable.h"
 #include "CommonStruct.generated.h"
 
 #pragma region Character Customizing
@@ -111,7 +112,7 @@ struct FAnatomyBodyProfile
 };
 
 USTRUCT(BlueprintType)
-struct FAnatomyProfile
+struct FAnatomyProfile : public FTableRowBase
 {
 	GENERATED_USTRUCT_BODY()
 
