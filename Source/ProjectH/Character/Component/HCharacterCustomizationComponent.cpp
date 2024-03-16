@@ -7,6 +7,7 @@
 #include "Kismet/KismetSystemLibrary.h"
 #include "ProjectH.h"
 #include "Net/UnrealNetwork.h"
+#include "Common/CommonStruct.h"
 
 UHCharacterCustomizationComponent::UHCharacterCustomizationComponent()
 {
@@ -32,6 +33,22 @@ void UHCharacterCustomizationComponent::InitializeComponent()
 
 	SetIsReplicated(true);
 	
+
+	// Remove Event
+	if (OnStartLoadAsset.IsBoundToObject(this))
+	{
+		OnStartLoadAsset.Remove(OnStartLoadAssetHandle);
+	}
+
+	if (OnBeforeUpdateApparel.IsBoundToObject(this))
+	{
+		OnBeforeUpdateApparel.Remove(OnBeforeUpdateApparelHandle);
+	}
+
+	// Add Event
+	//OnStartLoadAsset.AddUObject(this, &UMassNavigationTestingComponent::OnZoneGraphDataBuildDone
+	//OnBeforeUpdateApparel.AddUObject
+
 	check(!bLoaded);
 	check(!bIsLoading);
 

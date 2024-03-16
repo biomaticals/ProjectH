@@ -7,9 +7,10 @@
 #include "HCharacterCustomizationComponent.generated.h"
 
 class UPrimaryAssetLabel;
+struct FApparelProfile;
 
 DECLARE_EVENT(UHCharacterCustomizationComponent, FOnStartLoadAsset);
-//DECLARE_EVENT_ThreeParams(UHCharacterCustomizationComponent, FOnBeforeUpdateApparel, UHCharacterCustomizationComponent, FApparelProfile, TArray<USkeletalMeshComponent>);
+DECLARE_EVENT_ThreeParams(UHCharacterCustomizationComponent, FOnBeforeUpdateApparel, UHCharacterCustomizationComponent, FApparelProfile, TArray<USkeletalMeshComponent>);
 
 UCLASS( Blueprintable, ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class PROJECTH_API UHCharacterCustomizationComponent : public UActorComponent
@@ -62,7 +63,15 @@ protected:
 	UPROPERTY(replicated)
 	bool bLoaded;
 
-private:
+public:
 	FOnStartLoadAsset OnStartLoadAsset;
+	FOnBeforeUpdateApparel OnBeforeUpdateApparel;
+
+private:
+	FDelegateHandle OnStartLoadAssetHandle;
+	FDelegateHandle OnBeforeUpdateApparelHandle;	
+	
+
+	
 #pragma endregion
 };
