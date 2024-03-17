@@ -6,7 +6,37 @@
 #include "Engine/DataTable.h"
 #include "CommonStruct.generated.h"
 
+class UCCDA_Apparel;
+
 #pragma region Character Customizing
+USTRUCT(BlueprintType)
+struct FCCDA_ApparelProfile
+{
+	GENERATED_USTRUCT_BODY()
+
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+	UCCDA_Apparel* DataAsset;
+
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+	int MaterialVariantIndex;
+};
+
+USTRUCT(BlueprintType)
+struct FMaterialVariants
+{
+	GENERATED_USTRUCT_BODY()
+
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+	FText DisplayName;
+
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+	FLinearColor Thumbnail;
+
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+	TArray<UMaterialInstance*> Materials;
+};
+
+
 USTRUCT(BlueprintType)
 struct FApparelProfile
 {

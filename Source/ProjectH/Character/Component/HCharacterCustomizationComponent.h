@@ -6,11 +6,16 @@
 #include "Components/ActorComponent.h"
 #include "HCharacterCustomizationComponent.generated.h"
 
-class UPrimaryAssetLabel;
+
 struct FApparelProfile;
+struct FCCDA_ApparelProfile;
+
+class UPrimaryAssetLabel;
+class UCCDA_Apparel;
 
 DECLARE_EVENT(UHCharacterCustomizationComponent, FOnStartLoadAsset);
-DECLARE_EVENT_ThreeParams(UHCharacterCustomizationComponent, FOnBeforeUpdateApparel, UHCharacterCustomizationComponent, FApparelProfile, TArray<USkeletalMeshComponent>);
+DECLARE_EVENT_ThreeParams(UHCharacterCustomizationComponent, FOnPreUpdateApparel, UHCharacterCustomizationComponent*, FApparelProfile, TArray<USkeletalMeshComponent*>);
+DECLARE_EVENT_FiveParams(UHCharacterCustomizationComponent, FOnPostUpdateApparel, UHCharacterCustomizationComponent*, FApparelProfile, TArray<FCCDA_ApparelProfile>, TArray<USkeletalMeshComponent*>, TArray<FCCDA_ApparelProfile>);
 
 UCLASS( Blueprintable, ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class PROJECTH_API UHCharacterCustomizationComponent : public UActorComponent
@@ -65,13 +70,20 @@ protected:
 
 public:
 	FOnStartLoadAsset OnStartLoadAsset;
-	FOnBeforeUpdateApparel OnBeforeUpdateApparel;
+	FOnPreUpdateApparel OnPreUpdateApparel;
+	FOnPostUpdateApparel OnpostUpdateApparel;
 
 private:
 	FDelegateHandle OnStartLoadAssetHandle;
 	FDelegateHandle OnBeforeUpdateApparelHandle;	
 	
-
-	
 #pragma endregion
+
+public:
+	UFUNCTION()
+	void ApplyApparelSpecificSettings(UHCharacterCustomizationComponent* CharacterCustomizationComponent, FApparelProfile ApparelProfile, TArray<FCCDA_ApparelProfile> AddingCCDA_Apparels, TArray<USkeletalMeshComponent*> AddingSkeletalMeshComponents, TArray<FCCDA_ApparelProfile> SkippedCCDA_ApparelProfiles);
+	
+	UFUNCTION()
+	void ClearApparelSpecificSettings(UHCharacterCustomizationComponent* CharacterCustomizationComponent, FApparelProfile ApparelProfile, TArray<USkeletalMeshComponent*> RemoveingSkeletalMeshComponents);
+
 };

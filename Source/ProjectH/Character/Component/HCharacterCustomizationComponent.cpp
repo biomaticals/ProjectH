@@ -2,12 +2,12 @@
 
 
 #include "Character/Component/HCharacterCustomizationComponent.h"
-#include "Engine/AssetManager.h"
-#include "Engine/PrimaryAssetLabel.h"
-#include "Kismet/KismetSystemLibrary.h"
-#include "ProjectH.h"
-#include "Net/UnrealNetwork.h"
 #include "Common/CommonStruct.h"
+#include "DataAsset/CharacterCustomizationDataAsset.h"
+#include "Engine/AssetManager.h"
+#include "Kismet/KismetSystemLibrary.h"
+#include "Net/UnrealNetwork.h"
+#include "ProjectH.h"
 
 UHCharacterCustomizationComponent::UHCharacterCustomizationComponent()
 {
@@ -39,15 +39,15 @@ void UHCharacterCustomizationComponent::InitializeComponent()
 	{
 		OnStartLoadAsset.Remove(OnStartLoadAssetHandle);
 	}
-
-	if (OnBeforeUpdateApparel.IsBoundToObject(this))
+	
+	if (OnPreUpdateApparel.IsBoundToObject(this))
 	{
-		OnBeforeUpdateApparel.Remove(OnBeforeUpdateApparelHandle);
+		OnPreUpdateApparel.Remove(OnBeforeUpdateApparelHandle);
 	}
 
 	// Add Event
-	//OnStartLoadAsset.AddUObject(this, &UMassNavigationTestingComponent::OnZoneGraphDataBuildDone
-	//OnBeforeUpdateApparel.AddUObject
+	OnPreUpdateApparel.AddUObject(this, &UHCharacterCustomizationComponent::ClearApparelSpecificSettings);
+	OnpostUpdateApparel.AddUObject(this, &UHCharacterCustomizationComponent::ApplyApparelSpecificSettings);
 
 	check(!bLoaded);
 	check(!bIsLoading);
@@ -91,4 +91,14 @@ void UHCharacterCustomizationComponent::LoadAsset()
 	
 	bLoaded = true;
 	bIsLoading = false;
+}
+
+void UHCharacterCustomizationComponent::ApplyApparelSpecificSettings(UHCharacterCustomizationComponent* CharacterCustomizationComponent, FApparelProfile ApparelProfile, TArray<FCCDA_ApparelProfile> AddingCCDA_Apparels, TArray<USkeletalMeshComponent*> AddingSkeletalMeshComponents, TArray<FCCDA_ApparelProfile> SkippedCCDA_ApparelProfiles)
+{
+
+}
+
+void UHCharacterCustomizationComponent::ClearApparelSpecificSettings(UHCharacterCustomizationComponent* CharacterCustomizationComponent, FApparelProfile ApparelProfile, TArray<USkeletalMeshComponent*> RemoveingSkeletalMeshComponents)
+{
+
 }
