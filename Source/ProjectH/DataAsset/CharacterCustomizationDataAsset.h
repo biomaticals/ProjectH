@@ -22,7 +22,7 @@ protected:
 	UPROPERTY(BlueprintReadWrite, EditDefaultsOnly)
 	TArray<EAnatomy> Anatomies;
 
-	UPROPERTY(BlueprintReadWrite, EditDefaultsOnly)
+	UPROPERTY(BlueprintReadWrite, EditDefaultsOnly, Category = "Mesh")
 	TArray<FMaterialVariants> MaterialVariants;
 };
 
@@ -35,10 +35,10 @@ class PROJECTH_API UCCDA_SkeletalMesh : public UCharacterCustomizationDataAsset
 	GENERATED_BODY()
 	
 protected:
-	UPROPERTY(BlueprintReadWrite, EditDefaultsOnly)
+	UPROPERTY(BlueprintReadWrite, EditDefaultsOnly, Category = "Mesh")
 	USkeletalMeshComponent* SkeletalMesh;
 
-	UPROPERTY(BlueprintReadWrite, EditDefaultsOnly)
+	UPROPERTY(BlueprintReadWrite, EditDefaultsOnly, Category = "Mesh")
 	TMap<FName, float> AdditionalMorphTargets;
 };
 
@@ -51,9 +51,28 @@ class PROJECTH_API UCCDA_Apparel: public UCCDA_SkeletalMesh
 	GENERATED_BODY()
 	
 protected:
-	UPROPERTY(BlueprintReadWrite, EditDefaultsOnly)
+	UPROPERTY(BlueprintReadWrite, EditDefaultsOnly, Category = "Mesh")
 	UTexture2D* BasebodyMast;
 
-	UPROPERTY(BlueprintReadWrite, EditDefaultsOnly)
+	UPROPERTY(BlueprintReadWrite, EditDefaultsOnly, Category = "Mesh")
 	bool UseAlternativeSkinTexture;
+};
+
+/**
+ * 
+ */
+UCLASS(Blueprintable, BlueprintType)
+class PROJECTH_API UCCDA_Apparel_Feet : public UCCDA_Apparel
+{
+	GENERATED_BODY()
+	
+protected:
+	UPROPERTY(BlueprintReadWrite, EditDefaultsOnly)
+	float RootOffset;
+
+	UPROPERTY(BlueprintReadWrite, EditDefaultsOnly)
+	float  FootRoation;
+
+	UPROPERTY(BlueprintReadWrite, EditDefaultsOnly)
+	float  BallRotation;
 };

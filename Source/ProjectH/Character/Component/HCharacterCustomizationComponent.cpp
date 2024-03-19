@@ -95,7 +95,10 @@ void UHCharacterCustomizationComponent::LoadAsset()
 
 void UHCharacterCustomizationComponent::ApplyApparelSpecificSettings(UHCharacterCustomizationComponent* CharacterCustomizationComponent, FApparelProfile ApparelProfile, TArray<FCCDA_ApparelProfile> AddingCCDA_Apparels, TArray<USkeletalMeshComponent*> AddingSkeletalMeshComponents, TArray<FCCDA_ApparelProfile> SkippedCCDA_ApparelProfiles)
 {
-
+	for (FCCDA_ApparelProfile AddingCCDA_Apparel : AddingCCDA_Apparels)
+	{
+		AddingCCDA_Apparel.DataAsset->IsA(UCCDA_Apparel_Feet)
+	}
 }
 
 void UHCharacterCustomizationComponent::ClearApparelSpecificSettings(UHCharacterCustomizationComponent* CharacterCustomizationComponent, FApparelProfile ApparelProfile, TArray<USkeletalMeshComponent*> RemoveingSkeletalMeshComponents)

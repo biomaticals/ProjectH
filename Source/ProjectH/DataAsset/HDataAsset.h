@@ -21,6 +21,6 @@ protected:
 	UPROPERTY(BlueprintReadWrite, EditDefaultsOnly)
 	UTexture2D* Thumnail;
 
-	UPROPERTY(BlueprintReadWrite, EditDefaultsOnly)
+	UPROPERTY(BlueprintReadWrite, EditDefaultsOnly, Category = "Debug")
 	bool bDebug;
 };
