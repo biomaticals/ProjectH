@@ -6,7 +6,6 @@
 #include "Components/ActorComponent.h"
 #include "HCharacterCustomizationComponent.generated.h"
 
-
 struct FApparelProfile;
 struct FCCDA_ApparelProfile;
 
@@ -40,17 +39,24 @@ public:
 	UPROPERTY(BlueprintReadOnly, EditAnywhere)
 	UDataTable* PresetDataTable;
 
+#pragma region Repliacte
+protected:
+	bool CheckReplicateIndividualChagnes() const;
+	bool CheckMulticastIndividualChanges() const;
+
+protected:
 	UPROPERTY(BlueprintReadOnly, EditAnywhere)
-	bool Replicate;
+	bool bMulticastProfileApplication;
 
 	UPROPERTY(BlueprintReadOnly, EditAnywhere)
-	bool MulticastProfileApplication;
+	bool bReplicateIndividualChanges;
 
 	UPROPERTY(BlueprintReadOnly, EditAnywhere)
-	bool ReplicateIndividualChanges;
+	bool bMulticastIndividualChanges;
 
 	UPROPERTY(BlueprintReadOnly, EditAnywhere)
-	bool DebugReplication;
+	bool bDebugReplication;
+#pragma endregion/
 
 #pragma region Load
 public:
@@ -85,5 +91,22 @@ public:
 	
 	UFUNCTION()
 	void ClearApparelSpecificSettings(UHCharacterCustomizationComponent* CharacterCustomizationComponent, FApparelProfile ApparelProfile, TArray<USkeletalMeshComponent*> RemoveingSkeletalMeshComponents);
+
+
+#pragma region Anim Instance Alpha
+public:
+	UFUNCTION(BlueprintCallable)
+	void SetBasebodyAnimInstanceAlpha_Replicable(FName Name, float Value);
+
+protected:
+	UFUNCTION(Reliable, Server)
+	void SetBasebodyAnimInstanceAlpha_Server(FName Name, float Value);
+
+	UFUNCTION(Reliable, NetMulticast)
+	void SetBasebodyAnimInstanceAlpha_Multicast(FName Name, float Value);
+
+	UFUNCTION()
+	void SetBasebodyAnimInstanceAlpha(FName Name, float Value);
+#pragma endregion
 
 };

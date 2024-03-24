@@ -66,6 +66,18 @@ class PROJECTH_API UCCDA_Apparel_Feet : public UCCDA_Apparel
 {
 	GENERATED_BODY()
 	
+public:
+	UFUNCTION(BlueprintCallable, BlueprintPure)
+	float GetRootOffset() {return RootOffset;}
+
+	UFUNCTION(BlueprintCallable, BlueprintPure)
+	float GetFootRotation() {return FootRoation;}
+
+	UFUNCTION(BlueprintCallable, BlueprintPure)
+	float GetBallRotation() {return BallRotation;}
+
+
+
 protected:
 	UPROPERTY(BlueprintReadWrite, EditDefaultsOnly)
 	float RootOffset;

@@ -13,11 +13,19 @@ UHCharacterCustomizationComponent::UHCharacterCustomizationComponent()
 {
 	PrimaryComponentTick.bCanEverTick = true;
 	PrimaryComponentTick.bStartWithTickEnabled = false;
+	bWantsInitializeComponent = true;
+	
+	#pragma region Replicate
+	bMulticastProfileApplication = false;
+	bReplicateIndividualChanges = true;
+	bMulticastIndividualChanges = true;
+	bDebugReplication = false;
+	#pragma endregion
 
-	
-	
+	#pragma region Load
 	bIsLoading = false;
 	bLoaded = false;
+	#pragma endregion
 }
 
 void UHCharacterCustomizationComponent::BeginPlay()
@@ -33,7 +41,6 @@ void UHCharacterCustomizationComponent::InitializeComponent()
 
 	SetIsReplicated(true);
 	
-
 	// Remove Event
 	if (OnStartLoadAsset.IsBoundToObject(this))
 	{
@@ -71,6 +78,16 @@ void UHCharacterCustomizationComponent::GetLifetimeReplicatedProps(TArray<FLifet
 	DOREPLIFETIME(UHCharacterCustomizationComponent, bLoaded);
 }
 
+bool UHCharacterCustomizationComponent::CheckReplicateIndividualChagnes() const
+{
+	return bReplicateIndividualChanges && CHECK_REPLIACTE_COMPONENT();
+}
+
+bool UHCharacterCustomizationComponent::CheckMulticastIndividualChanges() const
+{
+	return bMulticastIndividualChanges && CHECK_REPLIACTE_COMPONENT();
+}
+
 void UHCharacterCustomizationComponent::LoadAsset()
 {
 	bIsLoading = true;
@@ -82,7 +99,7 @@ void UHCharacterCustomizationComponent::LoadAsset()
 
 	if (AssetPackagesToLoad.IsEmpty())
 	{
-		UT_LOG(HCharacterLog, Fatal, TEXT("No AssetPackeToLoad : %s"));
+		UT_LOG(HCharacterLog, Warning, TEXT("No AssetPackesToLoad"));
 		return;
 	}
 	
@@ -97,11 +114,48 @@ void UHCharacterCustomizationComponent::ApplyApparelSpecificSettings(UHCharacter
 {
 	for (FCCDA_ApparelProfile AddingCCDA_Apparel : AddingCCDA_Apparels)
 	{
-		AddingCCDA_Apparel.DataAsset->IsA(UCCDA_Apparel_Feet)
+		if (AddingCCDA_Apparel.DataAsset->IsA(UCCDA_Apparel_Feet::StaticClass()))
+		{
+			UCCDA_Apparel_Feet* CCDA_Apparel_Feet = Cast<UCCDA_Apparel_Feet>(AddingCCDA_Apparel.DataAsset);
+			CCDA_Apparel_Feet->GetRootOffset();
+		}
 	}
 }
 
 void UHCharacterCustomizationComponent::ClearApparelSpecificSettings(UHCharacterCustomizationComponent* CharacterCustomizationComponent, FApparelProfile ApparelProfile, TArray<USkeletalMeshComponent*> RemoveingSkeletalMeshComponents)
+{
+
+}
+
+void UHCharacterCustomizationComponent::SetBasebodyAnimInstanceAlpha_Replicable(FName Name, float Value)
+{
+	if (CheckReplicateIndividualChagnes())
+	{
+		if(GetOwner()->GetLocalRole() == ROLE_Authority)
+			SetBasebodyAnimInstanceAlpha_Multicast(Name, Value);
+		else
+			SetBasebodyAnimInstanceAlpha_Server(Name, Value);
+	}
+	else
+	{
+		SetBasebodyAnimInstanceAlpha(Name, Value);
+	}
+}
+
+void UHCharacterCustomizationComponent::SetBasebodyAnimInstanceAlpha_Server_Implementation(FName Name, float Value)
+{
+	if (CheckMulticastIndividualChanges())
+	{
+		SetBasebodyAnimInstanceAlpha_Multicast(Name, Value);
+	}
+}
+
+void UHCharacterCustomizationComponent::SetBasebodyAnimInstanceAlpha_Multicast_Implementation(FName Name, float Value)
+{
+	SetBasebodyAnimInstanceAlpha(Name, Value);
+}
+
+void UHCharacterCustomizationComponent::SetBasebodyAnimInstanceAlpha(FName Name, float Value)
 {
 
 }
