@@ -76,15 +76,13 @@ public:
 	UFUNCTION(BlueprintCallable, BlueprintPure)
 	float GetBallRotation() {return BallRotation;}
 
-
-
 protected:
 	UPROPERTY(BlueprintReadWrite, EditDefaultsOnly)
 	float RootOffset;
 
 	UPROPERTY(BlueprintReadWrite, EditDefaultsOnly)
-	float  FootRoation;
+	float FootRoation;
 
 	UPROPERTY(BlueprintReadWrite, EditDefaultsOnly)
-	float  BallRotation;
+	float BallRotation;
 };

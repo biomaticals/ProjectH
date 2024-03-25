@@ -127,11 +127,12 @@ void UHCharacterCustomizationComponent::ClearApparelSpecificSettings(UHCharacter
 
 }
 
+#pragma region Anim Instance Alpha
 void UHCharacterCustomizationComponent::SetBasebodyAnimInstanceAlpha_Replicable(FName Name, float Value)
 {
 	if (CheckReplicateIndividualChagnes())
 	{
-		if(GetOwner()->GetLocalRole() == ROLE_Authority)
+		if(GetOwner()->GetLocalRole() == ENetRole::ROLE_Authority)
 			SetBasebodyAnimInstanceAlpha_Multicast(Name, Value);
 		else
 			SetBasebodyAnimInstanceAlpha_Server(Name, Value);
@@ -159,3 +160,4 @@ void UHCharacterCustomizationComponent::SetBasebodyAnimInstanceAlpha(FName Name,
 {
 
 }
+#pragma endregion

@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Engine/DataTable.h"
+#include "Common/CommonEnum.h"
 #include "CommonStruct.generated.h"
 
 class UCCDA_Apparel;
@@ -36,7 +37,6 @@ struct FMaterialVariants
 	TArray<UMaterialInstance*> Materials;
 };
 
-
 USTRUCT(BlueprintType)
 struct FApparelProfile
 {
@@ -44,31 +44,47 @@ struct FApparelProfile
 };
 
 USTRUCT(BlueprintType)
+struct FHairStyleProfile
+{
+	GENERATED_USTRUCT_BODY()
+};
+
+
+USTRUCT(BlueprintType)
+struct FCustomizationProfileMetaData
+{
+	GENERATED_USTRUCT_BODY()
+
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+	FString Name;
+
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+	EAnatomy Anatomy;
+};
+
+USTRUCT(BlueprintType)
 struct FCustomizationProfile
 {
+
 	GENERATED_USTRUCT_BODY()
 };
 
 USTRUCT(BlueprintType)
-struct FAnatomyHeadProfile
+struct FSlotTexture_SkinHead
 {
 	GENERATED_USTRUCT_BODY()
+
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+	TMap<FName, UTexture*> Head;
 };
 
 USTRUCT(BlueprintType)
-struct FAnatomyFaceVariants
+struct FSlotMaterial_SkinHead
 {
 	GENERATED_USTRUCT_BODY()
-	FAnatomyFaceVariants()
-	{
-
-	};
 
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
-	FName GroupName;
-
-	UPROPERTY(BlueprintReadWrite, EditAnywhere)
-	TArray<FName> IDs;
+	TMap<FName, UMaterialInstance*> Head;
 };
 
 USTRUCT(BlueprintType)
@@ -82,6 +98,46 @@ struct FSlotMaterial_Eyes
 
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
 	TMap<FName, UMaterialInstance*> Eyes;
+};
+
+USTRUCT(BlueprintType)
+struct FAnatomyProfileFaceVariants
+{
+	GENERATED_USTRUCT_BODY()
+	FAnatomyProfileFaceVariants()
+	{
+
+	};
+
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+	FName GroupName;
+
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+	TArray<FName> IDs;
+};
+
+USTRUCT(BlueprintType)
+struct FAnatomyHeadProfile
+{
+	GENERATED_USTRUCT_BODY()
+
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+	USkeletalMeshComponent* Mesh;
+
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+	UAnimInstance* AnimInstanceClass_Override;
+
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+	FSlotMaterial_SkinHead SkinMaterialSets_Override;
+
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+	TMap<FName, FSlotTexture_SkinHead> SkinTextureSets_Override;
+
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+	TArray<FSlotMaterial_Eyes> EyesMaterialSets_Override;
+
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+	FAnatomyProfileFaceVariants FaceVariants;
 };
 
 USTRUCT(BlueprintType)
@@ -114,15 +170,14 @@ struct FSlotMaterial_SkinBodyAndHead
 
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
 	TMap<FName, UMaterialInstance*> Head;
-
 };
 
 USTRUCT(BlueprintType)
-struct FAnatomyBodyProfile
+struct FAnatomyBaseBodyProfile
 {
 	GENERATED_USTRUCT_BODY()
 
-	FAnatomyBodyProfile()
+	FAnatomyBaseBodyProfile()
 	{
 
 	};
@@ -143,7 +198,7 @@ struct FAnatomyBodyProfile
 	TArray<FSlotMaterial_Eyes> EyesMaterialSets;
 
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
-	FAnatomyFaceVariants FaceVariants;
+	FAnatomyProfileFaceVariants FaceVariants;
 	
 };
 
@@ -153,7 +208,7 @@ struct FAnatomyProfile : public FTableRowBase
 	GENERATED_USTRUCT_BODY()
 
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
-	FAnatomyBodyProfile Body;
+	FAnatomyBaseBodyProfile Body;
 
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
 	FAnatomyHeadProfile Head;

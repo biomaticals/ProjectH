@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
+#include "ProjectH.h"
 #include "HCharacterCustomizationComponent.generated.h"
 
 struct FApparelProfile;
@@ -33,11 +34,22 @@ public:
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 
 public:
+	UFUNCTION()
+	void ApplyApparelSpecificSettings(UHCharacterCustomizationComponent* CharacterCustomizationComponent, FApparelProfile ApparelProfile, TArray<FCCDA_ApparelProfile> AddingCCDA_Apparels, TArray<USkeletalMeshComponent*> AddingSkeletalMeshComponents, TArray<FCCDA_ApparelProfile> SkippedCCDA_ApparelProfiles);
+
+	UFUNCTION()
+	void ClearApparelSpecificSettings(UHCharacterCustomizationComponent* CharacterCustomizationComponent, FApparelProfile ApparelProfile, TArray<USkeletalMeshComponent*> RemoveingSkeletalMeshComponents);
+
+public:
 	UPROPERTY(BlueprintReadOnly, EditAnywhere)
 	UDataTable* AnatomyDataTable;
 
 	UPROPERTY(BlueprintReadOnly, EditAnywhere)
 	UDataTable* PresetDataTable;
+
+protected:
+	//UPROPERTY(BlueprintReadOnly)
+	//FC
 
 #pragma region Repliacte
 protected:
@@ -85,14 +97,6 @@ private:
 	
 #pragma endregion
 
-public:
-	UFUNCTION()
-	void ApplyApparelSpecificSettings(UHCharacterCustomizationComponent* CharacterCustomizationComponent, FApparelProfile ApparelProfile, TArray<FCCDA_ApparelProfile> AddingCCDA_Apparels, TArray<USkeletalMeshComponent*> AddingSkeletalMeshComponents, TArray<FCCDA_ApparelProfile> SkippedCCDA_ApparelProfiles);
-	
-	UFUNCTION()
-	void ClearApparelSpecificSettings(UHCharacterCustomizationComponent* CharacterCustomizationComponent, FApparelProfile ApparelProfile, TArray<USkeletalMeshComponent*> RemoveingSkeletalMeshComponents);
-
-
 #pragma region Anim Instance Alpha
 public:
 	UFUNCTION(BlueprintCallable)
@@ -108,5 +112,4 @@ protected:
 	UFUNCTION()
 	void SetBasebodyAnimInstanceAlpha(FName Name, float Value);
 #pragma endregion
-
 };
