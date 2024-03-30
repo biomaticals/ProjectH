@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Common/HelperLibrary.h"
 
 #define UT_LOG(CategoryName, Verbosity, Format, ...) \
 	UE_LOG(CategoryName, Verbosity, TEXT("%hs(%d)"), __FUNCTION__, __LINE__) \
@@ -12,3 +13,4 @@
 
 DECLARE_LOG_CATEGORY_EXTERN(HLog, Log, All);
 DECLARE_LOG_CATEGORY_EXTERN(HCharacterLog, Log, All);
+DECLARE_LOG_CATEGORY_EXTERN(HCharacterCustomizationLog, Log, All);

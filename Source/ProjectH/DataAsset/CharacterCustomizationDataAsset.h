@@ -7,8 +7,11 @@
 #include "CharacterCustomizationDataAsset.generated.h"
 
 enum class EAnatomy;
-
+enum class ECCDACollection;
 struct FMaterialVariants;
+
+class UGroomAsset;
+class UGroomBindingAsset;
 
 /**
  * 
@@ -18,11 +21,17 @@ class PROJECTH_API UCharacterCustomizationDataAsset : public UHDataAsset
 {
 	GENERATED_BODY()
 	
-protected:
-	UPROPERTY(BlueprintReadWrite, EditDefaultsOnly)
+public:
+	UPROPERTY(BlueprintReadOnly, EditAnywhere)
 	TArray<EAnatomy> Anatomies;
 
-	UPROPERTY(BlueprintReadWrite, EditDefaultsOnly, Category = "Mesh")
+	UPROPERTY(BlueprintReadOnly, EditAnywhere)
+	TArray<ECCDACollection> Collections;
+	
+	UPROPERTY(BlueprintReadOnly, EditAnywhere)
+	TArray<TSubclassOf<UCharacterCustomizationDataAsset>> HiddenCCDAClasses;
+
+	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Mesh")
 	TArray<FMaterialVariants> MaterialVariants;
 };
 
@@ -34,11 +43,11 @@ class PROJECTH_API UCCDA_SkeletalMesh : public UCharacterCustomizationDataAsset
 {
 	GENERATED_BODY()
 	
-protected:
-	UPROPERTY(BlueprintReadWrite, EditDefaultsOnly, Category = "Mesh")
+public:
+	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Mesh")
 	USkeletalMeshComponent* SkeletalMesh;
 
-	UPROPERTY(BlueprintReadWrite, EditDefaultsOnly, Category = "Mesh")
+	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Mesh")
 	TMap<FName, float> AdditionalMorphTargets;
 };
 
@@ -50,11 +59,11 @@ class PROJECTH_API UCCDA_Apparel: public UCCDA_SkeletalMesh
 {
 	GENERATED_BODY()
 	
-protected:
-	UPROPERTY(BlueprintReadWrite, EditDefaultsOnly, Category = "Mesh")
+public:
+	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Mesh")
 	UTexture2D* BasebodyMast;
 
-	UPROPERTY(BlueprintReadWrite, EditDefaultsOnly, Category = "Mesh")
+	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Mesh")
 	bool UseAlternativeSkinTexture;
 };
 
@@ -67,22 +76,86 @@ class PROJECTH_API UCCDA_Apparel_Feet : public UCCDA_Apparel
 	GENERATED_BODY()
 	
 public:
-	UFUNCTION(BlueprintCallable, BlueprintPure)
-	float GetRootOffset() {return RootOffset;}
-
-	UFUNCTION(BlueprintCallable, BlueprintPure)
-	float GetFootRotation() {return FootRoation;}
-
-	UFUNCTION(BlueprintCallable, BlueprintPure)
-	float GetBallRotation() {return BallRotation;}
-
-protected:
-	UPROPERTY(BlueprintReadWrite, EditDefaultsOnly)
+	UPROPERTY(BlueprintReadOnly, EditAnywhere)
 	float RootOffset;
 
-	UPROPERTY(BlueprintReadWrite, EditDefaultsOnly)
+	UPROPERTY(BlueprintReadOnly, EditAnywhere)
 	float FootRoation;
 
-	UPROPERTY(BlueprintReadWrite, EditDefaultsOnly)
+	UPROPERTY(BlueprintReadOnly, EditAnywhere)
 	float BallRotation;
+};
+
+/**
+ * 
+ */
+UCLASS(Blueprintable, BlueprintType)
+class PROJECTH_API UCCDA_Hairstyle : public UCCDA_SkeletalMesh
+{
+	GENERATED_BODY()
+};
+
+/**
+ * 
+ */
+UCLASS(Blueprintable, BlueprintType)
+class PROJECTH_API UCCDA_Groom : public UCharacterCustomizationDataAsset
+{
+	GENERATED_BODY()
+
+public:
+	UPROPERTY(BlueprintReadOnly, EditAnywhere)
+	UGroomAsset* GroomAsset;
+
+	UPROPERTY(BlueprintReadOnly, EditAnywhere)
+	TArray<UGroomBindingAsset*> BindingAssets;
+};
+
+/**
+ * 
+ */
+UCLASS(Blueprintable, BlueprintType)
+class PROJECTH_API UCCDA_Equipment : public UCCDA_SkeletalMesh
+{
+	GENERATED_BODY()
+
+public:
+	UCCDA_Equipment()
+	{
+
+	};
+};
+
+/**
+ * 
+ */
+UCLASS(Blueprintable, BlueprintType)
+class PROJECTH_API UCCDA_StaticMesh : public UCharacterCustomizationDataAsset
+{
+	GENERATED_BODY()
+
+public:
+	UCCDA_StaticMesh()
+	{
+		
+	};
+
+public:
+	UPROPERTY(BlueprintReadOnly, EditAnywhere)
+	UStaticMeshComponent* StaticMesh;
+};
+
+/**
+ * 
+ */
+UCLASS(Blueprintable, BlueprintType)
+class PROJECTH_API UCCDA_Attachment : public UCCDA_StaticMesh
+{
+	GENERATED_BODY()
+
+public:
+	UCCDA_Attachment()
+	{
+
+	};
 };

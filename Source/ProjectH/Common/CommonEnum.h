@@ -34,12 +34,61 @@ enum class EAnatomy
 };
 
 UENUM(BlueprintType)
-enum class ECharacterCustomizationInitializationBehavior
+enum class ECharacterCustomizationInitializationBehavior : uint8
 {
 	None,
 	UseCurrentProfile,
 	UseProfileToLoad,
 	OpenCharacterEditorWithCurrentProfile,
 	OpenCharacterEditorWithProfileToLoad,
+};
+
+UENUM(BlueprintType)
+enum class ECCDACollection
+{
+	Smith,
+	Gardener,
+};
+
+UENUM(BlueprintType)
+enum class EGender
+{
+	Female,
+	Male,
+};
+
+UENUM(BlueprintType)
+enum class EGeneration
+{
+	Adult,
+	Child,
+};
+
+UENUM(BlueprintType)
+enum class ERace
+{
+	Human,
+	MetaHuman,
+	Drawf,
+	Elf,
+	Orc,
+};
+
+UENUM(BlueprintType)
+enum class EApparelType
+{
+	Hat,
+	UpperBody,
+	Hands,
+	LowerBody,
+	Feet,
+};
+
+UENUM(BlueprintType)
+enum class ECharacterCustomizationProfileType
+{
+	SavedProfile,
+	PresetProfile,
+	NotFound,
 };
 #pragma endregion

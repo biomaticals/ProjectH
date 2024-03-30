@@ -5,10 +5,14 @@
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
 #include "ProjectH.h"
+#include "Common/CommonStruct.h"
 #include "HCharacterCustomizationComponent.generated.h"
+
+enum class EAnatomy;
 
 struct FApparelProfile;
 struct FCCDA_ApparelProfile;
+struct FCustomizationProfile;
 
 class UPrimaryAssetLabel;
 class UCCDA_Apparel;
@@ -48,35 +52,28 @@ public:
 	UDataTable* PresetDataTable;
 
 protected:
-	//UPROPERTY(BlueprintReadOnly)
-	//FC
+	UPROPERTY(BlueprintReadOnly, VIsibleAnywhere, Transient)
+	FCustomizationProfile CurrentCusomizationProfile;
 
-#pragma region Repliacte
-protected:
-	bool CheckReplicateIndividualChagnes() const;
-	bool CheckMulticastIndividualChanges() const;
+	UPROPERTY(Transient)
+	TMap<EAnatomy, FCustomizationProfile> CachedCustomizationProfiles;
 
-protected:
-	UPROPERTY(BlueprintReadOnly, EditAnywhere)
-	bool bMulticastProfileApplication;
-
-	UPROPERTY(BlueprintReadOnly, EditAnywhere)
-	bool bReplicateIndividualChanges;
-
-	UPROPERTY(BlueprintReadOnly, EditAnywhere)
-	bool bMulticastIndividualChanges;
-
-	UPROPERTY(BlueprintReadOnly, EditAnywhere)
-	bool bDebugReplication;
-#pragma endregion/
-
-#pragma region Load
+#pragma region Initialization
 public:
-	UFUNCTION(Category = Load)
+	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Initialization")
+	ECharacterCustomizationInitializationBehavior InitializationBehavior;
+
+	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Initialization")
+	FString ProfileToLoad;
+#pragma endregion
+
+#pragma region Load Assets
+public:
+	UFUNCTION(Category = "Load Assets")
 	void LoadAsset();
 
 protected:
-	UPROPERTY(BlueprintReadWrite, EditDefaultsOnly, Category = Load)
+	UPROPERTY(BlueprintReadWrite, EditDefaultsOnly, Category = "Load Assets")
 	TArray<UPrimaryAssetLabel*> AssetPackagesToLoad;
 
 protected:
@@ -96,6 +93,25 @@ private:
 	FDelegateHandle OnBeforeUpdateApparelHandle;	
 	
 #pragma endregion
+
+#pragma region Repliacte
+protected:
+	bool CheckReplicateIndividualChagnes() const;
+	bool CheckMulticastIndividualChanges() const;
+
+protected:
+	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Replicate")
+	bool bMulticastProfileApplication;
+
+	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Replicate")
+	bool bReplicateIndividualChanges;
+
+	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Replicate")
+	bool bMulticastIndividualChanges;
+
+	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Replicate")
+	bool bDebugReplication;
+#pragma endregion/
 
 #pragma region Anim Instance Alpha
 public:

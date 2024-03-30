@@ -3,6 +3,7 @@
 
 #include "Character/Component/HCharacterCustomizationComponent.h"
 #include "Common/CommonStruct.h"
+#include "Common/CommonEnum.h"
 #include "DataAsset/CharacterCustomizationDataAsset.h"
 #include "Engine/AssetManager.h"
 #include "Kismet/KismetSystemLibrary.h"
@@ -31,16 +32,22 @@ UHCharacterCustomizationComponent::UHCharacterCustomizationComponent()
 void UHCharacterCustomizationComponent::BeginPlay()
 {
 	Super::BeginPlay();
-
-
 }
 
 void UHCharacterCustomizationComponent::InitializeComponent()
 {
 	Super::InitializeComponent();
 
+	UT_LOG(HCharacterCustomizationLog, Log, TEXT("InitializeComponent Start"));
+
 	SetIsReplicated(true);
 	
+	CachedCustomizationProfiles.Empty(1);
+
+	UT_LOG(HCharacterCustomizationLog, Log, TEXT("Initialization Behavior : %s"), *EnumToString((int32)InitializationBehavior, TEXT("/Script/ProjectH.ECharacterCustomizationInitializationBehavior")));
+	
+	UT_LOG(HCharacterCustomizationLog, Log, TEXT("ProfileToLoad : %s"), *ProfileToLoad);
+
 	// Remove Event
 	if (OnStartLoadAsset.IsBoundToObject(this))
 	{
@@ -56,6 +63,12 @@ void UHCharacterCustomizationComponent::InitializeComponent()
 	OnPreUpdateApparel.AddUObject(this, &UHCharacterCustomizationComponent::ClearApparelSpecificSettings);
 	OnpostUpdateApparel.AddUObject(this, &UHCharacterCustomizationComponent::ApplyApparelSpecificSettings);
 
+	if (UKismetSystemLibrary::IsStandalone(this))
+	{
+		
+	}
+
+	// Load Assets... Realize when hitch occurs
 	check(!bLoaded);
 	check(!bIsLoading);
 
@@ -117,7 +130,7 @@ void UHCharacterCustomizationComponent::ApplyApparelSpecificSettings(UHCharacter
 		if (AddingCCDA_Apparel.DataAsset->IsA(UCCDA_Apparel_Feet::StaticClass()))
 		{
 			UCCDA_Apparel_Feet* CCDA_Apparel_Feet = Cast<UCCDA_Apparel_Feet>(AddingCCDA_Apparel.DataAsset);
-			CCDA_Apparel_Feet->GetRootOffset();
+			CCDA_Apparel_Feet->RootOffset;
 		}
 	}
 }
@@ -158,6 +171,7 @@ void UHCharacterCustomizationComponent::SetBasebodyAnimInstanceAlpha_Multicast_I
 
 void UHCharacterCustomizationComponent::SetBasebodyAnimInstanceAlpha(FName Name, float Value)
 {
-
+	CurrentCusomizationProfile.Basebody.AnimInstanceAlphas.AddUnique(FHNamedFloat(Name, Value));
+	
 }
 #pragma endregion
