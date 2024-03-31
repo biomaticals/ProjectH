@@ -33,6 +33,8 @@ enum class EAnatomy
 	OrcMaleChild,
 };
 
+ENUM_RANGE_BY_COUNT(EAnatomy, EAnatomy::OrcMaleChild)
+
 UENUM(BlueprintType)
 enum class ECharacterCustomizationInitializationBehavior : uint8
 {

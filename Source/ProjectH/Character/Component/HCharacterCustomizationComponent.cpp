@@ -1,9 +1,9 @@
 // Copy Rigts are in Team UniqueTurtle. 
 
-
 #include "Character/Component/HCharacterCustomizationComponent.h"
-#include "Common/CommonStruct.h"
+#include "Character/Base/HCharacter.h"
 #include "Common/CommonEnum.h"
+#include "Common/CommonStruct.h"
 #include "DataAsset/CharacterCustomizationDataAsset.h"
 #include "Engine/AssetManager.h"
 #include "Kismet/KismetSystemLibrary.h"
@@ -16,6 +16,8 @@ UHCharacterCustomizationComponent::UHCharacterCustomizationComponent()
 	PrimaryComponentTick.bStartWithTickEnabled = false;
 	bWantsInitializeComponent = true;
 	
+	CachedOwner = nullptr;
+
 	#pragma region Replicate
 	bMulticastProfileApplication = false;
 	bReplicateIndividualChanges = true;
@@ -40,13 +42,21 @@ void UHCharacterCustomizationComponent::InitializeComponent()
 
 	UT_LOG(HCharacterCustomizationLog, Log, TEXT("InitializeComponent Start"));
 
+	// Network
 	SetIsReplicated(true);
-	
-	CachedCustomizationProfiles.Empty(1);
+
+	// Property Reset
+	CachedCustomizationProfiles.Empty();
 
 	UT_LOG(HCharacterCustomizationLog, Log, TEXT("Initialization Behavior : %s"), *EnumToString((int32)InitializationBehavior, TEXT("/Script/ProjectH.ECharacterCustomizationInitializationBehavior")));
-	
+
 	UT_LOG(HCharacterCustomizationLog, Log, TEXT("ProfileToLoad : %s"), *ProfileToLoad);
+
+	/**
+	 * To do 
+	 * automization to find profile from data table.
+	 * change profile type as FGameplayTag
+	 */
 
 	// Remove Event
 	if (OnStartLoadAsset.IsBoundToObject(this))
@@ -63,10 +73,12 @@ void UHCharacterCustomizationComponent::InitializeComponent()
 	OnPreUpdateApparel.AddUObject(this, &UHCharacterCustomizationComponent::ClearApparelSpecificSettings);
 	OnpostUpdateApparel.AddUObject(this, &UHCharacterCustomizationComponent::ApplyApparelSpecificSettings);
 
-	if (UKismetSystemLibrary::IsStandalone(this))
-	{
-		
-	}
+	if(GetOwner() && GetOwner()->IsA(AHCharacter::StaticClass()))
+	CachedOwner = GetOwner() ? Cast<AHCharacter>(GetOwner()) : nullptr;
+	
+	ensureMsgf(!CachedOwner, TEXT("HCharacterComponent's owner is not a AHCharacter. It will not be functional."));
+
+
 
 	// Load Assets... Realize when hitch occurs
 	check(!bLoaded);
@@ -91,14 +103,37 @@ void UHCharacterCustomizationComponent::GetLifetimeReplicatedProps(TArray<FLifet
 	DOREPLIFETIME(UHCharacterCustomizationComponent, bLoaded);
 }
 
-bool UHCharacterCustomizationComponent::CheckReplicateIndividualChagnes() const
+void UHCharacterCustomizationComponent::UpdateAvailableAnatomyProfiles()
 {
-	return bReplicateIndividualChanges && CHECK_REPLIACTE_COMPONENT();
+	UT_LOG(HCharacterCustomizationLog, Log, TEXT("Update AvailableAnatomyProfiles"));
+
+	AvailableAnatomyProfiles.Empty();
+
+	UT_LOG(HCharacterCustomizationLog, Log, TEXT("Get Data Table : %s\n"), *AnatomyDataTable->GetName());
+
+
+	for (EAnatomy Anatomy : TEnumRange<EAnatomy>())
+	{
+		FName AnatomyRowName = FName(*EnumToString((int)Anatomy, TEXT("/Script/ProjectH.EAnatomy")));
+		//AnatomyDataTable->FindRow<FAnatomyProfile>(AnatomyRowName, *FString::Printf("Find"));//, AnatomyRowName, *AnatomyDataTable->GetName()));
+	}
 }
 
-bool UHCharacterCustomizationComponent::CheckMulticastIndividualChanges() const
+void UHCharacterCustomizationComponent::ApplyApparelSpecificSettings(UHCharacterCustomizationComponent* CharacterCustomizationComponent, FApparelProfile ApparelProfile, TArray<FCCDA_ApparelProfile> AddingCCDA_Apparels, TArray<USkeletalMeshComponent*> AddingSkeletalMeshComponents, TArray<FCCDA_ApparelProfile> SkippedCCDA_ApparelProfiles)
 {
-	return bMulticastIndividualChanges && CHECK_REPLIACTE_COMPONENT();
+	for (FCCDA_ApparelProfile AddingCCDA_Apparel : AddingCCDA_Apparels)
+	{
+		if (AddingCCDA_Apparel.DataAsset->IsA(UCCDA_Apparel_Feet::StaticClass()))
+		{
+			UCCDA_Apparel_Feet* CCDA_Apparel_Feet = Cast<UCCDA_Apparel_Feet>(AddingCCDA_Apparel.DataAsset);
+			CCDA_Apparel_Feet->RootOffset;
+		}
+	}
+}
+
+void UHCharacterCustomizationComponent::ClearApparelSpecificSettings(UHCharacterCustomizationComponent* CharacterCustomizationComponent, FApparelProfile ApparelProfile, TArray<USkeletalMeshComponent*> RemoveingSkeletalMeshComponents)
+{
+
 }
 
 void UHCharacterCustomizationComponent::LoadAsset()
@@ -123,21 +158,14 @@ void UHCharacterCustomizationComponent::LoadAsset()
 	bIsLoading = false;
 }
 
-void UHCharacterCustomizationComponent::ApplyApparelSpecificSettings(UHCharacterCustomizationComponent* CharacterCustomizationComponent, FApparelProfile ApparelProfile, TArray<FCCDA_ApparelProfile> AddingCCDA_Apparels, TArray<USkeletalMeshComponent*> AddingSkeletalMeshComponents, TArray<FCCDA_ApparelProfile> SkippedCCDA_ApparelProfiles)
+bool UHCharacterCustomizationComponent::CheckReplicateIndividualChagnes() const
 {
-	for (FCCDA_ApparelProfile AddingCCDA_Apparel : AddingCCDA_Apparels)
-	{
-		if (AddingCCDA_Apparel.DataAsset->IsA(UCCDA_Apparel_Feet::StaticClass()))
-		{
-			UCCDA_Apparel_Feet* CCDA_Apparel_Feet = Cast<UCCDA_Apparel_Feet>(AddingCCDA_Apparel.DataAsset);
-			CCDA_Apparel_Feet->RootOffset;
-		}
-	}
+	return bReplicateIndividualChanges && CHECK_REPLIACTE_COMPONENT();
 }
 
-void UHCharacterCustomizationComponent::ClearApparelSpecificSettings(UHCharacterCustomizationComponent* CharacterCustomizationComponent, FApparelProfile ApparelProfile, TArray<USkeletalMeshComponent*> RemoveingSkeletalMeshComponents)
+bool UHCharacterCustomizationComponent::CheckMulticastIndividualChanges() const
 {
-
+	return bMulticastIndividualChanges && CHECK_REPLIACTE_COMPONENT();
 }
 
 #pragma region Anim Instance Alpha

@@ -14,6 +14,7 @@ struct FApparelProfile;
 struct FCCDA_ApparelProfile;
 struct FCustomizationProfile;
 
+class AHCharacter;
 class UPrimaryAssetLabel;
 class UCCDA_Apparel;
 
@@ -37,6 +38,9 @@ public:
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 
+protected:
+	void UpdateAvailableAnatomyProfiles();
+
 public:
 	UFUNCTION()
 	void ApplyApparelSpecificSettings(UHCharacterCustomizationComponent* CharacterCustomizationComponent, FApparelProfile ApparelProfile, TArray<FCCDA_ApparelProfile> AddingCCDA_Apparels, TArray<USkeletalMeshComponent*> AddingSkeletalMeshComponents, TArray<FCCDA_ApparelProfile> SkippedCCDA_ApparelProfiles);
@@ -50,6 +54,13 @@ public:
 
 	UPROPERTY(BlueprintReadOnly, EditAnywhere)
 	UDataTable* PresetDataTable;
+
+	UPROPERTY(BlueprintReadOnly, VisibleAnywhere)
+	TMap<EAnatomy, FAnatomyProfile> AvailableAnatomyProfiles;
+
+private:
+	UPROPERTY(Transient)
+	AHCharacter* CachedOwner;
 
 protected:
 	UPROPERTY(BlueprintReadOnly, VIsibleAnywhere, Transient)
