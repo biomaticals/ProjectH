@@ -103,22 +103,6 @@ void UHCharacterCustomizationComponent::GetLifetimeReplicatedProps(TArray<FLifet
 	DOREPLIFETIME(UHCharacterCustomizationComponent, bLoaded);
 }
 
-void UHCharacterCustomizationComponent::UpdateAvailableAnatomyProfiles()
-{
-	UT_LOG(HCharacterCustomizationLog, Log, TEXT("Update AvailableAnatomyProfiles"));
-
-	AvailableAnatomyProfiles.Empty();
-
-	UT_LOG(HCharacterCustomizationLog, Log, TEXT("Get Data Table : %s\n"), *AnatomyDataTable->GetName());
-
-
-	for (EAnatomy Anatomy : TEnumRange<EAnatomy>())
-	{
-		FName AnatomyRowName = FName(*EnumToString((int)Anatomy, TEXT("/Script/ProjectH.EAnatomy")));
-		//AnatomyDataTable->FindRow<FAnatomyProfile>(AnatomyRowName, *FString::Printf("Find"));//, AnatomyRowName, *AnatomyDataTable->GetName()));
-	}
-}
-
 void UHCharacterCustomizationComponent::ApplyApparelSpecificSettings(UHCharacterCustomizationComponent* CharacterCustomizationComponent, FApparelProfile ApparelProfile, TArray<FCCDA_ApparelProfile> AddingCCDA_Apparels, TArray<USkeletalMeshComponent*> AddingSkeletalMeshComponents, TArray<FCCDA_ApparelProfile> SkippedCCDA_ApparelProfiles)
 {
 	for (FCCDA_ApparelProfile AddingCCDA_Apparel : AddingCCDA_Apparels)

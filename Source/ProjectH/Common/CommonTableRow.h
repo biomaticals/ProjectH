@@ -1,0 +1,29 @@
+// Copy Rigts are in Team UniqueTurtle. 
+
+#pragma once
+
+#include "CoreMinimal.h"
+#include "Engine/DataTable.h"
+#include "Common/CommonStruct.h"
+#include "CommonTableRow.generated.h"
+
+USTRUCT(BlueprintType)
+struct FAnatomyProfile : public FTableRowBase
+{
+	GENERATED_USTRUCT_BODY()
+
+	bool IsValid()
+	{
+		return Body.AnimInstanceClass != nullptr && Body.Mesh != nullptr;
+	}
+
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+	FAnatomyBaseBodyProfile Body;
+
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+	FAnatomyHeadProfile Head;
+
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+	FCustomizationProfile Customzation;
+};
+#pragma endregion

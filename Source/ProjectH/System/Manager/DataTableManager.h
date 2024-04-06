@@ -17,7 +17,20 @@ class PROJECTH_API UDataTableManager : public UObject
 public:
 	void ValidateDataTables();
 
+
+#pragma region CharacterCustomization
 public:
+	UFUNCTION()
+	bool UpdateAvaiableAnatomyProfiles();
+
+protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "CharacterCustomization")
 	UDataTable* CharacterCustomizationDataTable;
+
+	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "CharacterCustomization")
+	UDataTable* AnatomyProfilesDataTable;
+
+	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "CharacterCustomization")
+	UDataTable* PresetCharacterCustomizationDataTable;
+#pragma endregion
 };

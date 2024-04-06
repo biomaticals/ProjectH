@@ -7,7 +7,7 @@
 
 #pragma region Character Customization
 UENUM(BlueprintType)
-enum class EAnatomy
+enum class EAnatomy : uint8
 {
 	HumanFemaleAdult,
 	HumanFemaleChild,

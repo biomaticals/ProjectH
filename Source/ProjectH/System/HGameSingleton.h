@@ -7,8 +7,10 @@
 #include "HGameSingleton.generated.h"
 
 class UDataTableManager;
+class USaveGameManager;
 
 #define DATATABLE_MANAGER() {UHGameSingleton::GetHGameSingleton()->DataTableManager;}
+#define SAVEGAME_MANAGER() {UHGameSingleton::GetHGameSingleton()->SaveGameManager;}
 
 /**
  * 
@@ -30,6 +32,10 @@ protected:
 private:
 	UPROPERTY(Transient)
 	TObjectPtr<UDataTableManager> DataTableManager;
+
+	UPROPERTY(Transient)
+	TObjectPtr<USaveGameManager> SaveGameManager;
+	
 
 	bool ManagersCreated;
 };

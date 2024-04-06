@@ -3,6 +3,7 @@
 
 #include "System/HGameSingleton.h"
 #include "System/Manager/DataTableManager.h"
+#include "System/Manager/SaveGameManager.h"
 
 UHGameSingleton::UHGameSingleton(const FObjectInitializer& ObjectInitializer)
 	: ManagersCreated(false)
@@ -46,6 +47,11 @@ bool UHGameSingleton::CreateManagers()
 		DataTableManager = NewObject<UDataTableManager>(this, UDataTableManager::StaticClass());
 	}
 
+	if (SaveGameManager == NULL)
+	{
+		SaveGameManager = NewObject<USaveGameManager>(this, USaveGameManager::StaticClass());
+	}
+
 	ManagersCreated = true;
 	return true;
 }
@@ -55,5 +61,10 @@ void UHGameSingleton::DestroyManagers()
 	if (DataTableManager)
 	{
 		DataTableManager = NULL;
+	}
+
+	if (SaveGameManager)
+	{
+		SaveGameManager = NULL;
 	}
 }

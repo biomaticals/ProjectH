@@ -8,7 +8,7 @@
 #include "Common/CommonStruct.h"
 #include "HCharacterCustomizationComponent.generated.h"
 
-enum class EAnatomy;
+enum class EAnatomy : uint8;
 
 struct FApparelProfile;
 struct FCCDA_ApparelProfile;
@@ -47,16 +47,6 @@ public:
 
 	UFUNCTION()
 	void ClearApparelSpecificSettings(UHCharacterCustomizationComponent* CharacterCustomizationComponent, FApparelProfile ApparelProfile, TArray<USkeletalMeshComponent*> RemoveingSkeletalMeshComponents);
-
-public:
-	UPROPERTY(BlueprintReadOnly, EditAnywhere)
-	UDataTable* AnatomyDataTable;
-
-	UPROPERTY(BlueprintReadOnly, EditAnywhere)
-	UDataTable* PresetDataTable;
-
-	UPROPERTY(BlueprintReadOnly, VisibleAnywhere)
-	TMap<EAnatomy, FAnatomyProfile> AvailableAnatomyProfiles;
 
 private:
 	UPROPERTY(Transient)
