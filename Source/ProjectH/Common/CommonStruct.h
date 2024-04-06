@@ -533,3 +533,28 @@ struct FAnatomyBaseBodyProfile
 	FAnatomyProfileFaceVariants FaceVariants;
 	
 };
+#pragma endregion
+
+#pragma region SaveGame
+USTRUCT(BlueprintType)
+struct FHSaveGameObjectData
+{
+	GENERATED_USTRUCT_BODY()
+
+	UPROPERTY()
+	FString ID;
+
+	UPROPERTY(VisibleAnywhere)
+	TSubclassOf<UObject> ObjectClass;
+
+	const bool operator== (const FHSaveGameObjectData& Other) const
+	{
+		return ID.Equals(Other.ID);
+	}
+
+	const bool operator!= (const FHSaveGameObjectData& Other) const
+	{
+		return !ID.Equals(Other.ID);
+	}
+
+};

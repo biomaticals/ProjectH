@@ -4,6 +4,8 @@
 
 #include "CoreMinimal.h"
 #include "UObject/NoExportTypes.h"
+#include "Common/CommonEnum.h"
+#include "Common/CommonTableRow.h"
 #include "DataTableManager.generated.h"
 
 /**
@@ -23,14 +25,18 @@ public:
 	UFUNCTION()
 	bool UpdateAvaiableAnatomyProfiles();
 
+	UFUNCTION()
+	TMap<EAnatomy, FAnatomyProfile> GetAvailableAnatomyProfiles();
+
 protected:
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "CharacterCustomization")
-	UDataTable* CharacterCustomizationDataTable;
-
 	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "CharacterCustomization")
-	UDataTable* AnatomyProfilesDataTable;
+	UDataTable* AnatomyProfilesDataTable; 
 
-	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "CharacterCustomization")
-	UDataTable* PresetCharacterCustomizationDataTable;
+private:
+	UPROPERTY(Transient)
+	TMap<EAnatomy, FAnatomyProfile> AvailableAnatomyProfiles;
+
+	UPROPERTY(Transient)
+	bool NeedUpdatAnatomyProfiles = false;
 #pragma endregion
 };

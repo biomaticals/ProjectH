@@ -1,4 +1,4 @@
-// Copy Rigts are in Team UniqueTurtle. 
+// Copyright 2024. Unique Turtle. All rights reserved.
 
 #pragma once
 
@@ -14,7 +14,11 @@ class PROJECTH_API USaveGameManager : public UObject
 {
 	GENERATED_BODY()
 
-#pragma region CharacterCustomization
+public:
+	UFUNCTION(BlueprintCallable, Category = "SaveGame")
+	bool SaveGame(TArray<UObject*> Objects, FString Slot);
 
-#pragma endregion
+	UFUNCTION(BlueprintCallable, Category = "SaveGame")
+	bool LoadGame(TArray<UObject*> Objects, FString Slot);
+
 };
