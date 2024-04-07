@@ -541,12 +541,6 @@ struct FHSaveGameObjectData
 {
 	GENERATED_USTRUCT_BODY()
 
-	UPROPERTY()
-	FString ID;
-
-	UPROPERTY(VisibleAnywhere)
-	TSubclassOf<UObject> ObjectClass;
-
 	const bool operator== (const FHSaveGameObjectData& Other) const
 	{
 		return ID.Equals(Other.ID);
@@ -557,4 +551,29 @@ struct FHSaveGameObjectData
 		return !ID.Equals(Other.ID);
 	}
 
+protected:
+	UPROPERTY(VisibleAnywhere)
+	FString ID;
+
+	UPROPERTY(VisibleAnywhere)
+	TSubclassOf<UObject> ObjectClass;
 };
+
+USTRUCT(BlueprintType)
+struct FHSaveGameData
+{
+	GENERATED_USTRUCT_BODY()
+
+protected:
+	UPROPERTY(VisibleAnywhere)
+	FHSaveGameObjectData ObjectData;
+	
+	FHSaveGameObjectData* ParentObjectData;
+	
+	TArray<FHSaveGameObjectData>* ChildrenObjectData;
+
+private:
+	bool RootData = true;
+	bool TerminalData = true;
+};
+#pragma endregion 

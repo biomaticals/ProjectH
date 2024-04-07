@@ -15,10 +15,9 @@ class PROJECTH_API USaveGameManager : public UObject
 	GENERATED_BODY()
 
 public:
-	UFUNCTION(BlueprintCallable, Category = "SaveGame")
-	bool SaveGame(TArray<UObject*> Objects, FString Slot);
+	UFUNCTION(BlueprintCallable, Category = "SaveGameManager")
+	bool WriteSaveGameObjectsToSlot(TArray<UObject*> Objects, const FString& Slot, const int32 UserIndex);
 
-	UFUNCTION(BlueprintCallable, Category = "SaveGame")
-	bool LoadGame(TArray<UObject*> Objects, FString Slot);
-
+	UFUNCTION(BlueprintCallable, Category = "SaveGameManager")
+	bool ReadSaveGameObjectsToSlot(TArray<UObject*> Objects, const FString& Slot, const int32 UserIndex);
 };

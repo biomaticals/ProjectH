@@ -3,17 +3,22 @@
 
 #include "System/Manager/SaveGameManager.h"
 #include "Kismet/GameplayStatics.h"
-#include "System/HSaveGame.h"
+#include "System/SaveGame/HSaveGame.h"
+#include "System/SaveGame/HSaveGameObjectInterface.h"
 
-bool USaveGameManager::SaveGame(TArray<UObject*> Objects, FString Slot)
-{
+bool USaveGameManager::WriteSaveGameObjectsToSlot(TArray<UObject*> Objects, const FString& Slot, const int32 UserIndex)
+{	
 	UHSaveGame* HSaveGame = Cast<UHSaveGame>(UGameplayStatics::CreateSaveGameObject(UHSaveGame::StaticClass()));
 
+	for (UObject* Object : Objects)
+	{
+		
+	}
 
 	return true;
 }
 
-bool USaveGameManager::LoadGame(TArray<UObject*> Objects, FString Slot)
+bool USaveGameManager::ReadSaveGameObjectsToSlot(TArray<UObject*> Objects, const FString& Slot, const int32 UserIndex)
 {
 	return true;
 }
