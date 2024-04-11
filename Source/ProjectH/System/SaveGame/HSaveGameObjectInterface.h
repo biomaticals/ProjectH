@@ -25,4 +25,10 @@ public:
 
 	UFUNCTION(BlueprintNativeEvent, Category = "HSaveGameObjectInterface")
 	const FString GetHSaveGameObjectKey() const;
+
+	UFUNCTION(BlueprintNativeEvent, Category = "HSaveGameObjectInterface")
+	const TArray<UObject*> GetHSaveGameObjectChildren() const;
+
+	UFUNCTION(BlueprintNativeEvent, Category = "HSaveGameObjectInreface")
+	void WriteSaveGameObjectData(FHSaveGameObjectData& SaveGameData);
 };

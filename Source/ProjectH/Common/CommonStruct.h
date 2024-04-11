@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Common/CommonEnum.h"
+#include "GameplayTags.h"
 #include "CommonStruct.generated.h"
 
 #pragma region Common
@@ -537,6 +538,59 @@ struct FAnatomyBaseBodyProfile
 
 #pragma region SaveGame
 USTRUCT(BlueprintType)
+struct FHSaveGamePropertyData
+{
+	GENERATED_USTRUCT_BODY()
+
+	const bool operator== (const FHSaveGamePropertyData& Other) const
+	{
+		return Name.Equals(Other.Name) && Type.Equals(Other.Type) && Value.Equals(Other.Value);
+	}
+
+	const bool operator!= (const FHSaveGamePropertyData& Other) const
+	{
+		return !Name.Equals(Other.Name) || !Type.Equals(Other.Type) || !Value.Equals(Other.Value);
+	}
+
+protected:
+	UPROPERTY(VisibleAnywhere)
+	FString Name;
+
+	UPROPERTY(VisibleAnywhere)
+	FString Type;
+
+	UPROPERTY(VisibleAnywhere)
+	FString Value;
+
+	friend class USaveGameManager;
+};
+
+USTRUCT(BlueprintType)
+struct FHSaveGameNonPropertyData
+{
+	GENERATED_USTRUCT_BODY()
+
+	const bool operator== (const FHSaveGameNonPropertyData& Other) const
+	{
+		return Key.Equals(Other.Key) && Value.Equals(Other.Value);
+	}
+
+	const bool operator!= (const FHSaveGameNonPropertyData& Other) const
+	{
+		return !Key.Equals(Other.Key) || !Value.Equals(Other.Value);
+	}
+
+protected:
+	UPROPERTY(VisibleAnywhere)
+	FString Key;
+
+	UPROPERTY(VisibleAnywhere)
+	FString Value;
+
+	friend class USaveGameManager;
+};
+
+USTRUCT(BlueprintType)
 struct FHSaveGameObjectData
 {
 	GENERATED_USTRUCT_BODY()
@@ -557,6 +611,17 @@ protected:
 
 	UPROPERTY(VisibleAnywhere)
 	TSubclassOf<UObject> ObjectClass;
+
+	UPROPERTY(VisibleAnywhere)
+	TArray<FHSaveGamePropertyData> PropertyData;
+
+	UPROPERTY(VisibleAnywhere)
+	TArray<FHSaveGameNonPropertyData> NonProperties;
+
+	UPROPERTY()
+	TSoftObjectPtr<UObject> ParentSaveGameObject;
+
+	friend class USaveGameManager;
 };
 
 USTRUCT(BlueprintType)
@@ -564,16 +629,16 @@ struct FHSaveGameData
 {
 	GENERATED_USTRUCT_BODY()
 
+	FHSaveGameData() 	
+	{
+
+	};
+
 protected:
 	UPROPERTY(VisibleAnywhere)
-	FHSaveGameObjectData ObjectData;
-	
-	FHSaveGameObjectData* ParentObjectData;
-	
-	TArray<FHSaveGameObjectData>* ChildrenObjectData;
+	TArray<FHSaveGameObjectData> ObjectData;
 
-private:
-	bool RootData = true;
-	bool TerminalData = true;
+	friend class USaveGameManager;
 };
 #pragma endregion 
+	

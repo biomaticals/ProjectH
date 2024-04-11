@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/SaveGame.h"
+#include "Common/CommonStruct.h"
 #include "HSaveGame.generated.h"
 
 struct FHSaveGameData;
@@ -18,5 +19,5 @@ class PROJECTH_API UHSaveGame : public ULocalPlayerSaveGame
 
 public:
 	UPROPERTY(BlueprintReadOnly)
-	TArray<FHSaveGameData> HSaveGameDataList;
+	struct FHSaveGameData HSaveGameData;
 };
