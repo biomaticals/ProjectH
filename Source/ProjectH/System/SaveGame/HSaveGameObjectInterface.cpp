@@ -3,4 +3,3 @@
 
 #include "System/SaveGame/HSaveGameObjectInterface.h"
 
-// Add default functionality here for any IHSaveGameInterface functions that are not pure virtual.

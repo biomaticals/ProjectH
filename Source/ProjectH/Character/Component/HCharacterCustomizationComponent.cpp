@@ -78,8 +78,6 @@ void UHCharacterCustomizationComponent::InitializeComponent()
 	
 	ensureMsgf(!CachedOwner, TEXT("HCharacterComponent's owner is not a AHCharacter. It will not be functional."));
 
-
-
 	// Load Assets... Realize when hitch occurs
 	check(!bLoaded);
 	check(!bIsLoading);

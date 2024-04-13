@@ -605,6 +605,11 @@ struct FHSaveGameObjectData
 		return !ID.Equals(Other.ID);
 	}
 
+	const bool IsValid() const
+	{
+		return ID.IsEmpty() == false && ObjectClass != nullptr;
+	}
+
 protected:
 	UPROPERTY(VisibleAnywhere)
 	FString ID;
@@ -613,10 +618,10 @@ protected:
 	TSubclassOf<UObject> ObjectClass;
 
 	UPROPERTY(VisibleAnywhere)
-	TArray<FHSaveGamePropertyData> PropertyData;
+	TArray<FHSaveGamePropertyData> PropertyDataList;
 
 	UPROPERTY(VisibleAnywhere)
-	TArray<FHSaveGameNonPropertyData> NonProperties;
+	TArray<FHSaveGameNonPropertyData> NonPropertyDataList;
 
 	UPROPERTY()
 	TSoftObjectPtr<UObject> ParentSaveGameObject;

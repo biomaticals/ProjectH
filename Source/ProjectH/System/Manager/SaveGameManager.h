@@ -44,15 +44,15 @@ class PROJECTH_API USaveGameManager : public UObject
 
 public:
 	UFUNCTION(BlueprintCallable, Category = "SaveGameManager")
-	bool WriteSaveGameObjectsToSlot(TArray<UObject*> Objects, const FString& Slot, const int32 UserIndex);
+	bool WriteSaveGameObjectsToSlot(TArray<UObject*> Objects, const FString& SlotName, const int32 UserIndex);
 
 	UFUNCTION(BlueprintCallable, Category = "SaveGameManager")
-	bool ReadSaveGameObjectsToSlot(TArray<UObject*> Objects, const FString& Slot, const int32 UserIndex);
+	bool ReadSaveGameObjectsToSlot(TArray<UObject*> Objects, const FString& SlotName, const int32 UserIndex);
 
 public:
 	static bool WriteObjectProperty(UPARAM(Ref) FHSaveGameObjectData& SaveGameObjectData, UObject* Object, FString InPropertyName);
 	static bool WriteObjectNonProperty(UPARAM(Ref) FHSaveGameObjectData& SaveGameOjbectData, UObject* Object, FString Key, FString Value);
-	static bool ReadObjectProperty(UObject* Object, FHSaveGameData SaveGameData);
+	static bool ReadObjectProperty(UPARAM(Ref) FHSaveGameObjectData& SaveGameObjectData, UObject* Object);
 
 private:
 	bool WriteSaveGameObjectsChildData(UObject* ChildObject, FHSaveGameData& SaveGameData, UObject* ParentObject = nullptr);
@@ -86,3 +86,4 @@ template<> void USaveGameManager::ReadObjectProperty_Internal(UPARAM(Ref) const 
 template<> void USaveGameManager::ReadObjectProperty_Internal(UPARAM(Ref) const FHSaveGamePropertyData& PropertyData, FVector2D* ValueAddress);
 template<> void USaveGameManager::ReadObjectProperty_Internal(UPARAM(Ref) const FHSaveGamePropertyData& PropertyData, FRotator* ValueAddress);
 template<> void USaveGameManager::ReadObjectProperty_Internal(UPARAM(Ref) const FHSaveGamePropertyData& PropertyData, FQuat* ValueAddress);
+template<> void USaveGameManager::ReadObjectProperty_Internal(UPARAM(Ref) const FHSaveGamePropertyData& PropertyData, FTransform* ValueAddress);

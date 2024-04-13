@@ -29,6 +29,9 @@ public:
 	UFUNCTION(BlueprintNativeEvent, Category = "HSaveGameObjectInterface")
 	const TArray<UObject*> GetHSaveGameObjectChildren() const;
 
-	UFUNCTION(BlueprintNativeEvent, Category = "HSaveGameObjectInreface")
-	void WriteSaveGameObjectData(FHSaveGameObjectData& SaveGameData);
+	UFUNCTION(BlueprintNativeEvent, Category = "HSaveGameObjectInterface")
+	bool WriteSaveGameObjectData(FHSaveGameObjectData& SaveGameObjectData);
+
+	UFUNCTION(BlueprintNativeEvent, Category = "HSaveGameObjectInterface")
+	bool ReadSaveGameObjectData(FHSaveGameObjectData& SaveGameObjectData);
 };
