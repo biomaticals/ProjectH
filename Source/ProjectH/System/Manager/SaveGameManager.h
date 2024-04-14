@@ -37,7 +37,7 @@ struct FHSaveGamePropertyData;
 /**
  * 
  */
-UCLASS()
+UCLASS(Blueprintable, BlueprintType)
 class PROJECTH_API USaveGameManager : public UObject
 {
 	GENERATED_BODY()

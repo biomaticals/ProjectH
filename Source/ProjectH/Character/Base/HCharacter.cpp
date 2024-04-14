@@ -2,6 +2,7 @@
 
 
 #include "Character/Base/HCharacter.h"
+#include "System/Manager/SaveGameManager.h"
 
 // Sets default values
 AHCharacter::AHCharacter()
@@ -32,3 +33,27 @@ void AHCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponen
 
 }
 
+const FString AHCharacter::GetHSaveGameObjectKey_Implementation() const
+{
+	return GetName();
+}
+
+const TArray<UObject*> AHCharacter::GetHSaveGameObjectChildren_Implementation() const
+{
+	return TArray<UObject*>();
+}
+
+bool AHCharacter::WriteSaveGameObjectData_Implementation(FHSaveGameObjectData& SaveGameObjectData)
+{
+	const FString& PropertyName = GET_MEMBER_NAME_STRING_CHECKED(AHCharacter, SaveTest);
+	USaveGameManager::WriteObjectProperty(SaveGameObjectData, this, PropertyName);
+
+	return true;
+}
+
+bool AHCharacter::ReadSaveGameObjectData_Implementation(FHSaveGameObjectData& SaveGameObjectData)
+{
+	USaveGameManager::ReadObjectProperty(SaveGameObjectData, this);
+
+	return true;
+}

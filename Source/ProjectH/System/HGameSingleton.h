@@ -23,11 +23,20 @@ class PROJECTH_API UHGameSingleton : public UObject
 public:
 	UHGameSingleton(const FObjectInitializer& ObjectInitializer);
 	~UHGameSingleton();
+
+	UFUNCTION(BlueprintCallable, BlueprintPure)
 	UHGameSingleton* GetHGameSingleton();
 
 protected:
 	bool CreateManagers();
 	void DestroyManagers();
+
+public:
+	UFUNCTION(BlueprintCallable, BlueprintPure)
+	UDataTableManager* GetDataTableManager(){return DataTableManager;}
+
+	UFUNCTION(BlueprintCallable, BlueprintPure)
+	USaveGameManager* GetSaveGameManager(){return SaveGameManager;}
 
 private:
 	UPROPERTY(Transient)

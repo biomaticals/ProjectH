@@ -11,7 +11,7 @@
 /**
  * 
  */
-UCLASS()
+UCLASS(Blueprintable, BlueprintType)
 class PROJECTH_API UDataTableManager : public UObject
 {
 	GENERATED_BODY()

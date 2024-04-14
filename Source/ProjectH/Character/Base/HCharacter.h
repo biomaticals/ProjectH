@@ -4,10 +4,11 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
+#include "System/SaveGame/HSaveGameObjectInterface.h"
 #include "HCharacter.generated.h"
 
 UCLASS()
-class PROJECTH_API AHCharacter : public ACharacter
+class PROJECTH_API AHCharacter : public ACharacter, public IHSaveGameObjectInterface
 {
 	GENERATED_BODY()
 
@@ -26,5 +27,18 @@ public:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
-private:
+
+/** IHSaveGameObjectInterface ~ */
+public:
+	virtual const FString GetHSaveGameObjectKey_Implementation() const override;
+	virtual const TArray<UObject*> GetHSaveGameObjectChildren_Implementation() const override;
+	virtual bool WriteSaveGameObjectData_Implementation(FHSaveGameObjectData& SaveGameObjectData) override;
+	virtual bool ReadSaveGameObjectData_Implementation(FHSaveGameObjectData& SaveGameObjectData) override;
+
+public:
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+	int SaveTest = 0;
+
+
+/** ~ IHSavveGameObjectInterface */
 };
