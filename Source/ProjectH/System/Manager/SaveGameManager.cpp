@@ -172,19 +172,19 @@ bool USaveGameManager::ReadObjectProperty(UPARAM(Ref) FHSaveGameObjectData& Save
 template<>
 void USaveGameManager::WriteObjectProperty_Internal(UPARAM(Ref) FHSaveGamePropertyData& PropertyData, int32* ValueAddress)
 {
-	PropertyData.Value = FString::Printf(TEXT("%d"), ValueAddress);
+	PropertyData.Value = FString::Printf(TEXT("%d"), *ValueAddress);
 }
 
 template<>
 void USaveGameManager::WriteObjectProperty_Internal(UPARAM(Ref) FHSaveGamePropertyData& PropertyData, float* ValueAddress)
 {
-	PropertyData.Value = FString::Printf(TEXT("%f"), ValueAddress);
+	PropertyData.Value = FString::Printf(TEXT("%f"), *ValueAddress);
 }
 
 template<>
 void USaveGameManager::WriteObjectProperty_Internal(UPARAM(Ref) FHSaveGamePropertyData& PropertyData, double* ValueAddress)
 {
-	PropertyData.Value = FString::Printf(TEXT("%f"), ValueAddress);
+	PropertyData.Value = FString::Printf(TEXT("%f"), *ValueAddress);
 }
 
 template<>

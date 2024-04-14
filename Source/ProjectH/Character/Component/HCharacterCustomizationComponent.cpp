@@ -76,7 +76,7 @@ void UHCharacterCustomizationComponent::InitializeComponent()
 	if(GetOwner() && GetOwner()->IsA(AHCharacter::StaticClass()))
 	CachedOwner = GetOwner() ? Cast<AHCharacter>(GetOwner()) : nullptr;
 	
-	ensureMsgf(!CachedOwner, TEXT("HCharacterComponent's owner is not a AHCharacter. It will not be functional."));
+	ensureMsgf(CachedOwner, TEXT("HCharacterComponent's owner is not a AHCharacter. It will not be functional."));
 
 	// Load Assets... Realize when hitch occurs
 	check(!bLoaded);
