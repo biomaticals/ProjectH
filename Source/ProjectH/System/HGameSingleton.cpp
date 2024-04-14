@@ -31,7 +31,7 @@ UHGameSingleton* UHGameSingleton::GetHGameSingleton()
 	if (Instance->IsValidLowLevel() == false)
 		return NULL;
 	
-	if(CreateManagers() == false)
+	if(Instance->CreateManagers() == false)
 		return NULL;
 	
 	return Instance;
@@ -67,4 +67,36 @@ void UHGameSingleton::DestroyManagers()
 	{
 		SaveGameManager = NULL;
 	}
+}
+
+UDataTableManager* UHGameSingleton::GetDataTableManager(const UObject* WorldContextObject)
+{
+	if(WorldContextObject == NULL)
+		return NULL;
+
+	if(WorldContextObject->GetOuter() == NULL)
+		return NULL;
+
+	if (UHGameSingleton* HGameSington = GetHGameSingleton())
+	{
+		return HGameSington->DataTableManager;
+	}
+
+	return NULL;
+}
+
+USaveGameManager* UHGameSingleton::GetSaveGameManager(const UObject* WorldContextObject)
+{
+	if (WorldContextObject == NULL)
+		return NULL;
+
+	if (WorldContextObject->GetOuter() == NULL)
+		return NULL;
+
+	if (UHGameSingleton* HGameSington = GetHGameSingleton())
+	{
+		return HGameSington->SaveGameManager;
+	}
+
+	return NULL;
 }

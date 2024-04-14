@@ -23,20 +23,18 @@ class PROJECTH_API UHGameSingleton : public UObject
 public:
 	UHGameSingleton(const FObjectInitializer& ObjectInitializer);
 	~UHGameSingleton();
-
-	UFUNCTION(BlueprintCallable, BlueprintPure)
-	UHGameSingleton* GetHGameSingleton();
+	static UHGameSingleton* GetHGameSingleton();
 
 protected:
 	bool CreateManagers();
 	void DestroyManagers();
 
 public:
-	UFUNCTION(BlueprintCallable, BlueprintPure)
-	UDataTableManager* GetDataTableManager(){return DataTableManager;}
+	UFUNCTION(BlueprintCallable, BlueprintPure, meta = (WorldContext = "WorldContextObject"))
+	static UDataTableManager* GetDataTableManager(const UObject* WorldContextObject);
 
-	UFUNCTION(BlueprintCallable, BlueprintPure)
-	USaveGameManager* GetSaveGameManager(){return SaveGameManager;}
+	UFUNCTION(BlueprintCallable, BlueprintPure, meta = (WorldContext = "WorldContextObject"))
+	static USaveGameManager* GetSaveGameManager(const UObject* WorldContextObject);
 
 private:
 	UPROPERTY(Transient)
@@ -45,6 +43,6 @@ private:
 	UPROPERTY(Transient)
 	TObjectPtr<USaveGameManager> SaveGameManager;
 	
-
+private:
 	bool ManagersCreated;
 };

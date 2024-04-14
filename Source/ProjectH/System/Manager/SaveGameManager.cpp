@@ -64,7 +64,7 @@ bool USaveGameManager::ReadSaveGameObjectsToSlot(TArray<UObject*> Objects, const
 			
 			if (FoundObjectData)
 			{
-				IHSaveGameObjectInterface::Execute_WriteSaveGameObjectData(Object, *FoundObjectData);
+				IHSaveGameObjectInterface::Execute_ReadSaveGameObjectData(Object, *FoundObjectData);
 			}
 		}
 	}
