@@ -51,7 +51,7 @@ bool USaveGameManager::ReadSaveGameObjectsToSlot(TArray<UObject*> Objects, const
 
 	if (HSaveGame == nullptr)
 	{
-		UT_LOG(HSaveGameLog, Fatal, TEXT(" % s is exist, but load failed. (UserIndex = %d)"), *SlotName, UserIndex);
+		UT_LOG(HSaveGameLog, Error, TEXT(" % s is exist, but load failed. (UserIndex = %d)"), *SlotName, UserIndex);
 		return false;
 	}
 
