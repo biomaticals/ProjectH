@@ -538,62 +538,14 @@ struct FAnatomyBaseBodyProfile
 
 #pragma region SaveGame
 USTRUCT(BlueprintType)
-struct FHSaveGamePropertyData
-{
-	GENERATED_USTRUCT_BODY()
-
-	const bool operator== (const FHSaveGamePropertyData& Other) const
-	{
-		return Name.Equals(Other.Name) && Type.Equals(Other.Type) && Value.Equals(Other.Value);
-	}
-
-	const bool operator!= (const FHSaveGamePropertyData& Other) const
-	{
-		return !Name.Equals(Other.Name) || !Type.Equals(Other.Type) || !Value.Equals(Other.Value);
-	}
-
-protected:
-	UPROPERTY(VisibleAnywhere)
-	FString Name;
-
-	UPROPERTY(VisibleAnywhere)
-	FString Type;
-
-	UPROPERTY(VisibleAnywhere)
-	FString Value;
-
-	friend class USaveGameManager;
-};
-
-USTRUCT(BlueprintType)
-struct FHSaveGameNonPropertyData
-{
-	GENERATED_USTRUCT_BODY()
-
-	const bool operator== (const FHSaveGameNonPropertyData& Other) const
-	{
-		return Key.Equals(Other.Key) && Value.Equals(Other.Value);
-	}
-
-	const bool operator!= (const FHSaveGameNonPropertyData& Other) const
-	{
-		return !Key.Equals(Other.Key) || !Value.Equals(Other.Value);
-	}
-
-protected:
-	UPROPERTY(VisibleAnywhere)
-	FString Key;
-
-	UPROPERTY(VisibleAnywhere)
-	FString Value;
-
-	friend class USaveGameManager;
-};
-
-USTRUCT(BlueprintType)
 struct FHSaveGameObjectData
 {
 	GENERATED_USTRUCT_BODY()
+
+	FHSaveGameObjectData()
+	{
+		bProcessed = false;
+	}
 
 	const bool operator== (const FHSaveGameObjectData& Other) const
 	{
@@ -618,13 +570,16 @@ protected:
 	TSubclassOf<UObject> ObjectClass;
 
 	UPROPERTY(VisibleAnywhere)
-	TArray<FHSaveGamePropertyData> PropertyDataList;
+	FTransform Transform;
 
 	UPROPERTY(VisibleAnywhere)
-	TArray<FHSaveGameNonPropertyData> NonPropertyDataList;
+	TArray<uint8> ByteData;
 
 	UPROPERTY()
 	TSoftObjectPtr<UObject> ParentSaveGameObject;
+
+	UPROPERTY(Transient)
+	bool bProcessed;
 
 	friend class USaveGameManager;
 };

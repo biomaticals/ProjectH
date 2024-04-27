@@ -18,6 +18,6 @@ class PROJECTH_API UHSaveGame : public ULocalPlayerSaveGame
 	GENERATED_BODY()
 
 public:
-	UPROPERTY(BlueprintReadOnly)
+	UPROPERTY(BlueprintReadOnly, SaveGame)
 	struct FHSaveGameData HSaveGameData;
 };
