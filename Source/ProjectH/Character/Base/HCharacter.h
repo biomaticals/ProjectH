@@ -30,11 +30,9 @@ public:
 
 /** IHSaveGameObjectInterface ~ */
 public:
-	virtual const FString GetHSaveGameObjectKey_Implementation() const override;
-	virtual const TArray<UObject*> GetHSaveGameObjectChildren_Implementation() const override;
-	virtual bool WriteSaveGameObjectData_Implementation(FHSaveGameObjectData& SaveGameObjectData) override;
-	virtual bool ReadSaveGameObjectData_Implementation(FHSaveGameObjectData& SaveGameObjectData) override;
-
+	virtual const FString GetHSaveGameObjectID_Implementation() const override;
+	virtual const FTransform GetHSaveGameObjectTransform_Implementation() const override;
+	
 public:
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
 	int SaveTest = 0;

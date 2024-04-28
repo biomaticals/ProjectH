@@ -47,11 +47,6 @@ bool UHGameSingleton::CreateManagers()
 		DataTableManager = NewObject<UDataTableManager>(this, UDataTableManager::StaticClass());
 	}
 
-	if (SaveGameManager == NULL)
-	{
-		SaveGameManager = NewObject<USaveGameManager>(this, USaveGameManager::StaticClass());
-	}
-
 	ManagersCreated = true;
 	return true;
 }
@@ -63,10 +58,6 @@ void UHGameSingleton::DestroyManagers()
 		DataTableManager = NULL;
 	}
 
-	if (SaveGameManager)
-	{
-		SaveGameManager = NULL;
-	}
 }
 
 UDataTableManager* UHGameSingleton::GetDataTableManager(const UObject* WorldContextObject)
@@ -80,22 +71,6 @@ UDataTableManager* UHGameSingleton::GetDataTableManager(const UObject* WorldCont
 	if (UHGameSingleton* HGameSington = GetHGameSingleton())
 	{
 		return HGameSington->DataTableManager;
-	}
-
-	return NULL;
-}
-
-USaveGameManager* UHGameSingleton::GetSaveGameManager(const UObject* WorldContextObject)
-{
-	if (WorldContextObject == NULL)
-		return NULL;
-
-	if (WorldContextObject->GetOuter() == NULL)
-		return NULL;
-
-	if (UHGameSingleton* HGameSington = GetHGameSingleton())
-	{
-		return HGameSington->SaveGameManager;
 	}
 
 	return NULL;

@@ -581,7 +581,7 @@ protected:
 	UPROPERTY(Transient)
 	bool bProcessed;
 
-	friend class USaveGameManager;
+	friend class UHSaveGameSubSystem;
 };
 
 USTRUCT(BlueprintType)
@@ -598,7 +598,7 @@ protected:
 	UPROPERTY(VisibleAnywhere)
 	TArray<FHSaveGameObjectData> ObjectData;
 
-	friend class USaveGameManager;
+	friend class UHSaveGameSubSystem;
 };
 #pragma endregion 
 	

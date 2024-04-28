@@ -23,14 +23,14 @@ class PROJECTH_API IHSaveGameObjectInterface
 	// Add interface functions to this class. This is the class that will be inherited to implement this interface.
 public:
 	UFUNCTION(BlueprintNativeEvent, Category = "HSaveGameObjectInterface")
-	const FString GetHSaveGameObjectKey() const;
+	const FString GetHSaveGameObjectID() const;
 
 	UFUNCTION(BlueprintNativeEvent, Category = "HSaveGameObjectInterface")
-	const TArray<UObject*> GetHSaveGameObjectChildren() const;
+	const FTransform GetHSaveGameObjectTransform() const;
 
 	UFUNCTION(BlueprintNativeEvent, Category = "HSaveGameObjectInterface")
-	bool WriteSaveGameObjectData(FHSaveGameObjectData& SaveGameObjectData);
+	void OnObjectSaving();
 
 	UFUNCTION(BlueprintNativeEvent, Category = "HSaveGameObjectInterface")
-	bool ReadSaveGameObjectData(FHSaveGameObjectData& SaveGameObjectData);
+	void OnObjectLoading();
 };

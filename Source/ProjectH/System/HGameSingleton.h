@@ -9,8 +9,7 @@
 class UDataTableManager;
 class USaveGameManager;
 
-#define DATATABLE_MANAGER() {UHGameSingleton::GetHGameSingleton()->DataTableManager;}
-#define SAVEGAME_MANAGER() {UHGameSingleton::GetHGameSingleton()->SaveGameManager;}
+#define DATATABLE_MANAGER() UHGameSingleton::GetHGameSingleton()->DataTableManager;
 
 /**
  * 
@@ -33,15 +32,9 @@ public:
 	UFUNCTION(BlueprintCallable, BlueprintPure, meta = (WorldContext = "WorldContextObject"))
 	static UDataTableManager* GetDataTableManager(const UObject* WorldContextObject);
 
-	UFUNCTION(BlueprintCallable, BlueprintPure, meta = (WorldContext = "WorldContextObject"))
-	static USaveGameManager* GetSaveGameManager(const UObject* WorldContextObject);
-
-private:
+public:
 	UPROPERTY(Transient)
 	TObjectPtr<UDataTableManager> DataTableManager;
-
-	UPROPERTY(Transient)
-	TObjectPtr<USaveGameManager> SaveGameManager;
 	
 private:
 	bool ManagersCreated;
