@@ -10,6 +10,7 @@
 #include "System/SaveGame/HSaveGameObjectInterface.h"
 #include "GameFramework/AsyncActionHandleSaveGame.h"
 #include "System/Manager/SaveGameManager.h"
+#include "Serialization/ObjectAndNameAsStringProxyArchive.h"
 
 void UHSaveGameSubSystem::Initialize(FSubsystemCollectionBase& Collection)
 {
@@ -39,15 +40,26 @@ void UHSaveGameSubSystem::Deinitialize()
 
 void UHSaveGameSubSystem::OnSaved(const FString& SlotName, const int32 UserIndex, bool Success)
 {
+	if(Success)
+	{
+		UT_LOG(HSaveGameLog, Log, TEXT("%d 유저의 %s 슬롯에 세이브게임을 저장했습니다."), UserIndex, *SlotName);
+	}
+	else
+	{
+		UT_LOG(HSaveGameLog, Error, TEXT("%d 유저의 %s 슬롯에 세이브게임을 저장하는데 실패했습니다."), UserIndex, *SlotName);
+	}
 
 }
 
 void UHSaveGameSubSystem::OnLoaded(const FString& SlotName, const int32 UserIndex, USaveGame* SaveGame)
 {
+	UT_LOG(HSaveGameLog, Log, TEXT("%d 유저의 %s 슬롯으로 세이브게임을 불러왔습니다."), UserIndex, *SlotName);
+
 	UHSaveGame* HSaveGame = Cast<UHSaveGame>(SaveGame);
 	if (HSaveGame == NULL)
 	{
-		UT_LOG(HSaveGameLog, Error, TEXT("%s 슬롯의 세이브게임이 HSaveGame이 아닙니다."));
+		UT_LOG(HSaveGameLog, Error, TEXT("%s 슬롯의 세이브게임이 HSaveGame이 아닙니다."), *SlotName);
+		return;
 	}
 
 	for (FActorIterator It(GetWorld()); It; ++It)
@@ -76,7 +88,7 @@ void UHSaveGameSubSystem::OnLoaded(const FString& SlotName, const int32 UserInde
 				Actor->SetActorTransform(Data.Transform);
 
 				FMemoryReader MemReader(Data.ByteData);
-				FArchive Ar(MemReader);
+				FObjectAndNameAsStringProxyArchive Ar(MemReader, true);
 				Ar.ArIsSaveGame = true;
 				Actor->Serialize(Ar);
 
@@ -144,7 +156,7 @@ bool UHSaveGameSubSystem::HSaveGametoSlot(UObject* WorldContextObject, const FSt
 			Data.Transform = IHSaveGameObjectInterface::Execute_GetHSaveGameObjectTransform(Actor);
 
 			FMemoryWriter MemWriter(Data.ByteData);
-			FArchive Ar(MemWriter);
+			FObjectAndNameAsStringProxyArchive Ar(MemWriter, true);
 			Ar.ArIsSaveGame = true;
 			Actor->Serialize(Ar);
 			check(Data.IsValid());
