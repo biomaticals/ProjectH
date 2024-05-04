@@ -42,23 +42,23 @@ void UHSaveGameSubSystem::OnSaved(const FString& SlotName, const int32 UserIndex
 {
 	if(Success)
 	{
-		UT_LOG(HSaveGameLog, Log, TEXT("%d À¯ÀúÀÇ %s ½½·Ô¿¡ ¼¼ÀÌºê°ÔÀÓÀ» ÀúÀåÇß½À´Ï´Ù."), UserIndex, *SlotName);
+		UT_LOG(HSaveGameLog, Log, TEXT("%d ìœ ì €ì˜ %s ìŠ¬ë¡¯ì— ì„¸ì´ë¸Œê²Œì„ì„ ì €ì¥í–ˆìŠµë‹ˆë‹¤."), UserIndex, *SlotName);
 	}
 	else
 	{
-		UT_LOG(HSaveGameLog, Error, TEXT("%d À¯ÀúÀÇ %s ½½·Ô¿¡ ¼¼ÀÌºê°ÔÀÓÀ» ÀúÀåÇÏ´Âµ¥ ½ÇÆĞÇß½À´Ï´Ù."), UserIndex, *SlotName);
+		UT_LOG(HSaveGameLog, Error, TEXT("%d ìœ ì €ì˜ %s ìŠ¬ë¡¯ì— ì„¸ì´ë¸Œê²Œì„ì„ ì €ì¥í•˜ëŠ”ë° ì‹¤íŒ¨í–ˆìŠµë‹ˆë‹¤."), UserIndex, *SlotName);
 	}
 
 }
 
 void UHSaveGameSubSystem::OnLoaded(const FString& SlotName, const int32 UserIndex, USaveGame* SaveGame)
 {
-	UT_LOG(HSaveGameLog, Log, TEXT("%d À¯ÀúÀÇ %s ½½·ÔÀ¸·Î ¼¼ÀÌºê°ÔÀÓÀ» ºÒ·¯¿Ô½À´Ï´Ù."), UserIndex, *SlotName);
+	UT_LOG(HSaveGameLog, Log, TEXT("%d ìœ ì €ì˜ %s ìŠ¬ë¡¯ìœ¼ë¡œ ì„¸ì´ë¸Œê²Œì„ì„ ë¶ˆëŸ¬ì™”ìŠµë‹ˆë‹¤."), UserIndex, *SlotName);
 
 	UHSaveGame* HSaveGame = Cast<UHSaveGame>(SaveGame);
 	if (HSaveGame == NULL)
 	{
-		UT_LOG(HSaveGameLog, Error, TEXT("%s ½½·ÔÀÇ ¼¼ÀÌºê°ÔÀÓÀÌ HSaveGameÀÌ ¾Æ´Õ´Ï´Ù."), *SlotName);
+		UT_LOG(HSaveGameLog, Error, TEXT("%s ìŠ¬ë¡¯ì˜ ì„¸ì´ë¸Œê²Œì„ì´ HSaveGameì´ ì•„ë‹™ë‹ˆë‹¤."), *SlotName);
 		return;
 	}
 
@@ -83,23 +83,22 @@ void UHSaveGameSubSystem::OnLoaded(const FString& SlotName, const int32 UserInde
 
 			if (ID == Data.ID)
 			{
+				Found = true;
 				FoundData = Data;
-
-				Actor->SetActorTransform(Data.Transform);
-
+				
 				FMemoryReader MemReader(Data.ByteData);
 				FObjectAndNameAsStringProxyArchive Ar(MemReader, true);
 				Ar.ArIsSaveGame = true;
 				Actor->Serialize(Ar);
-
-				Found = true;
+				Actor->SetActorTransform(Data.Transform);
+				break;
 			}
 		}
 
 		if (Found)
 		{
 			HSaveGame->HSaveGameData.ObjectData.Remove(FoundData);
-			break;
+			continue;
 		}
 		else
 		{
@@ -117,21 +116,21 @@ bool UHSaveGameSubSystem::HSaveGametoSlot(UObject* WorldContextObject, const FSt
 {
 	if (GetWorld() == NULL)
 	{
-		UT_LOG(HSaveGameLog, Error, TEXT("¿ùµå°¡ ¾ø½À´Ï´Ù."));
+		UT_LOG(HSaveGameLog, Error, TEXT("ì›”ë“œê°€ ì—†ìŠµë‹ˆë‹¤."));
 		return false;
 	}
 
 
 	if (SlotName.IsEmpty())
 	{
-		UT_LOG(HSaveGameLog, Error, TEXT("½½·ÔÀÌ¸§ÀÌ ºñ¾ú½À´Ï´Ù."));
+		UT_LOG(HSaveGameLog, Error, TEXT("ìŠ¬ë¡¯ì´ë¦„ì´ ë¹„ì—ˆìŠµë‹ˆë‹¤."));
 		return false;
 	}
 
 	AGameStateBase* GameState = GetWorld()->GetGameState();
 	if (GameState == NULL)
 	{
-		UT_LOG(HSaveGameLog, Error, TEXT("¿ùµå¿¡ GameState°¡ Á¸ÀçÇÏÁö ¾Ê½À´Ï´Ù."));
+		UT_LOG(HSaveGameLog, Error, TEXT("ì›”ë“œì— GameStateê°€ ì¡´ì¬í•˜ì§€ ì•ŠìŠµë‹ˆë‹¤."));
 		return false;
 	}
 
@@ -175,7 +174,7 @@ bool UHSaveGameSubSystem::HLoadGameFromSlot(const FString& SlotName, const int32
 {
 	if (UGameplayStatics::DoesSaveGameExist(SlotName, UserIndex) == false)
 	{
-		UT_LOG(HSaveGameLog, Warning, TEXT("%s ½½·Ô¿¡ ¼¼ÀÌºê°ÔÀÓÀÌ ¾ø½À´Ï´Ù."), *SlotName);
+		UT_LOG(HSaveGameLog, Warning, TEXT("%s ìŠ¬ë¡¯ì— ì„¸ì´ë¸Œê²Œì„ì´ ì—†ìŠµë‹ˆë‹¤."), *SlotName);
 		return false;
 	}
 

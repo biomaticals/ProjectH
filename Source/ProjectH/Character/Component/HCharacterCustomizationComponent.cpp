@@ -1,4 +1,4 @@
-// Copy Rigts are in Team UniqueTurtle. 
+// Copyright 2024. Unique Turtle. All rights reserved.
 
 #include "Character/Component/HCharacterCustomizationComponent.h"
 #include "Character/Base/HCharacter.h"
@@ -6,9 +6,13 @@
 #include "Common/CommonStruct.h"
 #include "DataAsset/CharacterCustomizationDataAsset.h"
 #include "Engine/AssetManager.h"
+#include "Engine/PrimaryAssetLabel.h"
 #include "Kismet/KismetSystemLibrary.h"
 #include "Net/UnrealNetwork.h"
 #include "ProjectH.h"
+#include "System/HGameSingleton.h"
+#include "System/Manager/DataTableManager.h"
+#include "System/Manager/HAssetManager.h"
 
 UHCharacterCustomizationComponent::UHCharacterCustomizationComponent()
 {
@@ -24,11 +28,6 @@ UHCharacterCustomizationComponent::UHCharacterCustomizationComponent()
 	bMulticastIndividualChanges = true;
 	bDebugReplication = false;
 	#pragma endregion
-
-	#pragma region Load
-	bIsLoading = false;
-	bLoaded = false;
-	#pragma endregion
 }
 
 void UHCharacterCustomizationComponent::BeginPlay()
@@ -41,22 +40,17 @@ void UHCharacterCustomizationComponent::InitializeComponent()
 	Super::InitializeComponent();
 
 	UT_LOG(HCharacterCustomizationLog, Log, TEXT("InitializeComponent Start"));
+	
+	if (GetOwner() && GetOwner()->IsA(AHCharacter::StaticClass()))
+		CachedOwner = GetOwner() ? Cast<AHCharacter>(GetOwner()) : nullptr;
+
+	ensureMsgf(CachedOwner, TEXT("HCharacterComponent's owner is not a AHCharacter. It will not be functional."));
 
 	// Network
 	SetIsReplicated(true);
 
 	// Property Reset
 	CachedCustomizationProfiles.Empty();
-
-	UT_LOG(HCharacterCustomizationLog, Log, TEXT("Initialization Behavior : %s"), *EnumToString((int32)InitializationBehavior, TEXT("/Script/ProjectH.ECharacterCustomizationInitializationBehavior")));
-
-	UT_LOG(HCharacterCustomizationLog, Log, TEXT("ProfileToLoad : %s"), *ProfileToLoad);
-
-	/**
-	 * To do 
-	 * automization to find profile from data table.
-	 * change profile type as FGameplayTag
-	 */
 
 	// Remove Event
 	if (OnStartLoadAsset.IsBoundToObject(this))
@@ -73,18 +67,26 @@ void UHCharacterCustomizationComponent::InitializeComponent()
 	OnPreUpdateApparel.AddUObject(this, &UHCharacterCustomizationComponent::ClearApparelSpecificSettings);
 	OnpostUpdateApparel.AddUObject(this, &UHCharacterCustomizationComponent::ApplyApparelSpecificSettings);
 
-	if(GetOwner() && GetOwner()->IsA(AHCharacter::StaticClass()))
-	CachedOwner = GetOwner() ? Cast<AHCharacter>(GetOwner()) : nullptr;
+	UT_LOG(HCharacterCustomizationLog, Log, TEXT("Initialization Behavior : %s"), *EnumToString((int32)InitializationBehavior, TEXT("/Script/ProjectH.ECharacterCustomizationInitializationBehavior")));
+
+	UT_LOG(HCharacterCustomizationLog, Log, TEXT("ProfileToLoad : %s"), *ProfileToLoad);
 	
-	ensureMsgf(CachedOwner, TEXT("HCharacterComponent's owner is not a AHCharacter. It will not be functional."));
+	DATATABLE_MANAGER()->UpdateAvailableAnatomyProfiles();
+	
+	LoadPrimaryAsset();
 
-	// Load Assets... Realize when hitch occurs
-	check(!bLoaded);
-	check(!bIsLoading);
+	switch (InitializationBehavior)
+	{
+	case ECharacterCustomizationInitializationBehavior::UseCurrentProfile:
+	case ECharacterCustomizationInitializationBehavior::OpenCharacterEditorWithCurrentProfile:
 
-	bIsLoading = true;
-
-	LoadAsset();
+		break;
+	
+	case ECharacterCustomizationInitializationBehavior::UseProfileToLoad:
+	case ECharacterCustomizationInitializationBehavior::OpenCharacterEditorWithProfileToLoad:
+		break;
+	}
+	
 }
 
 void UHCharacterCustomizationComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
@@ -97,8 +99,6 @@ void UHCharacterCustomizationComponent::GetLifetimeReplicatedProps(TArray<FLifet
 {
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 
-	DOREPLIFETIME(UHCharacterCustomizationComponent, bIsLoading);
-	DOREPLIFETIME(UHCharacterCustomizationComponent, bLoaded);
 }
 
 void UHCharacterCustomizationComponent::ApplyApparelSpecificSettings(UHCharacterCustomizationComponent* CharacterCustomizationComponent, FApparelProfile ApparelProfile, TArray<FCCDA_ApparelProfile> AddingCCDA_Apparels, TArray<USkeletalMeshComponent*> AddingSkeletalMeshComponents, TArray<FCCDA_ApparelProfile> SkippedCCDA_ApparelProfiles)
@@ -118,10 +118,8 @@ void UHCharacterCustomizationComponent::ClearApparelSpecificSettings(UHCharacter
 
 }
 
-void UHCharacterCustomizationComponent::LoadAsset()
+void UHCharacterCustomizationComponent::LoadPrimaryAsset()
 {
-	bIsLoading = true;
-
 	UT_LOG(HCharacterLog, Log, TEXT("Start Load Asset"));
 
 	if (OnStartLoadAsset.IsBound())
@@ -133,11 +131,13 @@ void UHCharacterCustomizationComponent::LoadAsset()
 		return;
 	}
 	
-	UAssetManager& AssetManager = UAssetManager::Get();
-	IAssetRegistry& AssetRegistry = AssetManager.GetAssetRegistry();
+	UHAssetManager& AssetManager = UHAssetManager::Get();
 	
-	bLoaded = true;
-	bIsLoading = false;
+	for (UPrimaryAssetLabel* AssetPackageToLoad : AssetPackagesToLoad)
+	{
+		FPrimaryAssetId AssetId = AssetPackageToLoad->GetPrimaryAssetId();
+		AssetManager.LoadPrimaryAsset(AssetId);
+	}
 }
 
 bool UHCharacterCustomizationComponent::CheckReplicateIndividualChagnes() const

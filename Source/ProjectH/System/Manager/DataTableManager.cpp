@@ -14,8 +14,10 @@ void UDataTableManager::ValidateDataTables()
 }
 
 #pragma region CharacterCustomization
-bool UDataTableManager::UpdateAvaiableAnatomyProfiles()
+bool UDataTableManager::UpdateAvailableAnatomyProfiles()
 {
+	UT_LOG(HLog, Log, TEXT("Start UDataTableManager::UpdateAvailableAnatomyProfiles"));
+
 	if(NeedUpdatAnatomyProfiles == false)
 		return true;
 
@@ -50,8 +52,13 @@ bool UDataTableManager::UpdateAvaiableAnatomyProfiles()
 
 TMap<EAnatomy, FAnatomyProfile> UDataTableManager::GetAvailableAnatomyProfiles()
 {
-	if(NeedUpdatAnatomyProfiles && UpdateAvaiableAnatomyProfiles() == false)
+	if(NeedUpdatAnatomyProfiles && UpdateAvailableAnatomyProfiles() == false)
 		return TMap<EAnatomy, FAnatomyProfile>();
 
 	return AvailableAnatomyProfiles;
+}
+
+void UDataTableManager::SetNeedUpdateAnatomyProfiles()
+{
+	NeedUpdatAnatomyProfiles = true;
 }

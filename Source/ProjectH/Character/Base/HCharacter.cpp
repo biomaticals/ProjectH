@@ -1,15 +1,18 @@
-// Copy Rigts are in Team UniqueTurtle. 
+// Copyright 2024. Unique Turtle. All rights reserved.
 
 
 #include "Character/Base/HCharacter.h"
+#include "Character/Component/HCharacterCustomizationComponent.h"
 #include "System/Manager/SaveGameManager.h"
 
-// Sets default values
-AHCharacter::AHCharacter()
+FName AHCharacter::CharacterCustomizationComponentName(TEXT("CharacterCustomizationComponent"));
+
+AHCharacter::AHCharacter(const FObjectInitializer& ObjectInitializer)
+: Super(ObjectInitializer)
 {
- 	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
+	CharacterCustomizationComponent = CreateDefaultSubobject<UHCharacterCustomizationComponent>(AHCharacter::CharacterCustomizationComponentName);
 }
 
 // Called when the game starts or when spawned
@@ -26,6 +29,13 @@ void AHCharacter::Tick(float DeltaTime)
 
 }
 
+void AHCharacter::Serialize(FArchive& Ar)
+{
+	Super::Serialize(Ar);
+
+	CharacterCustomizationComponent->Serialize(Ar);
+}
+
 // Called to bind functionality to input
 void AHCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
@@ -33,6 +43,7 @@ void AHCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponen
 
 }
 
+/** IHSaveGameObjectInterface ~ */
 const FString AHCharacter::GetHSaveGameObjectID_Implementation() const
 {
 	return GetName();
@@ -41,4 +52,10 @@ const FString AHCharacter::GetHSaveGameObjectID_Implementation() const
 const FTransform AHCharacter::GetHSaveGameObjectTransform_Implementation() const
 {
 	return GetTransform();
+}
+/** ~ IHSavveGameObjectInterface */
+
+UHCharacterCustomizationComponent* AHCharacter::GetCHaracterCustomizationComponent()
+{
+	return CharacterCustomizationComponent;
 }

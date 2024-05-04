@@ -1,4 +1,4 @@
-// Copy Rigts are in Team UniqueTurtle. 
+// Copyright 2024. Unique Turtle. All rights reserved.
 
 #pragma once
 
@@ -7,14 +7,15 @@
 #include "System/SaveGame/HSaveGameObjectInterface.h"
 #include "HCharacter.generated.h"
 
+class UHCharacterCustomizationComponent;
+
 UCLASS()
 class PROJECTH_API AHCharacter : public ACharacter, public IHSaveGameObjectInterface
 {
 	GENERATED_BODY()
 
 public:
-	// Sets default values for this character's properties
-	AHCharacter();
+	AHCharacter(const FObjectInitializer& ObjectInitializer = FObjectInitializer::Get());
 
 protected:
 	// Called when the game starts or when spawned
@@ -26,7 +27,7 @@ public:
 
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
-
+	virtual void Serialize(FArchive& Ar) override;
 
 /** IHSaveGameObjectInterface ~ */
 public:
@@ -39,4 +40,15 @@ public:
 
 
 /** ~ IHSavveGameObjectInterface */
+
+public:
+	UFUNCTION(BlueprintCallable, BlueprintPure)
+	UHCharacterCustomizationComponent* GetCHaracterCustomizationComponent();
+
+protected:
+	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, SaveGame)
+	TObjectPtr<UHCharacterCustomizationComponent> CharacterCustomizationComponent;
+
+protected:
+	static FName CharacterCustomizationComponentName;
 };

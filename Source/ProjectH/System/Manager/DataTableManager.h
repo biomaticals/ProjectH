@@ -1,4 +1,4 @@
-// Copy Rigts are in Team UniqueTurtle. 
+// Copyright 2024. Unique Turtle. All rights reserved.
 
 #pragma once
 
@@ -23,10 +23,13 @@ public:
 #pragma region CharacterCustomization
 public:
 	UFUNCTION()
-	bool UpdateAvaiableAnatomyProfiles();
+	bool UpdateAvailableAnatomyProfiles();
 
 	UFUNCTION()
 	TMap<EAnatomy, FAnatomyProfile> GetAvailableAnatomyProfiles();
+
+	UFUNCTION(BlueprintCallable)
+	void SetNeedUpdateAnatomyProfiles();
 
 protected:
 	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "CharacterCustomization")

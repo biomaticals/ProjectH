@@ -1,4 +1,4 @@
-// Copy Rigts are in Team UniqueTurtle. 
+// Copyright 2024. Unique Turtle. All rights reserved.
 
 #pragma once
 
@@ -38,9 +38,6 @@ public:
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 
-protected:
-	void UpdateAvailableAnatomyProfiles();
-
 public:
 	UFUNCTION()
 	void ApplyApparelSpecificSettings(UHCharacterCustomizationComponent* CharacterCustomizationComponent, FApparelProfile ApparelProfile, TArray<FCCDA_ApparelProfile> AddingCCDA_Apparels, TArray<USkeletalMeshComponent*> AddingSkeletalMeshComponents, TArray<FCCDA_ApparelProfile> SkippedCCDA_ApparelProfiles);
@@ -53,36 +50,30 @@ private:
 	AHCharacter* CachedOwner;
 
 protected:
+	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Initialization")
+	ECharacterCustomizationInitializationBehavior InitializationBehavior;
+
+	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Initialization")
+	FString ProfileToLoad;
+	
 	UPROPERTY(BlueprintReadOnly, VIsibleAnywhere, Transient)
 	FCustomizationProfile CurrentCusomizationProfile;
 
 	UPROPERTY(Transient)
 	TMap<EAnatomy, FCustomizationProfile> CachedCustomizationProfiles;
 
-#pragma region Initialization
 public:
-	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Initialization")
-	ECharacterCustomizationInitializationBehavior InitializationBehavior;
-
-	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Initialization")
-	FString ProfileToLoad;
-#pragma endregion
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, SaveGame)
+	int SaveTest;
 
 #pragma region Load Assets
 public:
 	UFUNCTION(Category = "Load Assets")
-	void LoadAsset();
+	void LoadPrimaryAsset();
 
 protected:
 	UPROPERTY(BlueprintReadWrite, EditDefaultsOnly, Category = "Load Assets")
 	TArray<UPrimaryAssetLabel*> AssetPackagesToLoad;
-
-protected:
-	UPROPERTY(replicated)
-	bool bIsLoading;
-
-	UPROPERTY(replicated)
-	bool bLoaded;
 
 public:
 	FOnStartLoadAsset OnStartLoadAsset;
