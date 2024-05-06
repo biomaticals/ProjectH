@@ -7,9 +7,6 @@
 #include "Kismet/GameplayStatics.h"
 #include "HSaveGameSubSystem.generated.h"
 
-//class FAsyncSaveGameToSlotDelegate;
-//class FAsyncLoadGameFromSlotDelegate;
-
 /**
  * 
  */
@@ -34,7 +31,6 @@ public:
 	bool HLoadGameFromSlot(const FString& SlotName, const int32 UserIndex);
 
 public:
-
 	FAsyncSaveGameToSlotDelegate OnSaveCompleted;	
 	FAsyncLoadGameFromSlotDelegate OnLoadCompleted;
 };

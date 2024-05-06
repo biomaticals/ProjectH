@@ -26,20 +26,38 @@ public:
 	bool UpdateAvailableAnatomyProfiles();
 
 	UFUNCTION()
+	bool UpdatePresetCustomizationProfiles();
+
+	UFUNCTION()
 	TMap<EAnatomy, FAnatomyProfile> GetAvailableAnatomyProfiles();
+
+	UFUNCTION()
+	TMap<FName, FCustomizationProfileMetaData> GetPresetCustomizationProfiles();
 
 	UFUNCTION(BlueprintCallable)
 	void SetNeedUpdateAnatomyProfiles();
 
+	UFUNCTION(BlueprintCallable)
+	void SetNeedUpdatePresetCustomizationProfiles();
+
 protected:
 	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "CharacterCustomization")
 	UDataTable* AnatomyProfilesDataTable; 
+
+	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "CharacterCustomization")
+	UDataTable* PresetCustomizationProfilesDataTable;
 
 private:
 	UPROPERTY(Transient)
 	TMap<EAnatomy, FAnatomyProfile> AvailableAnatomyProfiles;
 
 	UPROPERTY(Transient)
-	bool NeedUpdatAnatomyProfiles = false;
+	TMap<FName, FCustomizationProfileMetaData> PresetCustomizationProfiles;
+
+	UPROPERTY(Transient)
+	bool NeedUpdatAnatomyProfiles = true;
+
+	UPROPERTY(Transient)
+	bool NeedUpdatePresetCustomizationProfiles = true;
 #pragma endregion
 };

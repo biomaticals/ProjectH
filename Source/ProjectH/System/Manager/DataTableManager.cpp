@@ -11,6 +11,7 @@ void UDataTableManager::ValidateDataTables()
 {
 	// CharacterCustomization
 	ensure(AnatomyProfilesDataTable);
+	ensure(PresetCustomizationProfilesDataTable);
 }
 
 #pragma region CharacterCustomization
@@ -24,6 +25,7 @@ bool UDataTableManager::UpdateAvailableAnatomyProfiles()
 	if (AnatomyProfilesDataTable == nullptr || AnatomyProfilesDataTable->IsValidLowLevel() == false)
 	{
 		UT_LOG(HLog, Error, TEXT("[AnatomyProfilesDataTable] is invalid."));
+		return false;
 	}
 
 	AvailableAnatomyProfiles.Empty();	
@@ -47,6 +49,59 @@ bool UDataTableManager::UpdateAvailableAnatomyProfiles()
 
 	NeedUpdatAnatomyProfiles = !Success;
 
+	ensureMsgf(Success, TEXT("UDataTableManager::UpdateAvailableAnatomyProfiles() failed."));
+
+	return Success;
+}
+
+bool UDataTableManager::UpdatePresetCustomizationProfiles()
+{
+	UT_LOG(HLog, Log, TEXT("Start UDataTableManager::UpdatePresetCustomizationProfiles"));
+
+	ensureMsgf(UpdateAvailableAnatomyProfiles(), TEXT("UpdateAvailableAnatomyProfiles() should be precede but it fails."));
+
+	if (NeedUpdatePresetCustomizationProfiles == false)
+		return true;
+
+	if (PresetCustomizationProfilesDataTable == nullptr || PresetCustomizationProfilesDataTable->IsValidLowLevel() == false)
+	{
+		UT_LOG(HLog, Error, TEXT("[PresetCustomizationProfilesDataTable] is invalid."));
+	}
+
+	PresetCustomizationProfiles.Empty();
+
+	bool Success = true;
+
+	TArray<FCustomizationProfile*> DataTableRows;
+	PresetCustomizationProfilesDataTable->GetAllRows<FCustomizationProfile>(*PresetCustomizationProfilesDataTable->GetName(), DataTableRows);
+	
+	for (FCustomizationProfile* DataTableRow : DataTableRows)
+	{
+		if(DataTableRow->MetaData.Name.IsEmpty())
+		{
+			Success = false;
+			continue;
+		}
+
+		if (AvailableAnatomyProfiles.Find(DataTableRow->MetaData.Anatomy))
+		{
+			FName AnatomyString = *EnumToString((uint8)(DataTableRow->MetaData.Anatomy), TEXT("/Script/ProjectH.EAnatomy"));
+			PresetCustomizationProfiles.Add(MakeTuple(AnatomyString, DataTableRow->MetaData));
+		}
+		else
+		{
+			Success = false;
+			continue;
+		}
+	}
+
+	if (AvailableAnatomyProfiles.IsEmpty())
+		Success = false;
+
+	NeedUpdatePresetCustomizationProfiles = !Success;
+
+	ensureMsgf(Success, TEXT("UDataTableManager::UpdatePresetCustomizationProfiles() failed."));
+
 	return Success;
 }
 
@@ -58,7 +113,21 @@ TMap<EAnatomy, FAnatomyProfile> UDataTableManager::GetAvailableAnatomyProfiles()
 	return AvailableAnatomyProfiles;
 }
 
+TMap<FName, FCustomizationProfileMetaData> UDataTableManager::GetPresetCustomizationProfiles()
+{
+	if(NeedUpdatePresetCustomizationProfiles && UpdatePresetCustomizationProfiles())
+		return TMap<FName, FCustomizationProfileMetaData>();
+
+	return PresetCustomizationProfiles;
+}
+
 void UDataTableManager::SetNeedUpdateAnatomyProfiles()
 {
 	NeedUpdatAnatomyProfiles = true;
 }
+
+void UDataTableManager::SetNeedUpdatePresetCustomizationProfiles()
+{
+	NeedUpdatePresetCustomizationProfiles = true;
+}
+#pragma endregion

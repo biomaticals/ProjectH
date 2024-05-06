@@ -104,6 +104,11 @@ void UHSaveGameSubSystem::OnLoaded(const FString& SlotName, const int32 UserInde
 		{
 			//	
 		}
+
+		if (HSaveGame->HSaveGameData.ObjectData.IsEmpty())
+		{
+			break;
+		}
 	}
 
 	if (HSaveGame->HSaveGameData.ObjectData.IsEmpty() == false)

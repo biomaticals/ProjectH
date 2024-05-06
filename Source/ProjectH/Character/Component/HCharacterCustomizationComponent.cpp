@@ -32,32 +32,88 @@ UHCharacterCustomizationComponent::UHCharacterCustomizationComponent()
 
 void UHCharacterCustomizationComponent::BeginPlay()
 {
+	InitializeComponent_Replicable();
+
+
+	
+	LoadPrimaryAsset();
+
+	switch (InitializationBehavior)
+	{
+	case ECharacterCustomizationInitializationBehavior::UseCurrentProfile:
+	case ECharacterCustomizationInitializationBehavior::OpenCharacterEditorWithCurrentProfile:
+		
+		break;
+	
+	case ECharacterCustomizationInitializationBehavior::UseProfileToLoad:
+	case ECharacterCustomizationInitializationBehavior::OpenCharacterEditorWithProfileToLoad:
+		break;
+	}
+
 	Super::BeginPlay();
 }
 
 void UHCharacterCustomizationComponent::InitializeComponent()
 {
-	Super::InitializeComponent();
+	// Network
+	SetIsReplicated(true);
 
-	UT_LOG(HCharacterCustomizationLog, Log, TEXT("InitializeComponent Start"));
-	
 	if (GetOwner() && GetOwner()->IsA(AHCharacter::StaticClass()))
 		CachedOwner = GetOwner() ? Cast<AHCharacter>(GetOwner()) : nullptr;
 
 	ensureMsgf(CachedOwner, TEXT("HCharacterComponent's owner is not a AHCharacter. It will not be functional."));
 
-	// Network
-	SetIsReplicated(true);
+	InitializeComponent_Internal();
 
+	Super::InitializeComponent();
+}
+
+void UHCharacterCustomizationComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
+{
+	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
+
+}
+
+void UHCharacterCustomizationComponent::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
+{
+	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+
+}
+
+void UHCharacterCustomizationComponent::InitializeComponent_Replicable()
+{
+	if (CHECK_REPLIACTE_COMPONENT())
+	{
+		InitializeComponent_Server();
+	}
+	else
+	{
+		InitializeComponent_Client();
+	}
+}
+
+void UHCharacterCustomizationComponent::InitializeComponent_Server_Implementation()
+{
+	
+}
+
+void UHCharacterCustomizationComponent::InitializeComponent_Client()
+{
+
+}
+
+void UHCharacterCustomizationComponent::InitializeComponent_Internal()
+{
 	// Property Reset
 	CachedCustomizationProfiles.Empty();
+	SavedCustomizationProfile.Empty();
 
 	// Remove Event
 	if (OnStartLoadAsset.IsBoundToObject(this))
 	{
 		OnStartLoadAsset.Remove(OnStartLoadAssetHandle);
 	}
-	
+
 	if (OnPreUpdateApparel.IsBoundToObject(this))
 	{
 		OnPreUpdateApparel.Remove(OnBeforeUpdateApparelHandle);
@@ -70,34 +126,8 @@ void UHCharacterCustomizationComponent::InitializeComponent()
 	UT_LOG(HCharacterCustomizationLog, Log, TEXT("Initialization Behavior : %s"), *EnumToString((int32)InitializationBehavior, TEXT("/Script/ProjectH.ECharacterCustomizationInitializationBehavior")));
 
 	UT_LOG(HCharacterCustomizationLog, Log, TEXT("ProfileToLoad : %s"), *ProfileToLoad);
-	
+
 	DATATABLE_MANAGER()->UpdateAvailableAnatomyProfiles();
-	
-	LoadPrimaryAsset();
-
-	switch (InitializationBehavior)
-	{
-	case ECharacterCustomizationInitializationBehavior::UseCurrentProfile:
-	case ECharacterCustomizationInitializationBehavior::OpenCharacterEditorWithCurrentProfile:
-
-		break;
-	
-	case ECharacterCustomizationInitializationBehavior::UseProfileToLoad:
-	case ECharacterCustomizationInitializationBehavior::OpenCharacterEditorWithProfileToLoad:
-		break;
-	}
-	
-}
-
-void UHCharacterCustomizationComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
-{
-	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
-
-}
-
-void UHCharacterCustomizationComponent::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
-{
-	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 
 }
 

@@ -30,13 +30,25 @@ class PROJECTH_API UHCharacterCustomizationComponent : public UActorComponent
 public:	
 	UHCharacterCustomizationComponent();
 
-protected:
-	virtual void BeginPlay() override;
-
 public:
 	virtual void InitializeComponent() override;
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
+
+protected:
+	virtual void BeginPlay() override;
+
+protected:
+	void InitializeComponent_Replicable();
+
+	UFUNCTION(Reliable, Server)
+	void InitializeComponent_Server();
+
+	
+	void InitializeComponent_Client();
+
+private:
+	void InitializeComponent_Internal();
 
 public:
 	UFUNCTION()
@@ -50,12 +62,19 @@ private:
 	AHCharacter* CachedOwner;
 
 protected:
-	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Initialization")
+	UPROPERTY(BlueprintReadOnly, EditAnywhere)
 	ECharacterCustomizationInitializationBehavior InitializationBehavior;
 
-	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Initialization")
+	UPROPERTY(BlueprintReadOnly, EditAnywhere)
 	FString ProfileToLoad;
 	
+protected:
+	//SaveGame
+	UPROPERTY(BlueprintReadOnly, VisibleAnywhere, SaveGame)
+	TArray<FCustomizationProfile> SavedCustomizationProfile;
+
+protected:
+	//Transient
 	UPROPERTY(BlueprintReadOnly, VIsibleAnywhere, Transient)
 	FCustomizationProfile CurrentCusomizationProfile;
 
@@ -86,22 +105,22 @@ private:
 	
 #pragma endregion
 
-#pragma region Repliacte
+#pragma region Repliacte Settings
 protected:
 	bool CheckReplicateIndividualChagnes() const;
 	bool CheckMulticastIndividualChanges() const;
 
 protected:
-	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Replicate")
+	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Repliacte Settings")
 	bool bMulticastProfileApplication;
 
-	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Replicate")
+	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Repliacte Settings")
 	bool bReplicateIndividualChanges;
 
-	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Replicate")
+	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Repliacte Settings")
 	bool bMulticastIndividualChanges;
 
-	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Replicate")
+	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Repliacte Settings")
 	bool bDebugReplication;
 #pragma endregion/
 
