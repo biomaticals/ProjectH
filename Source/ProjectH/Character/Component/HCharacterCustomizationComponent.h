@@ -21,6 +21,7 @@ class UCCDA_Apparel;
 DECLARE_EVENT(UHCharacterCustomizationComponent, FOnStartLoadAsset);
 DECLARE_EVENT_ThreeParams(UHCharacterCustomizationComponent, FOnPreUpdateApparel, UHCharacterCustomizationComponent*, FApparelProfile, TArray<USkeletalMeshComponent*>);
 DECLARE_EVENT_FiveParams(UHCharacterCustomizationComponent, FOnPostUpdateApparel, UHCharacterCustomizationComponent*, FApparelProfile, TArray<FCCDA_ApparelProfile>, TArray<USkeletalMeshComponent*>, TArray<FCCDA_ApparelProfile>);
+DECLARE_EVENT_OneParam(UHCharacterCustomizationComponent, FOnPreApplyCustomizationProfile, UHCharacterCustomizationComponent*, FCustomizationProfile);
 
 UCLASS( Blueprintable, ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class PROJECTH_API UHCharacterCustomizationComponent : public UActorComponent
@@ -38,19 +39,40 @@ public:
 protected:
 	virtual void BeginPlay() override;
 
+#pragma region InitializeComponent
 protected:
 	void InitializeComponent_Replicable();
 
 	UFUNCTION(Reliable, Server)
 	void InitializeComponent_Server();
 
-	
-	void InitializeComponent_Client();
+	UFUNCTION(Reliable, NetMulticast)
+	void InitializeComponent_Multicast();
 
 private:
 	void InitializeComponent_Internal();
+#pragma endregion
+
+#pragma region InitializeCustomziationProfile
+protected:
+	void InitializeCustomizationProfile_Replicable();
+
+	UFUNCTION(Reliable, Server)
+	void InitializeCustomizationProfile_Server();
+	void InitializeCustomizationProfile_Client();
+
+private:
+	void InitializeCustomizationProfile_Internal();
+
+#pragma endregion
 
 public:
+	UFUNCTION(BlueprintCallable)
+	void ApplyCustomizationProfile_Replicable(FCustomizationProfile CustomizationProfile);
+
+protected:
+	UFUNCTION(Reliable, Server)
+
 	UFUNCTION()
 	void ApplyApparelSpecificSettings(UHCharacterCustomizationComponent* CharacterCustomizationComponent, FApparelProfile ApparelProfile, TArray<FCCDA_ApparelProfile> AddingCCDA_Apparels, TArray<USkeletalMeshComponent*> AddingSkeletalMeshComponents, TArray<FCCDA_ApparelProfile> SkippedCCDA_ApparelProfiles);
 
@@ -65,8 +87,11 @@ protected:
 	UPROPERTY(BlueprintReadOnly, EditAnywhere)
 	ECharacterCustomizationInitializationBehavior InitializationBehavior;
 
-	UPROPERTY(BlueprintReadOnly, EditAnywhere)
-	FString ProfileToLoad;
+	UPROPERTY(BlueprintReadOnly, EditAnywhere, meta = (EditCondition = "InitializationBehavior == ECharacterCustomizationInitializationBehavior::UseCurrentProfile || InitializationBehavior == ECharacterCustomizationInitializationBehavior::OpenCharacterEditorWithCurrentProfile"))
+	FCustomizationProfile CustomizationProfile;
+
+	UPROPERTY(BlueprintReadOnly, EditAnywhere, meta = (EditCondition = "InitializationBehavior == ECharacterCustomizationInitializationBehavior::UseProfileToLoad || InitializationBehavior == ECharacterCustomizationInitializationBehavior::OpenCharacterEditorWithProfileToLoad"))	
+	FString ProfileNameToLoad;
 	
 protected:
 	//SaveGame
@@ -84,6 +109,9 @@ protected:
 public:
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, SaveGame)
 	int SaveTest;
+
+public:
+	FOnPreApplyCustomizationProfile OnPreApplyCustomizationProfile;
 
 #pragma region Load Assets
 public:
@@ -122,7 +150,7 @@ protected:
 
 	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Repliacte Settings")
 	bool bDebugReplication;
-#pragma endregion/
+#pragma endregion
 
 #pragma region Anim Instance Alpha
 public:

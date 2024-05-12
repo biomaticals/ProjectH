@@ -49,6 +49,8 @@ bool UDataTableManager::UpdateAvailableAnatomyProfiles()
 
 	NeedUpdatAnatomyProfiles = !Success;
 
+	SetNeedUpdatePresetCustomizationProfiles();
+
 	ensureMsgf(Success, TEXT("UDataTableManager::UpdateAvailableAnatomyProfiles() failed."));
 
 	return Success;
@@ -58,7 +60,11 @@ bool UDataTableManager::UpdatePresetCustomizationProfiles()
 {
 	UT_LOG(HLog, Log, TEXT("Start UDataTableManager::UpdatePresetCustomizationProfiles"));
 
-	ensureMsgf(UpdateAvailableAnatomyProfiles(), TEXT("UpdateAvailableAnatomyProfiles() should be precede but it fails."));
+	if (ensure(UpdateAvailableAnatomyProfiles()) == false)
+	{
+		UT_LOG(HLog, Error, TEXT("UpdateAvailableAnatomyProfiles() should be precede but it fails."));
+		return false;
+	}
 
 	if (NeedUpdatePresetCustomizationProfiles == false)
 		return true;
@@ -95,7 +101,7 @@ bool UDataTableManager::UpdatePresetCustomizationProfiles()
 		}
 	}
 
-	if (AvailableAnatomyProfiles.IsEmpty())
+	if (PresetCustomizationProfiles.IsEmpty())
 		Success = false;
 
 	NeedUpdatePresetCustomizationProfiles = !Success;

@@ -34,21 +34,7 @@ void UHCharacterCustomizationComponent::BeginPlay()
 {
 	InitializeComponent_Replicable();
 
-
-	
 	LoadPrimaryAsset();
-
-	switch (InitializationBehavior)
-	{
-	case ECharacterCustomizationInitializationBehavior::UseCurrentProfile:
-	case ECharacterCustomizationInitializationBehavior::OpenCharacterEditorWithCurrentProfile:
-		
-		break;
-	
-	case ECharacterCustomizationInitializationBehavior::UseProfileToLoad:
-	case ECharacterCustomizationInitializationBehavior::OpenCharacterEditorWithProfileToLoad:
-		break;
-	}
 
 	Super::BeginPlay();
 }
@@ -63,7 +49,13 @@ void UHCharacterCustomizationComponent::InitializeComponent()
 
 	ensureMsgf(CachedOwner, TEXT("HCharacterComponent's owner is not a AHCharacter. It will not be functional."));
 
-	InitializeComponent_Internal();
+	#if WITH_EDITOR
+	if (GetWorld() && GetWorld()->GetNetMode() == NM_Standalone)
+	{
+		InitializeComponent_Internal();
+		InitializeCustomizationProfile_Internal();
+	}
+	#endif
 
 	Super::InitializeComponent();
 }
@@ -94,12 +86,12 @@ void UHCharacterCustomizationComponent::InitializeComponent_Replicable()
 
 void UHCharacterCustomizationComponent::InitializeComponent_Server_Implementation()
 {
-	
+	InitializeComponent_Internal();
 }
 
 void UHCharacterCustomizationComponent::InitializeComponent_Client()
 {
-
+	InitializeComponent_Internal();
 }
 
 void UHCharacterCustomizationComponent::InitializeComponent_Internal()
@@ -123,12 +115,62 @@ void UHCharacterCustomizationComponent::InitializeComponent_Internal()
 	OnPreUpdateApparel.AddUObject(this, &UHCharacterCustomizationComponent::ClearApparelSpecificSettings);
 	OnpostUpdateApparel.AddUObject(this, &UHCharacterCustomizationComponent::ApplyApparelSpecificSettings);
 
-	UT_LOG(HCharacterCustomizationLog, Log, TEXT("Initialization Behavior : %s"), *EnumToString((int32)InitializationBehavior, TEXT("/Script/ProjectH.ECharacterCustomizationInitializationBehavior")));
-
-	UT_LOG(HCharacterCustomizationLog, Log, TEXT("ProfileToLoad : %s"), *ProfileToLoad);
-
 	DATATABLE_MANAGER()->UpdateAvailableAnatomyProfiles();
+	DATATABLE_MANAGER()->UpdatePresetCustomizationProfiles();
 
+}
+
+void UHCharacterCustomizationComponent::InitializeCustomizationProfile_Replicable()
+{
+	if (CHECK_REPLIACTE_COMPONENT())
+	{
+		InitializeCustomizationProfile_Server();
+	}
+	else
+	{
+		InitializeCustomizationProfile_Client();
+	}
+}
+
+void UHCharacterCustomizationComponent::InitializeCustomizationProfile_Server_Implementation()
+{
+	InitializeCustomizationProfile_Internal();
+}
+
+void UHCharacterCustomizationComponent::InitializeCustomizationProfile_Multicast_Implementation()
+{
+	InitializeCustomizationProfile_Internal();
+}
+
+void UHCharacterCustomizationComponent::InitializeCustomizationProfile_Internal()
+{
+	UT_LOG(HCharacterCustomizationLog, Log, TEXT("Initialize Customization Profile Behavior : %s"), *EnumToString((int32)InitializationBehavior, TEXT("/Script/ProjectH.ECharacterCustomizationInitializationBehavior")));
+
+	switch (InitializationBehavior)
+	{
+	case ECharacterCustomizationInitializationBehavior::UseCurrentProfile:
+	case ECharacterCustomizationInitializationBehavior::OpenCharacterEditorWithCurrentProfile:
+		ApplyCustomizationProfile_Replicable(CurrentCusomizationProfile);
+		break;
+
+	case ECharacterCustomizationInitializationBehavior::UseProfileToLoad:
+	case ECharacterCustomizationInitializationBehavior::OpenCharacterEditorWithProfileToLoad:
+		//ApplyCustomizationProfile_Replicable(CustomizationProfile);
+		break;
+	}
+
+}
+
+void UHCharacterCustomizationComponent::ApplyCustomizationProfile_Replicable(FCustomizationProfile CustomizationProfile)
+{
+	if(GetWorld() == NULL)
+		return;
+
+	if (GetWorld()->GetNetMode() < ENetMode::NM_Client)
+	{
+		ApplyCustomizationProfile_Replicable()
+	}
+	
 }
 
 void UHCharacterCustomizationComponent::ApplyApparelSpecificSettings(UHCharacterCustomizationComponent* CharacterCustomizationComponent, FApparelProfile ApparelProfile, TArray<FCCDA_ApparelProfile> AddingCCDA_Apparels, TArray<USkeletalMeshComponent*> AddingSkeletalMeshComponents, TArray<FCCDA_ApparelProfile> SkippedCCDA_ApparelProfiles)
