@@ -33,7 +33,8 @@ void AHCharacter::Serialize(FArchive& Ar)
 {
 	Super::Serialize(Ar);
 
-	CharacterCustomizationComponent->Serialize(Ar);
+	if(CharacterCustomizationComponent)
+		CharacterCustomizationComponent->Serialize(Ar);
 }
 
 // Called to bind functionality to input

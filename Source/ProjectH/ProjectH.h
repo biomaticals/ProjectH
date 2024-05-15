@@ -11,6 +11,11 @@
 
 #define CHECK_REPLIACTE_COMPONENT() UKismetSystemLibrary::IsStandalone(this) == false && IsA(UActorComponent::StaticClass()) && Cast<UActorComponent>(this)->GetIsReplicated()
 
+#define UT_LOG_OWNER_ROLE(CategoryName, Verbosity, RPCType) \
+	UE_LOG(CategoryName, Verbosity, TEXT("Owner LocalRole = %s, RemoteRole = %s\n, Call "#RPCType" RPC function"), \
+	GetOwner() ? *EnumToString((uint8)(GetOwner()->GetLocalRole()), TEXT("/Script/Engine.ENetRole")) : TEXT("Invalid"), \
+	GetOwner() ? *EnumToString((uint8)(GetOwner()->GetRemoteRole()), TEXT("/Script/Engine.ENetRole")) : TEXT("Invalid"));
+
 DECLARE_LOG_CATEGORY_EXTERN(HLog, Log, All);
 DECLARE_LOG_CATEGORY_EXTERN(HCharacterLog, Log, All);
 DECLARE_LOG_CATEGORY_EXTERN(HCharacterCustomizationLog, Log, All);

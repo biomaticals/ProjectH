@@ -72,24 +72,27 @@ void UHCharacterCustomizationComponent::GetLifetimeReplicatedProps(TArray<FLifet
 
 }
 
+#pragma region InitializeComponent
 void UHCharacterCustomizationComponent::InitializeComponent_Replicable()
 {
 	if (CHECK_REPLIACTE_COMPONENT())
 	{
+		UT_LOG_OWNER_ROLE(HCharacterCustomizationLog, Log, Server);
+		FString Role = GetOwner() ? *EnumToString((uint8)(GetOwner()->GetLocalRole()), TEXT("/Script/Engine.ENetRole")) : TEXT("Invalid");
 		InitializeComponent_Server();
 	}
 	else
 	{
-		InitializeComponent_Client();
+		InitializeComponent_Internal();
 	}
 }
 
 void UHCharacterCustomizationComponent::InitializeComponent_Server_Implementation()
 {
-	InitializeComponent_Internal();
+	InitializeComponent_Multicast();
 }
 
-void UHCharacterCustomizationComponent::InitializeComponent_Client()
+void UHCharacterCustomizationComponent::InitializeComponent_Multicast_Implementation()
 {
 	InitializeComponent_Internal();
 }
@@ -119,7 +122,9 @@ void UHCharacterCustomizationComponent::InitializeComponent_Internal()
 	DATATABLE_MANAGER()->UpdatePresetCustomizationProfiles();
 
 }
+#pragma endregion
 
+#pragma region InitializeCustomziationProfile
 void UHCharacterCustomizationComponent::InitializeCustomizationProfile_Replicable()
 {
 	if (CHECK_REPLIACTE_COMPONENT())
@@ -128,13 +133,13 @@ void UHCharacterCustomizationComponent::InitializeCustomizationProfile_Replicabl
 	}
 	else
 	{
-		InitializeCustomizationProfile_Client();
+		InitializeCustomizationProfile_Multicast();
 	}
 }
 
 void UHCharacterCustomizationComponent::InitializeCustomizationProfile_Server_Implementation()
 {
-	InitializeCustomizationProfile_Internal();
+	InitializeCustomizationProfile_Multicast();
 }
 
 void UHCharacterCustomizationComponent::InitializeCustomizationProfile_Multicast_Implementation()
@@ -160,18 +165,56 @@ void UHCharacterCustomizationComponent::InitializeCustomizationProfile_Internal(
 	}
 
 }
+#pragma endregion
 
-void UHCharacterCustomizationComponent::ApplyCustomizationProfile_Replicable(FCustomizationProfile CustomizationProfile)
+#pragma region ApplyCustomizationProfile
+void UHCharacterCustomizationComponent::ApplyCustomizationProfile_Replicable(FCustomizationProfile InCustomizationProfile)
 {
 	if(GetWorld() == NULL)
 		return;
 
-	if (GetWorld()->GetNetMode() < ENetMode::NM_Client)
+	if (CHECK_REPLIACTE_COMPONENT())
 	{
-		ApplyCustomizationProfile_Replicable()
+		if (GetWorld()->GetNetMode() < ENetMode::NM_Client)
+		{
+			ApplyCustomizationProfile_Server(InCustomizationProfile);
+		}
+		else
+		{
+			ApplyCustomizationProfile_Internal(InCustomizationProfile);
+			ApplyCustomizationProfile_Server(InCustomizationProfile);
+		}
 	}
-	
+	else
+	{
+		ApplyCustomizationProfile_Internal(InCustomizationProfile);
+	}
 }
+
+void UHCharacterCustomizationComponent::ApplyCustomizationProfile_Server_Implementation(FCustomizationProfile InCustomizationProfile)
+{	
+	ApplyCustomizationProfile_Internal(InCustomizationProfile);
+	if(bMulticastProfileApplication)
+		ApplyCustomizationProfile_Multicast(InCustomizationProfile);
+	else
+		ApplyCustomizationProfile_Client(InCustomizationProfile);
+}
+
+void UHCharacterCustomizationComponent::ApplyCustomizationProfile_Multicast_Implementation(FCustomizationProfile InCustomizationProfile)
+{
+	ApplyCustomizationProfile_Internal(InCustomizationProfile);
+}
+
+void UHCharacterCustomizationComponent::ApplyCustomizationProfile_Client_Implementation(FCustomizationProfile InCustomizationProfile)
+{
+	ApplyCustomizationProfile_Internal(InCustomizationProfile);
+}
+
+void UHCharacterCustomizationComponent::ApplyCustomizationProfile_Internal(FCustomizationProfile InCustomizationProfile)
+{
+
+}
+#pragma endregion
 
 void UHCharacterCustomizationComponent::ApplyApparelSpecificSettings(UHCharacterCustomizationComponent* CharacterCustomizationComponent, FApparelProfile ApparelProfile, TArray<FCCDA_ApparelProfile> AddingCCDA_Apparels, TArray<USkeletalMeshComponent*> AddingSkeletalMeshComponents, TArray<FCCDA_ApparelProfile> SkippedCCDA_ApparelProfiles)
 {

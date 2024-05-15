@@ -21,7 +21,7 @@ class UCCDA_Apparel;
 DECLARE_EVENT(UHCharacterCustomizationComponent, FOnStartLoadAsset);
 DECLARE_EVENT_ThreeParams(UHCharacterCustomizationComponent, FOnPreUpdateApparel, UHCharacterCustomizationComponent*, FApparelProfile, TArray<USkeletalMeshComponent*>);
 DECLARE_EVENT_FiveParams(UHCharacterCustomizationComponent, FOnPostUpdateApparel, UHCharacterCustomizationComponent*, FApparelProfile, TArray<FCCDA_ApparelProfile>, TArray<USkeletalMeshComponent*>, TArray<FCCDA_ApparelProfile>);
-DECLARE_EVENT_OneParam(UHCharacterCustomizationComponent, FOnPreApplyCustomizationProfile, UHCharacterCustomizationComponent*, FCustomizationProfile);
+DECLARE_EVENT_TwoParams(UHCharacterCustomizationComponent, FOnPreApplyCustomizationProfile, UHCharacterCustomizationComponent*, FCustomizationProfile);
 
 UCLASS( Blueprintable, ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class PROJECTH_API UHCharacterCustomizationComponent : public UActorComponent
@@ -59,20 +59,35 @@ protected:
 
 	UFUNCTION(Reliable, Server)
 	void InitializeCustomizationProfile_Server();
-	void InitializeCustomizationProfile_Client();
+
+	UFUNCTION(Reliable, NetMulticast)
+	void InitializeCustomizationProfile_Multicast();
 
 private:
 	void InitializeCustomizationProfile_Internal();
 
 #pragma endregion
 
+#pragma region ApplyCustomizationProfile
 public:
 	UFUNCTION(BlueprintCallable)
-	void ApplyCustomizationProfile_Replicable(FCustomizationProfile CustomizationProfile);
+	void ApplyCustomizationProfile_Replicable(FCustomizationProfile InCustomizationProfile);
 
 protected:
 	UFUNCTION(Reliable, Server)
+	void ApplyCustomizationProfile_Server(FCustomizationProfile InCustomizationProfile);
 
+	UFUNCTION(Reliable, NetMulticast)
+	void ApplyCustomizationProfile_Multicast(FCustomizationProfile InCustomizationProfile);
+
+	UFUNCTION(Reliable, Client)
+	void ApplyCustomizationProfile_Client(FCustomizationProfile InCustomizationProfile);
+
+private:
+	void ApplyCustomizationProfile_Internal(FCustomizationProfile InCustomizationProfile);
+#pragma endregion
+
+protected:
 	UFUNCTION()
 	void ApplyApparelSpecificSettings(UHCharacterCustomizationComponent* CharacterCustomizationComponent, FApparelProfile ApparelProfile, TArray<FCCDA_ApparelProfile> AddingCCDA_Apparels, TArray<USkeletalMeshComponent*> AddingSkeletalMeshComponents, TArray<FCCDA_ApparelProfile> SkippedCCDA_ApparelProfiles);
 
