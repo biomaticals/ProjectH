@@ -18,7 +18,7 @@ class AHCharacter;
 class UPrimaryAssetLabel;
 class UCCDA_Apparel;
  
-DECLARE_EVENT(UHCharacterCustomizationComponent, FOnStartLoadAsset);
+DECLARE_EVENT(UHCharacterCustomizationComponent, FPreStartLoadAsset);
 DECLARE_EVENT_TwoParams(UHCharacterCustomizationComponent, FOnPreApplyCustomizationProfile, UHCharacterCustomizationComponent*, FCustomizationProfile);
 DECLARE_EVENT_FourParams(UHCharacterCustomizationComponent, FOnPreUpdateBasebody, UHCharacterCustomizationComponent*, FBasebodyProfile, USkeletalMeshComponent*, USkeletalMeshComponent*);
 DECLARE_EVENT_ThreeParams(UHCharacterCustomizationComponent, FOnPreUpdateApparel, UHCharacterCustomizationComponent*, FApparelProfile, TArray<USkeletalMeshComponent*>);
@@ -140,7 +140,8 @@ protected:
 	TArray<UPrimaryAssetLabel*> AssetPackagesToLoad;
 
 public:
-	FOnStartLoadAsset OnStartLoadAsset;
+	FPreStartLoadAsset OnStartLoadAsset;
+	FOnPreUpdateBasebody OnPreUpdateBasebody;
 	FOnPreUpdateApparel OnPreUpdateApparel;
 	FOnPostUpdateApparel OnpostUpdateApparel;
 

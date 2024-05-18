@@ -21,7 +21,7 @@ struct FAnatomyProfile : public FTableRowBase
 	FAnatomyBaseBodyProfile Body;
 
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
-	FAnatomyHeadProfile Head;
+	TArray<FAnatomyHeadProfile> Heads;
 
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
 	FCustomizationProfile Customzation;

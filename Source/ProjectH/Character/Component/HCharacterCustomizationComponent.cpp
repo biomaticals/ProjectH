@@ -1,4 +1,4 @@
-﻿// Copyright 2024. Unique Turtle. All rights reserved.
+// Copyright 2024. Unique Turtle. All rights reserved.
 
 #include "Character/Component/HCharacterCustomizationComponent.h"
 #include "Character/Base/HCharacter.h"
@@ -326,11 +326,35 @@ void UHCharacterCustomizationComponent::SetBasebodyAnimInstanceAlpha_Multicast_I
 void UHCharacterCustomizationComponent::SetBasebodyAnimInstanceAlpha(FName Name, float Value)
 {
 	CurrentCusomizationProfile.Basebody.AnimInstanceAlphas.AddUnique(FHNamedFloat(Name, Value));
-	
 }
 #pragma endregion
 
 void UHCharacterCustomizationComponent::UpdateBaseBody()
 {
+	if(DATATABLE_MANAGER() == NULL)
+		return;
+
+	USkeletalMeshComponent* BodyComponent = GetOwner() && Cast<AHCharacter>(GetOwner()) ? Cast<AHCharacter>(GetOwner())->GetMesh() : nullptr;
+	if(BodyComponent == NULL)
+		return;
 	
+	USkeletalMeshComponent* HeadComponent = Cast<AHCharacter>(GetOwner())->GetHeadMeshComponent();
+	if(HeadComponent == NULL)
+		return;
+		
+	if(OnPreUpdateBasebody.IsBound())
+	{
+		OnPreUpdateBasebody.Broadcast(this, CurrentCusomizationProfile.Basebody, BodyComponent, HeadComponent);
+	}
+
+	TMap<EAnatomy, FAnatomyProfile> AvailableAnatomyProfiles = DATATABLE_MANAGER()->GetAvailableAnatomyProfiles();
+	if(AvailableAnatomyProfiles.IsEmpty())
+		return;
+
+	FAnatomyProfile* CurrentAnatomyProfile = AvailableAnatomyProfiles.Find(CurrentCusomizationProfile.MetaData.Anatomy);
+	if(CurrentAnatomyProfile == NULL)
+		return;
+
+
+
 }

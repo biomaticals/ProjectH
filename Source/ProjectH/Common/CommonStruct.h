@@ -225,7 +225,7 @@ struct FBasebodyProfile
 	FHeadProfile Head;
 
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)	
-	FSkinProfile SKin;
+	FSkinProfile Skin;
 
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
 	FEyesProfile Eyes;
