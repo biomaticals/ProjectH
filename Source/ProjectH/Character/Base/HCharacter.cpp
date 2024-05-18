@@ -2,7 +2,6 @@
 
 #include "Character/Base/HCharacter.h"
 #include "Character/Component/HCharacterCustomizationComponent.h"
-#include "System/Manager/SaveGameManager.h"
 
 FName AHCharacter::HeadMeshComponentName(TEXT("HeadMeshComponent"));
 FName AHCharacter::HeadApparelComponentName(TEXT("HeadApparelComponent"));
@@ -11,7 +10,7 @@ FName AHCharacter::UpperApparelComponentName(TEXT("UpperApparelComponent"));
 FName AHCharacter::LowerApparelComponentName(TEXT("LowerApparelComponent"));
 FName AHCharacter::FeetApparelComponentName(TEXT("FeetApparelComponent"));
 FName AHCharacter::CharacterCustomizationComponentName(TEXT("CharacterCustomizationComponent"));
-
+ 
 AHCharacter::AHCharacter(const FObjectInitializer& ObjectInitializer)
 : Super(ObjectInitializer)
 {

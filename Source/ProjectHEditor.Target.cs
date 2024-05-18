@@ -10,6 +10,6 @@ public class ProjectHEditorTarget : TargetRules
 		Type = TargetType.Editor;
 		DefaultBuildSettings = BuildSettingsVersion.V4;
 		IncludeOrderVersion = EngineIncludeOrderVersion.Unreal5_3;
-		ExtraModuleNames.Add("ProjectH");
+		ExtraModuleNames.Add("ProjectH"); 
 	}
 }

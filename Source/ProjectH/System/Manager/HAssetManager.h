@@ -15,7 +15,7 @@ UCLASS()
 class PROJECTH_API UHAssetManager : public UAssetManager
 {
 	GENERATED_BODY()
-	
+	 
 public:
 	static UHAssetManager& Get();
 };

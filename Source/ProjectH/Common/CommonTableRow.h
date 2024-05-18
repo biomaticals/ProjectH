@@ -6,7 +6,7 @@
 #include "Engine/DataTable.h"
 #include "Common/CommonStruct.h"
 #include "CommonTableRow.generated.h"
-
+ 
 USTRUCT(BlueprintType)
 struct FAnatomyProfile : public FTableRowBase
 {

@@ -12,7 +12,7 @@ struct FMaterialVariants;
 
 class UGroomAsset;
 class UGroomBindingAsset;
-
+ 
 /**
  * 
  */

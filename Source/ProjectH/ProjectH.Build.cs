@@ -12,6 +12,6 @@ public class ProjectH : ModuleRules
 		PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore", "EnhancedInput", "HairStrandsCore" });
 
 		PublicIncludePaths.Add(ModuleDirectory);
-		PrivateIncludePaths.Add(ModuleDirectory);
+		PrivateIncludePaths.Add(ModuleDirectory); 
 	}
 }

@@ -3,12 +3,11 @@
 
 #include "System/HGameSingleton.h"
 #include "System/Manager/DataTableManager.h"
-#include "System/Manager/SaveGameManager.h"
 
 UHGameSingleton::UHGameSingleton(const FObjectInitializer& ObjectInitializer)
 	: ManagersCreated(false)
 {
-
+ 
 }
 
 UHGameSingleton::~UHGameSingleton()

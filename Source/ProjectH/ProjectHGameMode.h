@@ -12,7 +12,7 @@ class AProjectHGameMode : public AGameModeBase
 	GENERATED_BODY()
 
 public:
-	AProjectHGameMode();
+	AProjectHGameMode(); 
 };
 
 

@@ -14,4 +14,4 @@ class PROJECTH_API AHGameMode : public AGameModeBase
 {
 	GENERATED_BODY()
 	
-};
+}; 

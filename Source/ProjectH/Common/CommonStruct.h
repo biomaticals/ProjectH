@@ -19,7 +19,7 @@ public:
 	{
 
 	}
-
+	 
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
 	FName Name;
 

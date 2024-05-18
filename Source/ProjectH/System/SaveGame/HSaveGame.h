@@ -21,3 +21,4 @@ public:
 	UPROPERTY(BlueprintReadOnly, SaveGame)
 	struct FHSaveGameData HSaveGameData;
 };
+ 

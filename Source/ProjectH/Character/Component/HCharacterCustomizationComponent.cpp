@@ -1,4 +1,4 @@
-// Copyright 2024. Unique Turtle. All rights reserved.
+﻿// Copyright 2024. Unique Turtle. All rights reserved.
 
 #include "Character/Component/HCharacterCustomizationComponent.h"
 #include "Character/Base/HCharacter.h"
@@ -98,7 +98,6 @@ void UHCharacterCustomizationComponent::InitializeComponent_Internal()
 {
 	// Property Reset
 	CachedCustomizationProfiles.Empty();
-	SavedCustomizationProfile.Empty();
 
 	// Remove Event
 	if (OnStartLoadAsset.IsBoundToObject(this))
@@ -239,7 +238,7 @@ void UHCharacterCustomizationComponent::ApplyCustomizationProfile_Internal(FCust
 
 	UT_LOG(HCharacterCustomizationLog, Log, TEXT("ApplyCustomizationProfile %s to %s."), *InCustomizationProfile.MetaData.ToString(), GetOwner()->GetFName());
 
-
+	CurrentCusomizationProfile = InCustomizationProfile;
 
 	UpdateBaseBody();
 	

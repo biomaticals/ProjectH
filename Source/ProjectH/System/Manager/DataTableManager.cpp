@@ -11,7 +11,7 @@ void UDataTableManager::ValidateDataTables()
 {
 	// CharacterCustomization
 	ensure(AnatomyProfilesDataTable);
-	ensure(PresetCustomizationProfilesDataTable);
+	ensure(PresetCustomizationProfilesDataTable); 
 }
 
 #pragma region CharacterCustomization

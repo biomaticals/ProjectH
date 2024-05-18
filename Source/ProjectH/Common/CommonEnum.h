@@ -4,7 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "CommonEnum.generated.h"
-
+ 
 #pragma region Character Customization
 UENUM(BlueprintType)
 enum class EAnatomy : uint8

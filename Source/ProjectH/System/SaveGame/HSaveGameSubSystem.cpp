@@ -9,9 +9,8 @@
 #include "System/SaveGame/HSaveGame.h"
 #include "System/SaveGame/HSaveGameObjectInterface.h"
 #include "GameFramework/AsyncActionHandleSaveGame.h"
-#include "System/Manager/SaveGameManager.h"
 #include "Serialization/ObjectAndNameAsStringProxyArchive.h"
-
+ 
 void UHSaveGameSubSystem::Initialize(FSubsystemCollectionBase& Collection)
 {
 	Super::Initialize(Collection);

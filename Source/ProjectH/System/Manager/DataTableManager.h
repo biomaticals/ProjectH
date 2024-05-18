@@ -9,7 +9,7 @@
 #include "DataTableManager.generated.h"
 
 /**
- * 
+ *  
  */
 UCLASS(Blueprintable, BlueprintType)
 class PROJECTH_API UDataTableManager : public UObject

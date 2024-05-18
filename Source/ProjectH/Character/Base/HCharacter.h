@@ -13,7 +13,7 @@ UCLASS()
 class PROJECTH_API AHCharacter : public ACharacter, public IHSaveGameObjectInterface
 {
 	GENERATED_BODY()
-
+	 
 public:
 	AHCharacter(const FObjectInitializer& ObjectInitializer = FObjectInitializer::Get());
 

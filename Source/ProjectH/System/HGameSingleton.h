@@ -10,7 +10,7 @@ class UDataTableManager;
 class USaveGameManager;
 
 #define DATATABLE_MANAGER() UHGameSingleton::GetHGameSingleton()->DataTableManager
-
+ 
 /**
  * 
  */

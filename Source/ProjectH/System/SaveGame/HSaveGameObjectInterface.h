@@ -34,3 +34,4 @@ public:
 	UFUNCTION(BlueprintNativeEvent, Category = "HSaveGameObjectInterface")
 	void OnObjectLoading();
 };
+ 
