@@ -1,10 +1,15 @@
 // Copyright 2024. Unique Turtle. All rights reserved.
 
-
 #include "Character/Base/HCharacter.h"
 #include "Character/Component/HCharacterCustomizationComponent.h"
 #include "System/Manager/SaveGameManager.h"
 
+FName AHCharacter::HeadMeshComponentName(TEXT("HeadMeshComponent"));
+FName AHCharacter::HeadApparelComponentName(TEXT("HeadApparelComponent"));
+FName AHCharacter::EarAccessoryComponentName(TEXT("EarAccessoryComponent"));
+FName AHCharacter::UpperApparelComponentName(TEXT("UpperApparelComponent"));
+FName AHCharacter::LowerApparelComponentName(TEXT("LowerApparelComponent"));
+FName AHCharacter::FeetApparelComponentName(TEXT("FeetApparelComponent"));
 FName AHCharacter::CharacterCustomizationComponentName(TEXT("CharacterCustomizationComponent"));
 
 AHCharacter::AHCharacter(const FObjectInitializer& ObjectInitializer)
@@ -12,7 +17,25 @@ AHCharacter::AHCharacter(const FObjectInitializer& ObjectInitializer)
 {
 	PrimaryActorTick.bCanEverTick = true;
 
+	HeadMeshComponent = CreateDefaultSubobject<USkeletalMeshComponent>(AHCharacter::HeadMeshComponentName);
+	
+	HeadApparelComponent = CreateDefaultSubobject<USkeletalMeshComponent>(AHCharacter::HeadApparelComponentName);
+	HeadApparelComponent->SetupAttachment(GetMesh());
+
+	EarAccessoryComponent = CreateDefaultSubobject<USkeletalMeshComponent>(AHCharacter::EarAccessoryComponentName);
+	EarAccessoryComponent->SetupAttachment(GetMesh());
+
+	UpperApparelComponent = CreateDefaultSubobject<USkeletalMeshComponent>(AHCharacter::UpperApparelComponentName);
+	UpperApparelComponent->SetupAttachment(GetMesh());
+
+	LowerApparelComponent = CreateDefaultSubobject<USkeletalMeshComponent>(AHCharacter::LowerApparelComponentName);
+	LowerApparelComponent->SetupAttachment(GetMesh());
+
+	FeetApparelComponent = CreateDefaultSubobject<USkeletalMeshComponent>(AHCharacter::FeetApparelComponentName);
+	FeetApparelComponent->SetupAttachment(GetMesh());
+
 	CharacterCustomizationComponent = CreateDefaultSubobject<UHCharacterCustomizationComponent>(AHCharacter::CharacterCustomizationComponentName);
+
 }
 
 // Called when the game starts or when spawned
@@ -55,6 +78,36 @@ const FTransform AHCharacter::GetHSaveGameObjectTransform_Implementation() const
 	return GetTransform();
 }
 /** ~ IHSavveGameObjectInterface */
+
+USkeletalMeshComponent* AHCharacter::GetHeadMeshComponent()
+{
+	return HeadMeshComponent;
+}
+
+USkeletalMeshComponent* AHCharacter::GetHeadApparelMeshComponent()
+{
+	return HeadApparelComponent;
+}
+
+USkeletalMeshComponent* AHCharacter::GetEarAccessoryComponent()
+{
+	return EarAccessoryComponent;
+}
+
+USkeletalMeshComponent* AHCharacter::GetUpperApparelComponent()
+{
+	return UpperApparelComponent;
+}
+
+USkeletalMeshComponent* AHCharacter::GetLowerApparelComponent()
+{
+	return LowerApparelComponent;
+}
+
+USkeletalMeshComponent* AHCharacter::GetFeetApparelComponent()
+{
+	return FeetApparelComponent;
+}
 
 UHCharacterCustomizationComponent* AHCharacter::GetCHaracterCustomizationComponent()
 {

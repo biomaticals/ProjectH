@@ -1,4 +1,4 @@
-// Copy Rigts are in Team UniqueTurtle. 
+// Copyright 2024. Unique Turtle. All rights reserved.
 
 
 #include "System/Manager/DataTableManager.h"
@@ -32,17 +32,17 @@ bool UDataTableManager::UpdateAvailableAnatomyProfiles()
 
 	bool Success = true;
 
-	for (EAnatomy Anatomy : TEnumRange<EAnatomy>())
-	{
-		FString AnatomyString = EnumToString((uint8)Anatomy, TEXT("/Script/ProjectH.EAnatomy"));
-		FAnatomyProfile* Data = AnatomyProfilesDataTable->FindRow<FAnatomyProfile>(FName(AnatomyString), 
-		*FString::Printf(TEXT("[AnatomyProfilesDataTable] doesn't have Row \"%s\""), *AnatomyString), true);
-	
-		if(Data == nullptr || Data->IsValid())
-			Success = false;
-		else
-			AvailableAnatomyProfiles.Add(MakeTuple(Anatomy, *Data));
-	}
+	//for (EAnatomy Anatomy : TEnumRange<EAnatomy>())
+	//{
+	//	FString AnatomyString = EnumToString((uint8)Anatomy, TEXT("/Script/ProjectH.EAnatomy"));
+	//	FAnatomyProfile* Data = AnatomyProfilesDataTable->FindRow<FAnatomyProfile>(FName(AnatomyString), 
+	//	*FString::Printf(TEXT("[AnatomyProfilesDataTable] doesn't have Row \"%s\""), *AnatomyString), true);
+	//
+	//	if(Data == nullptr || Data->IsValid())
+	//		Success = false;
+	//	else
+	//		AvailableAnatomyProfiles.Add(MakeTuple(Anatomy, *Data));
+	//}
 	
 	if(AvailableAnatomyProfiles.IsEmpty())
 		Success = false;
@@ -91,7 +91,7 @@ bool UDataTableManager::UpdatePresetCustomizationProfiles()
 
 		if (AvailableAnatomyProfiles.Find(DataTableRow->MetaData.Anatomy))
 		{
-			FName AnatomyString = *EnumToString((uint8)(DataTableRow->MetaData.Anatomy), TEXT("/Script/ProjectH.EAnatomy"));
+			FName AnatomyString = *HUtilityHelpers::EnumToString((uint8)(DataTableRow->MetaData.Anatomy), TEXT("/Script/ProjectH.EAnatomy"));
 			PresetCustomizationProfiles.Add(MakeTuple(AnatomyString, DataTableRow->MetaData));
 		}
 		else

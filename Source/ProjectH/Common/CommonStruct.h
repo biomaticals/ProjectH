@@ -1,9 +1,10 @@
-// Copy Rigts are in Team UniqueTurtle. 
+// Copyright 2024. Unique Turtle. All rights reserved.
 
 #pragma once
 
-#include "CoreMinimal.h"
 #include "Common/CommonEnum.h"
+#include "Common/HUtilityHelpers.h"
+#include "CoreMinimal.h"
 #include "GameplayTags.h"
 #include "CommonStruct.generated.h"
 
@@ -140,6 +141,13 @@ struct FCustomizationProfileMetaData
 
 	};
 
+public:
+	FString ToString() const
+	{
+		return Name + "_" + HUtilityHelpers::EnumToString((uint8)Anatomy, TEXT("Script/ProjectH.EAnatomy"));
+	}
+
+public:
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
 	FString Name;
 

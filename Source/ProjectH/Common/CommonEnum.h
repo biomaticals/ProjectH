@@ -1,4 +1,4 @@
-// Copy Rigts are in Team UniqueTurtle. 
+// Copyright 2024. Unique Turtle. All rights reserved.
 
 #pragma once
 
@@ -32,8 +32,6 @@ enum class EAnatomy : uint8
 	OrcMaleAdult,
 	OrcMaleChild,
 };
-
-ENUM_RANGE_BY_COUNT(EAnatomy, EAnatomy::OrcMaleChild);
 
 UENUM(BlueprintType)
 enum class ECharacterCustomizationInitializationBehavior : uint8

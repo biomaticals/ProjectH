@@ -19,9 +19,11 @@ class UPrimaryAssetLabel;
 class UCCDA_Apparel;
 
 DECLARE_EVENT(UHCharacterCustomizationComponent, FOnStartLoadAsset);
+DECLARE_EVENT_TwoParams(UHCharacterCustomizationComponent, FOnPreApplyCustomizationProfile, UHCharacterCustomizationComponent*, FCustomizationProfile);
+DECLARE_EVENT_FourParams(UHCharacterCustomizationComponent, FOnPreUpdateBasebody, UHCharacterCustomizationComponent*, FBasebodyProfile, USkeletalMeshComponent*, USkeletalMeshComponent*);
 DECLARE_EVENT_ThreeParams(UHCharacterCustomizationComponent, FOnPreUpdateApparel, UHCharacterCustomizationComponent*, FApparelProfile, TArray<USkeletalMeshComponent*>);
 DECLARE_EVENT_FiveParams(UHCharacterCustomizationComponent, FOnPostUpdateApparel, UHCharacterCustomizationComponent*, FApparelProfile, TArray<FCCDA_ApparelProfile>, TArray<USkeletalMeshComponent*>, TArray<FCCDA_ApparelProfile>);
-DECLARE_EVENT_TwoParams(UHCharacterCustomizationComponent, FOnPreApplyCustomizationProfile, UHCharacterCustomizationComponent*, FCustomizationProfile);
+
 
 UCLASS( Blueprintable, ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class PROJECTH_API UHCharacterCustomizationComponent : public UActorComponent
@@ -102,16 +104,16 @@ protected:
 	UPROPERTY(BlueprintReadOnly, EditAnywhere)
 	ECharacterCustomizationInitializationBehavior InitializationBehavior;
 
-	UPROPERTY(BlueprintReadOnly, EditAnywhere, meta = (EditCondition = "InitializationBehavior == ECharacterCustomizationInitializationBehavior::UseCurrentProfile || InitializationBehavior == ECharacterCustomizationInitializationBehavior::OpenCharacterEditorWithCurrentProfile"))
+	UPROPERTY(BlueprintReadOnly, EditAnywhere, meta = (EditCondition = "InitializationBehavior == ECharacterCustomizationInitializationBehavior::UseProfile || InitializationBehavior == ECharacterCustomizationInitializationBehavior::OpenCharacterEditorWithCurrentProfile"))
 	FCustomizationProfile CustomizationProfile;
 
-	UPROPERTY(BlueprintReadOnly, EditAnywhere, meta = (EditCondition = "InitializationBehavior == ECharacterCustomizationInitializationBehavior::UseProfileToLoad || InitializationBehavior == ECharacterCustomizationInitializationBehavior::OpenCharacterEditorWithProfileToLoad"))	
-	FString ProfileNameToLoad;
+	UPROPERTY(BlueprintReadOnly, EditAnywhere, meta = (EditCondition = "InitializationBehavior == ECharacterCustomizationInitializationBehavior::UseSavedProfile || InitializationBehavior == ECharacterCustomizationInitializationBehavior::OpenCharacterEditorWithProfileToLoad"))
+	FString ProfileNameFromSaves;
 	
 protected:
 	//SaveGame
 	UPROPERTY(BlueprintReadOnly, VisibleAnywhere, SaveGame)
-	TArray<FCustomizationProfile> SavedCustomizationProfile;
+	TMap<FString, FCustomizationProfile> SavedCustomizationProfileSlotList;
 
 protected:
 	//Transient
@@ -182,4 +184,7 @@ protected:
 	UFUNCTION()
 	void SetBasebodyAnimInstanceAlpha(FName Name, float Value);
 #pragma endregion
+
+public:
+	void UpdateBaseBody();
 };

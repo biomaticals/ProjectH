@@ -4,6 +4,7 @@
 #include "Character/Base/HCharacter.h"
 #include "Common/CommonEnum.h"
 #include "Common/CommonStruct.h"
+#include "Common/HUtilityHelpers.h"
 #include "DataAsset/CharacterCustomizationDataAsset.h"
 #include "Engine/AssetManager.h"
 #include "Engine/PrimaryAssetLabel.h"
@@ -32,8 +33,6 @@ UHCharacterCustomizationComponent::UHCharacterCustomizationComponent()
 
 void UHCharacterCustomizationComponent::BeginPlay()
 {
-	InitializeComponent_Replicable();
-
 	LoadPrimaryAsset();
 
 	Super::BeginPlay();
@@ -49,13 +48,8 @@ void UHCharacterCustomizationComponent::InitializeComponent()
 
 	ensureMsgf(CachedOwner, TEXT("HCharacterComponent's owner is not a AHCharacter. It will not be functional."));
 
-	#if WITH_EDITOR
-	if (GetWorld() && GetWorld()->GetNetMode() == NM_Standalone)
-	{
-		InitializeComponent_Internal();
-		InitializeCustomizationProfile_Internal();
-	}
-	#endif
+	InitializeComponent_Internal();
+	InitializeCustomizationProfile_Internal();
 
 	Super::InitializeComponent();
 }
@@ -78,22 +72,25 @@ void UHCharacterCustomizationComponent::InitializeComponent_Replicable()
 	if (CHECK_REPLIACTE_COMPONENT())
 	{
 		UT_LOG_OWNER_ROLE(HCharacterCustomizationLog, Log, Server);
-		FString Role = GetOwner() ? *EnumToString((uint8)(GetOwner()->GetLocalRole()), TEXT("/Script/Engine.ENetRole")) : TEXT("Invalid");
+		FString Role = GetOwner() ? *HUtilityHelpers::EnumToString((uint8)GetOwner()->GetLocalRole(), TEXT("")) : FString();
 		InitializeComponent_Server();
 	}
 	else
 	{
+		UT_LOG_OWNER_ROLE(HCharacterCustomizationLog, Log, Internal);
 		InitializeComponent_Internal();
 	}
 }
 
 void UHCharacterCustomizationComponent::InitializeComponent_Server_Implementation()
 {
+	UT_LOG_OWNER_ROLE(HCharacterCustomizationLog, Log, Multicast);
 	InitializeComponent_Multicast();
 }
 
 void UHCharacterCustomizationComponent::InitializeComponent_Multicast_Implementation()
 {
+	UT_LOG_OWNER_ROLE(HCharacterCustomizationLog, Log, Internal);
 	InitializeComponent_Internal();
 }
 
@@ -129,16 +126,19 @@ void UHCharacterCustomizationComponent::InitializeCustomizationProfile_Replicabl
 {
 	if (CHECK_REPLIACTE_COMPONENT())
 	{
+		UT_LOG_OWNER_ROLE(HCharacterCustomizationLog, Log, Server);
 		InitializeCustomizationProfile_Server();
 	}
 	else
 	{
+		UT_LOG_OWNER_ROLE(HCharacterCustomizationLog, Log, NetMulticast);
 		InitializeCustomizationProfile_Multicast();
 	}
 }
 
 void UHCharacterCustomizationComponent::InitializeCustomizationProfile_Server_Implementation()
 {
+	UT_LOG_OWNER_ROLE(HCharacterCustomizationLog, Log, NetMulticast);
 	InitializeCustomizationProfile_Multicast();
 }
 
@@ -149,18 +149,26 @@ void UHCharacterCustomizationComponent::InitializeCustomizationProfile_Multicast
 
 void UHCharacterCustomizationComponent::InitializeCustomizationProfile_Internal()
 {
-	UT_LOG(HCharacterCustomizationLog, Log, TEXT("Initialize Customization Profile Behavior : %s"), *EnumToString((int32)InitializationBehavior, TEXT("/Script/ProjectH.ECharacterCustomizationInitializationBehavior")));
+	//UT_LOG(HCharacterCustomizationLog, Log, TEXT("Initialize Customization Profile Behavior : %s"), *EnumToString((int32)InitializationBehavior, TEXT("/Script/ProjectH.ECharacterCustomizationInitializationBehavior")));
 
 	switch (InitializationBehavior)
 	{
 	case ECharacterCustomizationInitializationBehavior::UseCurrentProfile:
 	case ECharacterCustomizationInitializationBehavior::OpenCharacterEditorWithCurrentProfile:
-		ApplyCustomizationProfile_Replicable(CurrentCusomizationProfile);
+		ApplyCustomizationProfile_Replicable(CustomizationProfile);
 		break;
 
 	case ECharacterCustomizationInitializationBehavior::UseProfileToLoad:
 	case ECharacterCustomizationInitializationBehavior::OpenCharacterEditorWithProfileToLoad:
-		//ApplyCustomizationProfile_Replicable(CustomizationProfile);
+		FCustomizationProfile* SavedCustomizationProfile = SavedCustomizationProfileSlotList.Find(ProfileNameFromSaves);
+		if(SavedCustomizationProfile)
+		{
+			ApplyCustomizationProfile_Replicable(*SavedCustomizationProfile);
+		}
+		else
+		{
+			ApplyCustomizationProfile_Replicable(CustomizationProfile);
+		}
 		break;
 	}
 
@@ -177,11 +185,15 @@ void UHCharacterCustomizationComponent::ApplyCustomizationProfile_Replicable(FCu
 	{
 		if (GetWorld()->GetNetMode() < ENetMode::NM_Client)
 		{
+			UT_LOG_OWNER_ROLE(HCharacterCustomizationLog, Log, Server);
 			ApplyCustomizationProfile_Server(InCustomizationProfile);
 		}
 		else
 		{
+			UT_LOG_OWNER_ROLE(HCharacterCustomizationLog, Log, Internal);
 			ApplyCustomizationProfile_Internal(InCustomizationProfile);
+
+			UT_LOG_OWNER_ROLE(HCharacterCustomizationLog, Log, Server);
 			ApplyCustomizationProfile_Server(InCustomizationProfile);
 		}
 	}
@@ -193,26 +205,44 @@ void UHCharacterCustomizationComponent::ApplyCustomizationProfile_Replicable(FCu
 
 void UHCharacterCustomizationComponent::ApplyCustomizationProfile_Server_Implementation(FCustomizationProfile InCustomizationProfile)
 {	
+	UT_LOG_OWNER_ROLE(HCharacterCustomizationLog, Log, Internal);
 	ApplyCustomizationProfile_Internal(InCustomizationProfile);
-	if(bMulticastProfileApplication)
+
+	if (bMulticastProfileApplication)
+	{
+		UT_LOG_OWNER_ROLE(HCharacterCustomizationLog, Log, NetMulticast);
 		ApplyCustomizationProfile_Multicast(InCustomizationProfile);
+	}	
 	else
+	{
+		UT_LOG_OWNER_ROLE(HCharacterCustomizationLog, Log, Client);
 		ApplyCustomizationProfile_Client(InCustomizationProfile);
+	}
 }
 
 void UHCharacterCustomizationComponent::ApplyCustomizationProfile_Multicast_Implementation(FCustomizationProfile InCustomizationProfile)
 {
+	UT_LOG_OWNER_ROLE(HCharacterCustomizationLog, Log, Internal);
 	ApplyCustomizationProfile_Internal(InCustomizationProfile);
 }
 
 void UHCharacterCustomizationComponent::ApplyCustomizationProfile_Client_Implementation(FCustomizationProfile InCustomizationProfile)
 {
+	UT_LOG_OWNER_ROLE(HCharacterCustomizationLog, Log, Internal);
 	ApplyCustomizationProfile_Internal(InCustomizationProfile);
 }
 
 void UHCharacterCustomizationComponent::ApplyCustomizationProfile_Internal(FCustomizationProfile InCustomizationProfile)
 {
+	if(OnPreApplyCustomizationProfile.IsBound())
+		OnPreApplyCustomizationProfile.Broadcast(this, InCustomizationProfile);
 
+	UT_LOG(HCharacterCustomizationLog, Log, TEXT("ApplyCustomizationProfile %s to %s."), *InCustomizationProfile.MetaData.ToString(), GetOwner()->GetFName());
+
+
+
+	UpdateBaseBody();
+	
 }
 #pragma endregion
 
@@ -300,3 +330,8 @@ void UHCharacterCustomizationComponent::SetBasebodyAnimInstanceAlpha(FName Name,
 	
 }
 #pragma endregion
+
+void UHCharacterCustomizationComponent::UpdateBaseBody()
+{
+	
+}

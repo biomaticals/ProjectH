@@ -1,4 +1,4 @@
-// Copyright Epic Games, Inc. All Rights Reserved.
+// Copyright 2024. Unique Turtle. All rights reserved.
 
 #include "ProjectHCharacter.h"
 #include "Engine/LocalPlayer.h"
