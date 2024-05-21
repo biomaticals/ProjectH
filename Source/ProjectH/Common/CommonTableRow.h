@@ -24,6 +24,6 @@ struct FAnatomyProfile : public FTableRowBase
 	TArray<FAnatomyHeadProfile> Heads;
 
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
-	FCustomizationProfile Customzation;
+	FCustomizationProfile Customization;
 };
 #pragma endregion

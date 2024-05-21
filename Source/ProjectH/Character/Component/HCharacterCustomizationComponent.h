@@ -6,13 +6,10 @@
 #include "Components/ActorComponent.h"
 #include "ProjectH.h"
 #include "Common/CommonStruct.h"
+#include "Common/CommonTableRow.h"
 #include "HCharacterCustomizationComponent.generated.h"
 
 enum class EAnatomy : uint8;
-
-struct FApparelProfile;
-struct FCCDA_ApparelProfile;
-struct FCustomizationProfile;
 
 class AHCharacter;
 class UPrimaryAssetLabel;
@@ -23,7 +20,7 @@ DECLARE_EVENT_TwoParams(UHCharacterCustomizationComponent, FOnPreApplyCustomizat
 DECLARE_EVENT_FourParams(UHCharacterCustomizationComponent, FOnPreUpdateBasebody, UHCharacterCustomizationComponent*, FBasebodyProfile, USkeletalMeshComponent*, USkeletalMeshComponent*);
 DECLARE_EVENT_ThreeParams(UHCharacterCustomizationComponent, FOnPreUpdateApparel, UHCharacterCustomizationComponent*, FApparelProfile, TArray<USkeletalMeshComponent*>);
 DECLARE_EVENT_FiveParams(UHCharacterCustomizationComponent, FOnPostUpdateApparel, UHCharacterCustomizationComponent*, FApparelProfile, TArray<FCCDA_ApparelProfile>, TArray<USkeletalMeshComponent*>, TArray<FCCDA_ApparelProfile>);
-
+DECLARE_EVENT_TwoParams(UHCharacterCustomizationComponent, FOnPostUpdateBasebody, UHCharacterCustomizationComponent* , USkeletalMeshComponent*);
 
 UCLASS( Blueprintable, ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class PROJECTH_API UHCharacterCustomizationComponent : public UActorComponent
@@ -120,6 +117,9 @@ protected:
 	UPROPERTY(BlueprintReadOnly, VIsibleAnywhere, Transient)
 	FCustomizationProfile CurrentCusomizationProfile;
 
+	UPROPERTY(BlueprintReadOnly, VisibleAnywhere, Transient)
+	FAnatomyProfile CurrentAnatomyProfile;
+
 	UPROPERTY(Transient)
 	TMap<EAnatomy, FCustomizationProfile> CachedCustomizationProfiles;
 
@@ -188,4 +188,13 @@ protected:
 
 public:
 	void UpdateBaseBody();
+
+protected:
+	void UpdateBodyComponent();
+
+private:
+	void UpdateLODSyncComponent();
+
+public:
+	FOnPostUpdateBasebody OnPostUpdateBasebody;
 };

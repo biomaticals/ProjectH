@@ -2,6 +2,7 @@
 
 #include "Character/Base/HCharacter.h"
 #include "Character/Component/HCharacterCustomizationComponent.h"
+#include "Components/LODSyncComponent.h"
 
 FName AHCharacter::HeadMeshComponentName(TEXT("HeadMeshComponent"));
 FName AHCharacter::HeadApparelComponentName(TEXT("HeadApparelComponent"));
@@ -10,6 +11,7 @@ FName AHCharacter::UpperApparelComponentName(TEXT("UpperApparelComponent"));
 FName AHCharacter::LowerApparelComponentName(TEXT("LowerApparelComponent"));
 FName AHCharacter::FeetApparelComponentName(TEXT("FeetApparelComponent"));
 FName AHCharacter::CharacterCustomizationComponentName(TEXT("CharacterCustomizationComponent"));
+FName AHCharacter::LODSyncComponentName(TEXT("LODSyncComponent"));
  
 AHCharacter::AHCharacter(const FObjectInitializer& ObjectInitializer)
 : Super(ObjectInitializer)
@@ -35,6 +37,7 @@ AHCharacter::AHCharacter(const FObjectInitializer& ObjectInitializer)
 
 	CharacterCustomizationComponent = CreateDefaultSubobject<UHCharacterCustomizationComponent>(AHCharacter::CharacterCustomizationComponentName);
 
+	LODSyncComponent = CreateDefaultSubobject<ULODSyncComponent>(AHCharacter::LODSyncComponentName);
 }
 
 // Called when the game starts or when spawned
@@ -111,4 +114,9 @@ USkeletalMeshComponent* AHCharacter::GetFeetApparelComponent()
 UHCharacterCustomizationComponent* AHCharacter::GetCHaracterCustomizationComponent()
 {
 	return CharacterCustomizationComponent;
+}
+
+ULODSyncComponent* AHCharacter::GetLODSyncComponent()
+{
+	return LODSyncComponent;
 }

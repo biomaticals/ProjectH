@@ -466,7 +466,7 @@ struct FAnatomyHeadProfile
 	USkeletalMeshComponent* Mesh;
 
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
-	UAnimInstance* AnimInstanceClass_Override;
+	TSubclassOf<UAnimInstance> AnimInstanceClass_Override;
 
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
 	FSlotMaterial_SkinHead SkinMaterialSets_Override;

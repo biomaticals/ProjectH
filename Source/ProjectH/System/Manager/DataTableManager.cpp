@@ -22,7 +22,7 @@ bool UDataTableManager::UpdateAvailableAnatomyProfiles()
 	if(NeedUpdatAnatomyProfiles == false)
 		return true;
 
-	if (AnatomyProfilesDataTable == nullptr || AnatomyProfilesDataTable->IsValidLowLevel() == false)
+	if (AnatomyProfilesDataTable == NULL || AnatomyProfilesDataTable->IsValidLowLevel() == false)
 	{
 		UT_LOG(HLog, Error, TEXT("[AnatomyProfilesDataTable] is invalid."));
 		return false;
@@ -32,17 +32,17 @@ bool UDataTableManager::UpdateAvailableAnatomyProfiles()
 
 	bool Success = true;
 
-	//for (EAnatomy Anatomy : TEnumRange<EAnatomy>())
-	//{
-	//	FString AnatomyString = EnumToString((uint8)Anatomy, TEXT("/Script/ProjectH.EAnatomy"));
-	//	FAnatomyProfile* Data = AnatomyProfilesDataTable->FindRow<FAnatomyProfile>(FName(AnatomyString), 
-	//	*FString::Printf(TEXT("[AnatomyProfilesDataTable] doesn't have Row \"%s\""), *AnatomyString), true);
-	//
-	//	if(Data == nullptr || Data->IsValid())
-	//		Success = false;
-	//	else
-	//		AvailableAnatomyProfiles.Add(MakeTuple(Anatomy, *Data));
-	//}
+	for (EAnatomy Anatomy : TEnumRange<EAnatomy>())
+	{
+		FString AnatomyString = HUtilityHelpers::EnumToString((uint8)Anatomy, TEXT("/Script/ProjectH.EAnatomy"));
+		FAnatomyProfile* Data = AnatomyProfilesDataTable->FindRow<FAnatomyProfile>(FName(AnatomyString), 
+		*FString::Printf(TEXT("[AnatomyProfilesDataTable] doesn't have Row \"%s\""), *AnatomyString), true);
+	
+		if(Data == NULL || Data->IsValid())
+			Success = false;
+		else
+			AvailableAnatomyProfiles.Add(MakeTuple(Anatomy, *Data));
+	}
 	
 	if(AvailableAnatomyProfiles.IsEmpty())
 		Success = false;
@@ -69,7 +69,7 @@ bool UDataTableManager::UpdatePresetCustomizationProfiles()
 	if (NeedUpdatePresetCustomizationProfiles == false)
 		return true;
 
-	if (PresetCustomizationProfilesDataTable == nullptr || PresetCustomizationProfilesDataTable->IsValidLowLevel() == false)
+	if (PresetCustomizationProfilesDataTable == NULL || PresetCustomizationProfilesDataTable->IsValidLowLevel() == false)
 	{
 		UT_LOG(HLog, Error, TEXT("[PresetCustomizationProfilesDataTable] is invalid."));
 	}

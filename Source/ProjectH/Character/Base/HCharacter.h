@@ -8,6 +8,7 @@
 #include "HCharacter.generated.h"
 
 class UHCharacterCustomizationComponent;
+class ULODSyncComponent;
 
 UCLASS()
 class PROJECTH_API AHCharacter : public ACharacter, public IHSaveGameObjectInterface
@@ -57,6 +58,9 @@ public:
 	UFUNCTION(BlueprintCallable, BlueprintPure)
 	UHCharacterCustomizationComponent* GetCHaracterCustomizationComponent();
 
+	UFUNCTION(BlueprintCallable, BlueprintPure)
+	ULODSyncComponent* GetLODSyncComponent();
+
 protected:
 	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, SaveGame)
 	TObjectPtr<USkeletalMeshComponent> HeadMeshComponent;
@@ -79,6 +83,9 @@ protected:
 	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, SaveGame)
 	TObjectPtr<UHCharacterCustomizationComponent> CharacterCustomizationComponent;
 
+	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, SaveGame)
+	TObjectPtr<ULODSyncComponent> LODSyncComponent;
+
 protected:
 	static FName HeadMeshComponentName;
 	static FName HeadApparelComponentName;
@@ -87,4 +94,5 @@ protected:
 	static FName LowerApparelComponentName;
 	static FName FeetApparelComponentName;
 	static FName CharacterCustomizationComponentName;
+	static FName LODSyncComponentName;
 };

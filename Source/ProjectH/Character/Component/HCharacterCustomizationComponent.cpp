@@ -4,7 +4,9 @@
 #include "Character/Base/HCharacter.h"
 #include "Common/CommonEnum.h"
 #include "Common/CommonStruct.h"
+#include "Common/CommonTableRow.h"
 #include "Common/HUtilityHelpers.h"
+#include "Components/LODSyncComponent.h"
 #include "DataAsset/CharacterCustomizationDataAsset.h"
 #include "Engine/AssetManager.h"
 #include "Engine/PrimaryAssetLabel.h"
@@ -233,15 +235,25 @@ void UHCharacterCustomizationComponent::ApplyCustomizationProfile_Client_Impleme
 
 void UHCharacterCustomizationComponent::ApplyCustomizationProfile_Internal(FCustomizationProfile InCustomizationProfile)
 {
+	if(CachedOwner == NULL)
+		return;
+
 	if(OnPreApplyCustomizationProfile.IsBound())
 		OnPreApplyCustomizationProfile.Broadcast(this, InCustomizationProfile);
 
-	UT_LOG(HCharacterCustomizationLog, Log, TEXT("ApplyCustomizationProfile %s to %s."), *InCustomizationProfile.MetaData.ToString(), GetOwner()->GetFName());
+	UT_LOG(HCharacterCustomizationLog, Log, TEXT("ApplyCustomizationProfile %s to %s."), *InCustomizationProfile.MetaData.ToString(), CachedOwner->GetFName());
 
 	CurrentCusomizationProfile = InCustomizationProfile;
 
-	UpdateBaseBody();
-	
+	TMap<EAnatomy, FAnatomyProfile> AvailableAnatomyProfiles = DATATABLE_MANAGER()->GetAvailableAnatomyProfiles();
+	if (AvailableAnatomyProfiles.IsEmpty())
+		return;
+
+	CurrentAnatomyProfile = *AvailableAnatomyProfiles.Find(CurrentCusomizationProfile.MetaData.Anatomy);
+	if (CurrentAnatomyProfile.IsValid() == false)
+		return;
+
+	UpdateBaseBody();	
 }
 #pragma endregion
 
@@ -297,9 +309,12 @@ bool UHCharacterCustomizationComponent::CheckMulticastIndividualChanges() const
 #pragma region Anim Instance Alpha
 void UHCharacterCustomizationComponent::SetBasebodyAnimInstanceAlpha_Replicable(FName Name, float Value)
 {
+	if(CachedOwner == NULL)
+		return;
+
 	if (CheckReplicateIndividualChagnes())
 	{
-		if(GetOwner()->GetLocalRole() == ENetRole::ROLE_Authority)
+		if(CachedOwner->GetLocalRole() == ENetRole::ROLE_Authority)
 			SetBasebodyAnimInstanceAlpha_Multicast(Name, Value);
 		else
 			SetBasebodyAnimInstanceAlpha_Server(Name, Value);
@@ -331,30 +346,69 @@ void UHCharacterCustomizationComponent::SetBasebodyAnimInstanceAlpha(FName Name,
 
 void UHCharacterCustomizationComponent::UpdateBaseBody()
 {
+	if(CachedOwner == NULL)
+		return;
+
 	if(DATATABLE_MANAGER() == NULL)
 		return;
 
-	USkeletalMeshComponent* BodyComponent = GetOwner() && Cast<AHCharacter>(GetOwner()) ? Cast<AHCharacter>(GetOwner())->GetMesh() : nullptr;
+	USkeletalMeshComponent* BodyComponent = CachedOwner->GetMesh();
 	if(BodyComponent == NULL)
 		return;
 	
-	USkeletalMeshComponent* HeadComponent = Cast<AHCharacter>(GetOwner())->GetHeadMeshComponent();
+	USkeletalMeshComponent* HeadComponent =CachedOwner->GetHeadMeshComponent();
 	if(HeadComponent == NULL)
 		return;
-		
-	if(OnPreUpdateBasebody.IsBound())
+
+	if (OnPreUpdateBasebody.IsBound())
 	{
 		OnPreUpdateBasebody.Broadcast(this, CurrentCusomizationProfile.Basebody, BodyComponent, HeadComponent);
 	}
 
-	TMap<EAnatomy, FAnatomyProfile> AvailableAnatomyProfiles = DATATABLE_MANAGER()->GetAvailableAnatomyProfiles();
-	if(AvailableAnatomyProfiles.IsEmpty())
+	if(BodyComponent->GetAnimationMode() == EAnimationMode::AnimationBlueprint)
+		BodyComponent->SetAnimInstanceClass(CurrentAnatomyProfile.Body.AnimInstanceClass);
+
+	if (CurrentAnatomyProfile.Heads.IsValidIndex(CustomizationProfile.Basebody.Head.Index) &&
+		CurrentAnatomyProfile.Heads[CustomizationProfile.Basebody.Head.Index].AnimInstanceClass_Override)
+	{
+		HeadComponent->SetLeaderPoseComponent(nullptr, true);
+		HeadComponent->SetAnimInstanceClass(CurrentAnatomyProfile.Heads[CustomizationProfile.Basebody.Head.Index].AnimInstanceClass_Override);
+	}
+	else
+	{
+		HeadComponent->SetLeaderPoseComponent(BodyComponent, true);
+		HeadComponent->SetAnimInstanceClass(nullptr);
+	}
+
+	UpdateBodyComponent();
+}
+
+void UHCharacterCustomizationComponent::UpdateBodyComponent()
+{
+	if(CachedOwner == NULL)
 		return;
 
-	FAnatomyProfile* CurrentAnatomyProfile = AvailableAnatomyProfiles.Find(CurrentCusomizationProfile.MetaData.Anatomy);
-	if(CurrentAnatomyProfile == NULL)
+	USkeletalMeshComponent* BodyComponent = CachedOwner->GetMesh();
+	if (BodyComponent == NULL)
 		return;
 
+	BodyComponent->SetSkinnedAssetAndUpdate(CurrentAnatomyProfile.Body.Mesh->GetSkeletalMeshAsset());
 
+	UpdateLODSyncComponent();
 
+	if(OnPostUpdateBasebody.IsBound())
+		OnPostUpdateBasebody.Broadcast(this, BodyComponent);
+}
+
+void UHCharacterCustomizationComponent::UpdateLODSyncComponent()
+{
+	if(CachedOwner == NULL)
+		return;
+
+	ULODSyncComponent* LODSyncComponent = CachedOwner->GetLODSyncComponent();
+	if(LODSyncComponent == NULL)
+		return;
+
+	LODSyncComponent->ComponentsToSync.Empty();
+	LODSyncComponent->CustomLODMapping.Empty();
 }
