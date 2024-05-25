@@ -17,10 +17,13 @@ class UCCDA_Apparel;
  
 DECLARE_EVENT(UHCharacterCustomizationComponent, FPreStartLoadAsset);
 DECLARE_EVENT_TwoParams(UHCharacterCustomizationComponent, FOnPreApplyCustomizationProfile, UHCharacterCustomizationComponent*, FCustomizationProfile);
-DECLARE_EVENT_FourParams(UHCharacterCustomizationComponent, FOnPreUpdateBasebody, UHCharacterCustomizationComponent*, FBasebodyProfile, USkeletalMeshComponent*, USkeletalMeshComponent*);
 DECLARE_EVENT_ThreeParams(UHCharacterCustomizationComponent, FOnPreUpdateApparel, UHCharacterCustomizationComponent*, FApparelProfile, TArray<USkeletalMeshComponent*>);
 DECLARE_EVENT_FiveParams(UHCharacterCustomizationComponent, FOnPostUpdateApparel, UHCharacterCustomizationComponent*, FApparelProfile, TArray<FCCDA_ApparelProfile>, TArray<USkeletalMeshComponent*>, TArray<FCCDA_ApparelProfile>);
-DECLARE_EVENT_TwoParams(UHCharacterCustomizationComponent, FOnPostUpdateBasebody, UHCharacterCustomizationComponent* , USkeletalMeshComponent*);
+DECLARE_EVENT_FourParams(UHCharacterCustomizationComponent, FOnPreUpdateBasebody, UHCharacterCustomizationComponent*, FBasebodyProfile, USkeletalMeshComponent*, USkeletalMeshComponent*);
+DECLARE_EVENT_FourParams(UHCharacterCustomizationComponent, FOnPostUpdateBasebody, UHCharacterCustomizationComponent*, FBasebodyProfile, USkeletalMeshComponent*, USkeletalMeshComponent*);
+
+DECLARE_EVENT_TwoParams(UHCharacterCustomizationComponent, FOnPostUpdateBodyComponent, UHCharacterCustomizationComponent* , USkeletalMeshComponent*);
+DECLARE_EVENT_TwoParams(UHCharacterCustomizationComponent, FOnPostUpdateLODSync, UHCharacterCustomizationComponent*, USkeletalMeshComponent*);
 
 UCLASS( Blueprintable, ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class PROJECTH_API UHCharacterCustomizationComponent : public UActorComponent
@@ -38,6 +41,34 @@ public:
 protected:
 	virtual void BeginPlay() override;
 
+protected:
+	UPROPERTY(BlueprintReadWrite, EditDefaultsOnly, Category = "CustomizationProfile")
+	FAnatomyProfile FallbackAnatomyProfile;
+	 
+	/** SaveGame ~ */
+	UPROPERTY(BlueprintReadOnly, VisibleAnywhere, SaveGame, Category = "CustomizationProfile")
+	TMap<FString, FCustomizationProfile> SavedCustomizationProfileSlotList;
+	/** ~ SaveGame */
+	
+	/** Transient ~ */
+	UPROPERTY(BlueprintReadOnly, VIsibleAnywhere, Transient, Category = "CustomizationProfile")
+	FCustomizationProfile CurrentCusomizationProfile;
+
+	UPROPERTY(BlueprintReadOnly, VisibleAnywhere, Transient, Category = "CustomizationProfile")
+	FAnatomyProfile CurrentAnatomyProfile;
+
+	UPROPERTY(Transient)
+	TMap<EAnatomy, FCustomizationProfile> CachedCustomizationProfiles;
+	/** ~ Transient */
+
+protected:
+	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "BetaFeature")
+	bool bUseSkeletalMerging;
+
+private:
+	UPROPERTY(Transient)
+	AHCharacter* CachedOwner;
+
 #pragma region InitializeComponent
 protected:
 	void InitializeComponent_Replicable();
@@ -50,6 +81,11 @@ protected:
 
 private:
 	void InitializeComponent_Internal();
+
+public:
+	FOnPreUpdateApparel OnPreUpdateApparel;
+	FOnPostUpdateApparel OnpostUpdateApparel;
+
 #pragma endregion
 
 #pragma region InitializeCustomziationProfile
@@ -64,6 +100,16 @@ protected:
 
 private:
 	void InitializeCustomizationProfile_Internal();
+
+protected:
+	UPROPERTY(BlueprintReadOnly, EditAnywhere)
+	ECharacterCustomizationInitializationBehavior InitializationBehavior;
+
+	UPROPERTY(BlueprintReadOnly, EditAnywhere, meta = (EditCondition = "InitializationBehavior == ECharacterCustomizationInitializationBehavior::UseProfile || InitializationBehavior == ECharacterCustomizationInitializationBehavior::OpenCharacterEditorWithCurrentProfile"))
+	FCustomizationProfile CustomizationProfile;
+
+	UPROPERTY(BlueprintReadOnly, EditAnywhere, meta = (EditCondition = "InitializationBehavior == ECharacterCustomizationInitializationBehavior::UseSavedProfile || InitializationBehavior == ECharacterCustomizationInitializationBehavior::OpenCharacterEditorWithProfileToLoad"))
+	FString ProfileNameFromSaves;
 
 #pragma endregion
 
@@ -84,51 +130,19 @@ protected:
 
 private:
 	void ApplyCustomizationProfile_Internal(FCustomizationProfile InCustomizationProfile);
+
+public:
+	FOnPreApplyCustomizationProfile OnPreApplyCustomizationProfile;
 #pragma endregion
 
+#pragma region ApparelSpecificSettings
 protected:
 	UFUNCTION()
 	void ApplyApparelSpecificSettings(UHCharacterCustomizationComponent* CharacterCustomizationComponent, FApparelProfile ApparelProfile, TArray<FCCDA_ApparelProfile> AddingCCDA_Apparels, TArray<USkeletalMeshComponent*> AddingSkeletalMeshComponents, TArray<FCCDA_ApparelProfile> SkippedCCDA_ApparelProfiles);
 
 	UFUNCTION()
 	void ClearApparelSpecificSettings(UHCharacterCustomizationComponent* CharacterCustomizationComponent, FApparelProfile ApparelProfile, TArray<USkeletalMeshComponent*> RemoveingSkeletalMeshComponents);
-
-private:
-	UPROPERTY(Transient)
-	AHCharacter* CachedOwner;
-
-protected:
-	UPROPERTY(BlueprintReadOnly, EditAnywhere)
-	ECharacterCustomizationInitializationBehavior InitializationBehavior;
-
-	UPROPERTY(BlueprintReadOnly, EditAnywhere, meta = (EditCondition = "InitializationBehavior == ECharacterCustomizationInitializationBehavior::UseProfile || InitializationBehavior == ECharacterCustomizationInitializationBehavior::OpenCharacterEditorWithCurrentProfile"))
-	FCustomizationProfile CustomizationProfile;
-
-	UPROPERTY(BlueprintReadOnly, EditAnywhere, meta = (EditCondition = "InitializationBehavior == ECharacterCustomizationInitializationBehavior::UseSavedProfile || InitializationBehavior == ECharacterCustomizationInitializationBehavior::OpenCharacterEditorWithProfileToLoad"))
-	FString ProfileNameFromSaves;
-	
-protected:
-	//SaveGame
-	UPROPERTY(BlueprintReadOnly, VisibleAnywhere, SaveGame)
-	TMap<FString, FCustomizationProfile> SavedCustomizationProfileSlotList;
-
-protected:
-	//Transient
-	UPROPERTY(BlueprintReadOnly, VIsibleAnywhere, Transient)
-	FCustomizationProfile CurrentCusomizationProfile;
-
-	UPROPERTY(BlueprintReadOnly, VisibleAnywhere, Transient)
-	FAnatomyProfile CurrentAnatomyProfile;
-
-	UPROPERTY(Transient)
-	TMap<EAnatomy, FCustomizationProfile> CachedCustomizationProfiles;
-
-public:
-	UPROPERTY(BlueprintReadWrite, EditAnywhere, SaveGame)
-	int SaveTest;
-
-public:
-	FOnPreApplyCustomizationProfile OnPreApplyCustomizationProfile;
+#pragma endregion
 
 #pragma region Load Assets
 public:
@@ -141,9 +155,6 @@ protected:
 
 public:
 	FPreStartLoadAsset OnStartLoadAsset;
-	FOnPreUpdateBasebody OnPreUpdateBasebody;
-	FOnPreUpdateApparel OnPreUpdateApparel;
-	FOnPostUpdateApparel OnpostUpdateApparel;
 
 private:
 	FDelegateHandle OnStartLoadAssetHandle;
@@ -186,15 +197,23 @@ protected:
 	void SetBasebodyAnimInstanceAlpha(FName Name, float Value);
 #pragma endregion
 
+#pragma region Update
 public:
 	void UpdateBaseBody();
+
+public:
+	FOnPreUpdateBasebody OnPreUpdateBasebody;
+	FOnPostUpdateBasebody OnPostUpdateBasebody;
 
 protected:
 	void UpdateBodyComponent();
 
+public:
+	FOnPostUpdateBodyComponent OnPostUpdateBodyComponent;
+
 private:
 	void UpdateLODSyncComponent();
 
-public:
-	FOnPostUpdateBasebody OnPostUpdateBasebody;
+
+#pragma endregion
 };

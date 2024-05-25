@@ -37,26 +37,27 @@ public:
 /** ~ IHSavveGameObjectInterface */
 
 public:
+
 	UFUNCTION(BlueprintCallable, BlueprintPure)
 	USkeletalMeshComponent* GetHeadMeshComponent();
 
 	UFUNCTION(BlueprintCallable, BlueprintPure)
-	USkeletalMeshComponent* GetHeadApparelMeshComponent();
+	TArray<USkeletalMeshComponent*> GetHairstyleMeshComponents();
 
 	UFUNCTION(BlueprintCallable, BlueprintPure)
-	USkeletalMeshComponent* GetEarAccessoryComponent();
+	TArray<USkeletalMeshComponent*> GetApparelMeshComponents();
 
 	UFUNCTION(BlueprintCallable, BlueprintPure)
-	USkeletalMeshComponent* GetUpperApparelComponent();
+	TArray<USkeletalMeshComponent*> GetAttachmentMeshComponents();
 
 	UFUNCTION(BlueprintCallable, BlueprintPure)
-	USkeletalMeshComponent* GetLowerApparelComponent();
+	TArray<USkeletalMeshComponent*> GetEquipmentMeshComponents();
 
 	UFUNCTION(BlueprintCallable, BlueprintPure)
-	USkeletalMeshComponent* GetFeetApparelComponent();
+	TArray<USkeletalMeshComponent*> GetGroomComponents();
 
 	UFUNCTION(BlueprintCallable, BlueprintPure)
-	UHCharacterCustomizationComponent* GetCHaracterCustomizationComponent();
+	UHCharacterCustomizationComponent* GetCharacterCustomizationComponent();
 
 	UFUNCTION(BlueprintCallable, BlueprintPure)
 	ULODSyncComponent* GetLODSyncComponent();
@@ -66,33 +67,28 @@ protected:
 	TObjectPtr<USkeletalMeshComponent> HeadMeshComponent;
 
 	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, SaveGame)
-	TObjectPtr<USkeletalMeshComponent> HeadApparelComponent;	
+	TArray<TObjectPtr<USkeletalMeshComponent>> HairstyleMeshComponents;
 
 	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, SaveGame)
-	TObjectPtr<USkeletalMeshComponent> EarAccessoryComponent;
+	TArray<TObjectPtr<USkeletalMeshComponent>> ApparelMeshComponents;
+
+	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, SaveGame)
+	TArray<TObjectPtr<USkeletalMeshComponent>> AttachmentMeshComponents;
+
+	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, SaveGame)
+	TArray<TObjectPtr<USkeletalMeshComponent>> EquipmentMeshComponents;
+
+	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, SaveGame)
+	TArray<TObjectPtr<USkeletalMeshComponent>> GroomComponents;
+
+	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, SaveGame)
+	TObjectPtr<ULODSyncComponent> LODSyncComponent; 
 	
-	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, SaveGame)
-	TObjectPtr<USkeletalMeshComponent> UpperApparelComponent;
-
-	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, SaveGame)
-	TObjectPtr<USkeletalMeshComponent> LowerApparelComponent;
-
-	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, SaveGame)
-	TObjectPtr<USkeletalMeshComponent> FeetApparelComponent;
-
 	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, SaveGame)
 	TObjectPtr<UHCharacterCustomizationComponent> CharacterCustomizationComponent;
 
-	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, SaveGame)
-	TObjectPtr<ULODSyncComponent> LODSyncComponent;
-
 protected:
 	static FName HeadMeshComponentName;
-	static FName HeadApparelComponentName;
-	static FName EarAccessoryComponentName;
-	static FName UpperApparelComponentName;
-	static FName LowerApparelComponentName;
-	static FName FeetApparelComponentName;
-	static FName CharacterCustomizationComponentName;
 	static FName LODSyncComponentName;
+	static FName CharacterCustomizationComponentName;
 };

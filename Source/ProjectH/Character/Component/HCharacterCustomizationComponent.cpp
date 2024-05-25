@@ -31,6 +31,10 @@ UHCharacterCustomizationComponent::UHCharacterCustomizationComponent()
 	bMulticastIndividualChanges = true;
 	bDebugReplication = false;
 	#pragma endregion
+
+	#pragma region BetaFeature
+	bUseSkeletalMerging = false;
+	#pragma endregion
 }
 
 void UHCharacterCustomizationComponent::BeginPlay()
@@ -381,6 +385,11 @@ void UHCharacterCustomizationComponent::UpdateBaseBody()
 	}
 
 	UpdateBodyComponent();
+
+	if (OnPostUpdateBasebody.IsBound())
+	{
+		OnPostUpdateBasebody.Broadcast(this, CurrentCusomizationProfile.Basebody, BodyComponent, HeadComponent);
+	}
 }
 
 void UHCharacterCustomizationComponent::UpdateBodyComponent()
@@ -396,8 +405,8 @@ void UHCharacterCustomizationComponent::UpdateBodyComponent()
 
 	UpdateLODSyncComponent();
 
-	if(OnPostUpdateBasebody.IsBound())
-		OnPostUpdateBasebody.Broadcast(this, BodyComponent);
+	if(OnPostUpdateBodyComponent.IsBound())
+		OnPostUpdateBodyComponent.Broadcast(this, BodyComponent);
 }
 
 void UHCharacterCustomizationComponent::UpdateLODSyncComponent()
@@ -411,4 +420,42 @@ void UHCharacterCustomizationComponent::UpdateLODSyncComponent()
 
 	LODSyncComponent->ComponentsToSync.Empty();
 	LODSyncComponent->CustomLODMapping.Empty();
+
+	TArray<USkeletalMeshComponent*> NewLODDriverMeshComponents;
+	NewLODDriverMeshComponents.AddUnique(CachedOwner->GetMesh());
+	NewLODDriverMeshComponents.AddUnique(CachedOwner->GetHeadMeshComponent());
+	
+	for (USkeletalMeshComponent* NewLODDriverMeshComponent : NewLODDriverMeshComponents)
+	{
+		FComponentSync NewComponentSync(NewLODDriverMeshComponent->GetFName(), ESyncOption::Drive);
+		LODSyncComponent->ComponentsToSync.Add(NewComponentSync);
+	}
+
+	TArray<USkeletalMeshComponent*> NewLODPassiveMeshComponents;
+	NewLODPassiveMeshComponents.Append(CachedOwner->GetHairstyleMeshComponents());
+	NewLODPassiveMeshComponents.Append(CachedOwner->GetAttachmentMeshComponents());
+	NewLODPassiveMeshComponents.Append(CachedOwner->GetEquipmentMeshComponents());
+	NewLODPassiveMeshComponents.Append(CachedOwner->GetGroomComponents());		
+	if(bUseSkeletalMerging)
+		NewLODPassiveMeshComponents.Append(CachedOwner->GetApparelMeshComponents());
+	
+	for (USkeletalMeshComponent* NewLODPassiveMeshComponent : NewLODPassiveMeshComponents)
+	{
+		FComponentSync NewComponentSync(NewLODPassiveMeshComponent->GetFName(), ESyncOption::Passive);
+		LODSyncComponent->ComponentsToSync.Add(NewComponentSync);
+	}
+	
+	TArray<USkeletalMeshComponent*> New4LODMeshComponents;
+	New4LODMeshComponents.AddUnique(CachedOwner->GetMesh());
+	New4LODMeshComponents.Append(CachedOwner->GetAttachmentMeshComponents());
+	New4LODMeshComponents.Append(CachedOwner->GetEquipmentMeshComponents());
+	if(bUseSkeletalMerging)
+		New4LODMeshComponents.Append(CachedOwner->GetApparelMeshComponents());
+	
+	for (USkeletalMeshComponent* New4LODMeshComponent : New4LODMeshComponents)
+	{
+		FLODMappingData CustomLODMappingData;
+		CustomLODMappingData.Mapping = {0, 0, 1, 1, 2, 2, 3, 3};
+		LODSyncComponent->CustomLODMapping.Add(New4LODMeshComponent->GetFName(), CustomLODMappingData);
+	}
 }

@@ -5,11 +5,6 @@
 #include "Components/LODSyncComponent.h"
 
 FName AHCharacter::HeadMeshComponentName(TEXT("HeadMeshComponent"));
-FName AHCharacter::HeadApparelComponentName(TEXT("HeadApparelComponent"));
-FName AHCharacter::EarAccessoryComponentName(TEXT("EarAccessoryComponent"));
-FName AHCharacter::UpperApparelComponentName(TEXT("UpperApparelComponent"));
-FName AHCharacter::LowerApparelComponentName(TEXT("LowerApparelComponent"));
-FName AHCharacter::FeetApparelComponentName(TEXT("FeetApparelComponent"));
 FName AHCharacter::CharacterCustomizationComponentName(TEXT("CharacterCustomizationComponent"));
 FName AHCharacter::LODSyncComponentName(TEXT("LODSyncComponent"));
  
@@ -19,24 +14,10 @@ AHCharacter::AHCharacter(const FObjectInitializer& ObjectInitializer)
 	PrimaryActorTick.bCanEverTick = true;
 
 	HeadMeshComponent = CreateDefaultSubobject<USkeletalMeshComponent>(AHCharacter::HeadMeshComponentName);
-	
-	HeadApparelComponent = CreateDefaultSubobject<USkeletalMeshComponent>(AHCharacter::HeadApparelComponentName);
-	HeadApparelComponent->SetupAttachment(GetMesh());
-
-	EarAccessoryComponent = CreateDefaultSubobject<USkeletalMeshComponent>(AHCharacter::EarAccessoryComponentName);
-	EarAccessoryComponent->SetupAttachment(GetMesh());
-
-	UpperApparelComponent = CreateDefaultSubobject<USkeletalMeshComponent>(AHCharacter::UpperApparelComponentName);
-	UpperApparelComponent->SetupAttachment(GetMesh());
-
-	LowerApparelComponent = CreateDefaultSubobject<USkeletalMeshComponent>(AHCharacter::LowerApparelComponentName);
-	LowerApparelComponent->SetupAttachment(GetMesh());
-
-	FeetApparelComponent = CreateDefaultSubobject<USkeletalMeshComponent>(AHCharacter::FeetApparelComponentName);
-	FeetApparelComponent->SetupAttachment(GetMesh());
+	HeadMeshComponent->SetupAttachment(GetMesh());
 
 	CharacterCustomizationComponent = CreateDefaultSubobject<UHCharacterCustomizationComponent>(AHCharacter::CharacterCustomizationComponentName);
-
+	
 	LODSyncComponent = CreateDefaultSubobject<ULODSyncComponent>(AHCharacter::LODSyncComponentName);
 }
 
@@ -86,32 +67,32 @@ USkeletalMeshComponent* AHCharacter::GetHeadMeshComponent()
 	return HeadMeshComponent;
 }
 
-USkeletalMeshComponent* AHCharacter::GetHeadApparelMeshComponent()
+TArray<USkeletalMeshComponent*> AHCharacter::GetHairstyleMeshComponents()
 {
-	return HeadApparelComponent;
+	return HairstyleMeshComponents;
 }
 
-USkeletalMeshComponent* AHCharacter::GetEarAccessoryComponent()
+TArray<USkeletalMeshComponent*> AHCharacter::GetApparelMeshComponents()
 {
-	return EarAccessoryComponent;
+	return ApparelMeshComponents;
 }
 
-USkeletalMeshComponent* AHCharacter::GetUpperApparelComponent()
+TArray<USkeletalMeshComponent*> AHCharacter::GetAttachmentMeshComponents()
 {
-	return UpperApparelComponent;
+	return AttachmentMeshComponents;
 }
 
-USkeletalMeshComponent* AHCharacter::GetLowerApparelComponent()
+TArray<USkeletalMeshComponent*> AHCharacter::GetEquipmentMeshComponents()
 {
-	return LowerApparelComponent;
+	return EquipmentMeshComponents;
 }
 
-USkeletalMeshComponent* AHCharacter::GetFeetApparelComponent()
+TArray<USkeletalMeshComponent*> AHCharacter::GetGroomComponents()
 {
-	return FeetApparelComponent;
+	return GroomComponents;
 }
 
-UHCharacterCustomizationComponent* AHCharacter::GetCHaracterCustomizationComponent()
+UHCharacterCustomizationComponent* AHCharacter::GetCharacterCustomizationComponent()
 {
 	return CharacterCustomizationComponent;
 }
