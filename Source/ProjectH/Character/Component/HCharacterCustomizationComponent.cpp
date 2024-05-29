@@ -385,6 +385,13 @@ void UHCharacterCustomizationComponent::UpdateBaseBody()
 	}
 
 	UpdateBodyComponent();
+	UpdateHeadComponent();
+
+	// UpdateMorphTargets
+	// UpdateAnimInstanceAlphas
+	// ResetMaterial ?
+	// Update SkinProfile
+	// Update EyeProfile
 
 	if (OnPostUpdateBasebody.IsBound())
 	{
@@ -407,6 +414,11 @@ void UHCharacterCustomizationComponent::UpdateBodyComponent()
 
 	if(OnPostUpdateBodyComponent.IsBound())
 		OnPostUpdateBodyComponent.Broadcast(this, BodyComponent);
+}
+
+void UHCharacterCustomizationComponent::UpdateHeadComponent()
+{
+
 }
 
 void UHCharacterCustomizationComponent::UpdateLODSyncComponent()
@@ -457,5 +469,10 @@ void UHCharacterCustomizationComponent::UpdateLODSyncComponent()
 		FLODMappingData CustomLODMappingData;
 		CustomLODMappingData.Mapping = {0, 0, 1, 1, 2, 2, 3, 3};
 		LODSyncComponent->CustomLODMapping.Add(New4LODMeshComponent->GetFName(), CustomLODMappingData);
+	}
+
+	if (OnPostUpdateLODSyncComponent.IsBound())
+	{
+		OnPostUpdateLODSyncComponent.Broadcast(this, LODSyncComponent);
 	}
 }

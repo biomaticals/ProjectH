@@ -14,6 +14,7 @@ enum class EAnatomy : uint8;
 class AHCharacter;
 class UPrimaryAssetLabel;
 class UCCDA_Apparel;
+class ULODSyncComponent;
  
 DECLARE_EVENT(UHCharacterCustomizationComponent, FPreStartLoadAsset);
 DECLARE_EVENT_TwoParams(UHCharacterCustomizationComponent, FOnPreApplyCustomizationProfile, UHCharacterCustomizationComponent*, FCustomizationProfile);
@@ -23,7 +24,7 @@ DECLARE_EVENT_FourParams(UHCharacterCustomizationComponent, FOnPreUpdateBasebody
 DECLARE_EVENT_FourParams(UHCharacterCustomizationComponent, FOnPostUpdateBasebody, UHCharacterCustomizationComponent*, FBasebodyProfile, USkeletalMeshComponent*, USkeletalMeshComponent*);
 
 DECLARE_EVENT_TwoParams(UHCharacterCustomizationComponent, FOnPostUpdateBodyComponent, UHCharacterCustomizationComponent* , USkeletalMeshComponent*);
-DECLARE_EVENT_TwoParams(UHCharacterCustomizationComponent, FOnPostUpdateLODSync, UHCharacterCustomizationComponent*, USkeletalMeshComponent*);
+DECLARE_EVENT_TwoParams(UHCharacterCustomizationComponent, FOnPostUpdateLODSyncComponent, UHCharacterCustomizationComponent*, ULODSyncComponent*);
 
 UCLASS( Blueprintable, ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class PROJECTH_API UHCharacterCustomizationComponent : public UActorComponent
@@ -211,9 +212,13 @@ protected:
 public:
 	FOnPostUpdateBodyComponent OnPostUpdateBodyComponent;
 
+public:
+	void UpdateHeadComponent();
+
 private:
 	void UpdateLODSyncComponent();
 
-
+public:
+	FOnPostUpdateLODSyncComponent OnPostUpdateLODSyncComponent;
 #pragma endregion
 };
