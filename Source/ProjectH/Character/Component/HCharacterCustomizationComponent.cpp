@@ -242,6 +242,12 @@ void UHCharacterCustomizationComponent::ApplyCustomizationProfile_Internal(FCust
 	if(CachedOwner == NULL)
 		return;
 
+	if (InCustomizationProfile.MetaData.IsValid() == false)
+	{
+		UT_LOG(HCharacterCustomizationLog, Error, TEXT("InCustomizationProfile is not valid."));
+		return;
+	}
+
 	if(OnPreApplyCustomizationProfile.IsBound())
 		OnPreApplyCustomizationProfile.Broadcast(this, InCustomizationProfile);
 
@@ -251,13 +257,19 @@ void UHCharacterCustomizationComponent::ApplyCustomizationProfile_Internal(FCust
 
 	TMap<EAnatomy, FAnatomyProfile> AvailableAnatomyProfiles = DATATABLE_MANAGER()->GetAvailableAnatomyProfiles();
 	if (AvailableAnatomyProfiles.IsEmpty())
+	{
+		UT_LOG(HCharacterCustomizationLog, Error, TEXT("No AvailableAnatomyProfiles"));
 		return;
-
+	}
+	
 	CurrentAnatomyProfile = *AvailableAnatomyProfiles.Find(CurrentCusomizationProfile.MetaData.Anatomy);
 	if (CurrentAnatomyProfile.IsValid() == false)
+	{	
+		UT_LOG(HCharacterCustomizationLog, Error, TEXT("CurrentCustomizationProfile's Anatomy is not available."));
 		return;
+	}
 
-	UpdateBaseBody();	
+	UpdateBasebody();	
 }
 #pragma endregion
 
@@ -280,14 +292,14 @@ void UHCharacterCustomizationComponent::ClearApparelSpecificSettings(UHCharacter
 
 void UHCharacterCustomizationComponent::LoadPrimaryAsset()
 {
-	UT_LOG(HCharacterLog, Log, TEXT("Start Load Asset"));
+	UT_LOG(HCharacterCustomizationLog, Log, TEXT("Start Load Asset"));
 
 	if (OnStartLoadAsset.IsBound())
 		OnStartLoadAsset.Broadcast();
 
 	if (AssetPackagesToLoad.IsEmpty())
 	{
-		UT_LOG(HCharacterLog, Warning, TEXT("No AssetPackesToLoad"));
+		UT_LOG(HCharacterCustomizationLog, Warning, TEXT("No AssetPackesToLoad"));
 		return;
 	}
 	
@@ -348,7 +360,7 @@ void UHCharacterCustomizationComponent::SetBasebodyAnimInstanceAlpha(FName Name,
 }
 #pragma endregion
 
-void UHCharacterCustomizationComponent::UpdateBaseBody()
+void UHCharacterCustomizationComponent::UpdateBasebody()
 {
 	if(CachedOwner == NULL)
 		return;
@@ -387,6 +399,11 @@ void UHCharacterCustomizationComponent::UpdateBaseBody()
 	UpdateBodyComponent();
 	UpdateHeadComponent();
 
+	if (BodyComponent->GetAnimationMode() == EAnimationMode::AnimationBlueprint)
+	{
+		UpdateBasebodyMorphTargets();//CurrentAnatomyProfile.Customization.Basebody.MorphTargets
+	}
+
 	// UpdateMorphTargets
 	// UpdateAnimInstanceAlphas
 	// ResetMaterial ?
@@ -408,7 +425,7 @@ void UHCharacterCustomizationComponent::UpdateBodyComponent()
 	if (BodyComponent == NULL)
 		return;
 
-	BodyComponent->SetSkinnedAssetAndUpdate(CurrentAnatomyProfile.Body.Mesh->GetSkeletalMeshAsset());
+	BodyComponent->SetSkinnedAssetAndUpdate(CurrentAnatomyProfile.Body.Mesh);
 
 	UpdateLODSyncComponent();
 
@@ -418,6 +435,44 @@ void UHCharacterCustomizationComponent::UpdateBodyComponent()
 
 void UHCharacterCustomizationComponent::UpdateHeadComponent()
 {
+	if(CachedOwner == NULL)
+		return;
+
+	USkeletalMeshComponent* HeadComponent = CachedOwner->GetHeadMeshComponent();
+	if (HeadComponent == NULL)
+		return;
+
+	if (CurrentAnatomyProfile.Heads.IsValidIndex(CustomizationProfile.Basebody.Head.Index))
+	{
+		HeadComponent->SetSkinnedAssetAndUpdate(CurrentAnatomyProfile.Heads[CustomizationProfile.Basebody.Head.Index].Mesh);
+	}
+	else
+	{
+		UT_LOG(HCharacterCustomizationLog, Error, TEXT("CurrentAnatomyProfile's Heads doesn't have valid element on %d index"), CustomizationProfile.Basebody.Head.Index);
+	}
+
+	UpdateLODSyncComponent();
+
+	if(OnPostUpdateHeadComponent.IsBound())
+		OnPostUpdateHeadComponent.Broadcast(this, HeadComponent);
+}
+
+void UHCharacterCustomizationComponent::UpdateBasebodyMorphTargets()
+{
+	if(CachedOwner == NULL)
+		return;
+
+	USkeletalMeshComponent* BodyComponent = CachedOwner->GetMesh();
+
+	for (const auto Elem : CurrentCusomizationProfile.Basebody.MorphTargets)
+	{
+		BodyComponent->SetMorphTarget(Elem.Name, Elem.Value, true);
+		if(OnSetBasebodyMorphTarget.IsBound())
+			OnSetBasebodyMorphTarget.Broadcast(this, Elem.Name, Elem.Value);
+	}
+
+	if(OnPostUpdateBasebodyMorphTarget.IsBound())
+		OnPostUpdateBasebodyMorphTarget.Broadcast(this, CurrentCusomizationProfile.Basebody.MorphTargets);
 
 }
 

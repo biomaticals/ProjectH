@@ -147,6 +147,11 @@ public:
 		return Name + "_" + HUtilityHelpers::EnumToString((uint8)Anatomy, TEXT("Script/ProjectH.EAnatomy"));
 	}
 
+	bool IsValid() const
+	{
+		return Name != "" && Anatomy != EAnatomy::None;
+	}
+
 public:
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
 	FString Name;
@@ -463,7 +468,7 @@ struct FAnatomyHeadProfile
 	GENERATED_USTRUCT_BODY()
 
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
-	USkeletalMeshComponent* Mesh;
+	USkeletalMesh* Mesh;
 
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
 	TSubclassOf<UAnimInstance> AnimInstanceClass_Override;
@@ -524,7 +529,7 @@ struct FAnatomyBaseBodyProfile
 	};
 
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
-	USkeletalMeshComponent* Mesh;
+	USkeletalMesh* Mesh;
 	
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
 	TSubclassOf<UAnimInstance> AnimInstanceClass;

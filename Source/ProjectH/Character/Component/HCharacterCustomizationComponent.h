@@ -24,7 +24,10 @@ DECLARE_EVENT_FourParams(UHCharacterCustomizationComponent, FOnPreUpdateBasebody
 DECLARE_EVENT_FourParams(UHCharacterCustomizationComponent, FOnPostUpdateBasebody, UHCharacterCustomizationComponent*, FBasebodyProfile, USkeletalMeshComponent*, USkeletalMeshComponent*);
 
 DECLARE_EVENT_TwoParams(UHCharacterCustomizationComponent, FOnPostUpdateBodyComponent, UHCharacterCustomizationComponent* , USkeletalMeshComponent*);
+DECLARE_EVENT_TwoParams(UHCharacterCustomizationComponent, FOnPostUpdateHeadComponent, UHCharacterCustomizationComponent*, USkeletalMeshComponent*);
 DECLARE_EVENT_TwoParams(UHCharacterCustomizationComponent, FOnPostUpdateLODSyncComponent, UHCharacterCustomizationComponent*, ULODSyncComponent*);
+DECLARE_EVENT_ThreeParams(UHCharacterCustomizationComponent, FOnSetBasebodyMorphTarget, UHCharacterCustomizationComponent*, FName, float);
+DECLARE_EVENT_TwoParams(UHCharacterCustomizationComponent, FOnPostUpdateBaseboyMorphTarget, UHCharacterCustomizationComponent*, TArray<FHNamedFloat>);
 
 UCLASS( Blueprintable, ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class PROJECTH_API UHCharacterCustomizationComponent : public UActorComponent
@@ -200,7 +203,7 @@ protected:
 
 #pragma region Update
 public:
-	void UpdateBaseBody();
+	void UpdateBasebody();
 
 public:
 	FOnPreUpdateBasebody OnPreUpdateBasebody;
@@ -208,13 +211,15 @@ public:
 
 protected:
 	void UpdateBodyComponent();
+	void UpdateHeadComponent();
+	void UpdateBasebodyMorphTargets();
 
 public:
 	FOnPostUpdateBodyComponent OnPostUpdateBodyComponent;
-
-public:
-	void UpdateHeadComponent();
-
+	FOnPostUpdateHeadComponent OnPostUpdateHeadComponent;
+	FOnSetBasebodyMorphTarget OnSetBasebodyMorphTarget;
+	FOnPostUpdateBaseboyMorphTarget OnPostUpdateBasebodyMorphTarget;
+ 
 private:
 	void UpdateLODSyncComponent();
 

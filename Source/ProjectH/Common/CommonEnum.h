@@ -9,6 +9,8 @@
 UENUM(BlueprintType)
 enum class EAnatomy : uint8
 {
+	None, 
+
 	HumanFemaleAdult,
 	HumanFemaleChild,
 	HumanMaleAdult,
