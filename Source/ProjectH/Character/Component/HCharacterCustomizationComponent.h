@@ -28,6 +28,7 @@ DECLARE_EVENT_TwoParams(UHCharacterCustomizationComponent, FOnPostUpdateHeadComp
 DECLARE_EVENT_TwoParams(UHCharacterCustomizationComponent, FOnPostUpdateLODSyncComponent, UHCharacterCustomizationComponent*, ULODSyncComponent*);
 DECLARE_EVENT_ThreeParams(UHCharacterCustomizationComponent, FOnSetBasebodyMorphTarget, UHCharacterCustomizationComponent*, FName, float);
 DECLARE_EVENT_TwoParams(UHCharacterCustomizationComponent, FOnPostUpdateBaseboyMorphTarget, UHCharacterCustomizationComponent*, TArray<FHNamedFloat>);
+DECLARE_EVENT_TwoParams(UHCharacterCustomizationComponent, FOnPostUpdateBasebodyAnimInstanceAlphas, UHCharacterCustomizationComponent*, TArray<FHNamedFloat>);
 
 UCLASS( Blueprintable, ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class PROJECTH_API UHCharacterCustomizationComponent : public UActorComponent
@@ -63,6 +64,12 @@ protected:
 
 	UPROPERTY(Transient)
 	TMap<EAnatomy, FCustomizationProfile> CachedCustomizationProfiles;
+
+	UPROPERTY(Transient)
+	TArray<UMaterialInstanceDynamic> BodyMIDs;
+	
+	UPROPERTY(Transient)
+	TArray<UMaterialInstanceDynamic> HeadMIDs;
 	/** ~ Transient */
 
 protected:
@@ -213,13 +220,16 @@ protected:
 	void UpdateBodyComponent();
 	void UpdateHeadComponent();
 	void UpdateBasebodyMorphTargets();
+	void UpdateBasebodyAnimInstanceAlphas();
+	void UpdateBasebodySkin();
+	void UpdateHeadSkin();
 
 public:
 	FOnPostUpdateBodyComponent OnPostUpdateBodyComponent;
 	FOnPostUpdateHeadComponent OnPostUpdateHeadComponent;
 	FOnSetBasebodyMorphTarget OnSetBasebodyMorphTarget;
 	FOnPostUpdateBaseboyMorphTarget OnPostUpdateBasebodyMorphTarget;
- 
+	
 private:
 	void UpdateLODSyncComponent();
 

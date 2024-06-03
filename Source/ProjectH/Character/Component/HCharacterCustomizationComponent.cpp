@@ -404,11 +404,23 @@ void UHCharacterCustomizationComponent::UpdateBasebody()
 		UpdateBasebodyMorphTargets();//CurrentAnatomyProfile.Customization.Basebody.MorphTargets
 	}
 
-	// UpdateMorphTargets
-	// UpdateAnimInstanceAlphas
-	// ResetMaterial ?
-	// Update SkinProfile
-	// Update EyeProfile
+
+	UpdateBasebodyAnimInstanceAlphas();
+
+	const int NumBodyMaterials = BodyComponent->GetNumMaterials();
+	for (int i = 0; i < NumBodyMaterials; i++)
+	{
+		BodyComponent->SetMaterial(i, nullptr);
+	}
+
+	const int NumHeadMaterials = HeadComponent->GetNumMaterials();
+	for (int i = 0; i < NumHeadMaterials; i++)
+	{
+		HeadComponent->SetMaterial(i, nullptr);
+	}
+
+	UpdateBodySkin();
+	UpdateHeadSkin();
 
 	if (OnPostUpdateBasebody.IsBound())
 	{
@@ -463,6 +475,8 @@ void UHCharacterCustomizationComponent::UpdateBasebodyMorphTargets()
 		return;
 
 	USkeletalMeshComponent* BodyComponent = CachedOwner->GetMesh();
+	if(BodyComponent == NULL)
+		return;
 
 	for (const auto Elem : CurrentCusomizationProfile.Basebody.MorphTargets)
 	{
@@ -473,6 +487,27 @@ void UHCharacterCustomizationComponent::UpdateBasebodyMorphTargets()
 
 	if(OnPostUpdateBasebodyMorphTarget.IsBound())
 		OnPostUpdateBasebodyMorphTarget.Broadcast(this, CurrentCusomizationProfile.Basebody.MorphTargets);
+}
+
+void UHCharacterCustomizationComponent::UpdateBasebodyAnimInstanceAlphas()
+{
+	if (CachedOwner == NULL)
+		return;
+
+	USkeletalMeshComponent* BodyComponent = CachedOwner->GetMesh();
+	if(BodyComponent == NULL)
+		return;
+
+	
+	UAnimInstance* AnimInstance = BodyComponent->GetAnimInstance();
+	if(AnimInstance == NULL)
+		return;
+
+	for (const auto& Elem : CurrentCusomizationProfile.Basebody.AnimInstanceAlphas)
+	{
+		FProperty* Property = AnimInstance->GetClass()->FindPropertyByName(Elem.Name);
+		Property->SetValue_InContainer(AnimInstance, &Elem.Value);
+	}
 
 }
 
