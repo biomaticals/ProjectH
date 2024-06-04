@@ -419,8 +419,8 @@ void UHCharacterCustomizationComponent::UpdateBasebody()
 		HeadComponent->SetMaterial(i, nullptr);
 	}
 
-	UpdateBodySkin();
-	UpdateHeadSkin();
+	UpdateSkinMaterials();
+	UpdateEyesMaterials();
 
 	if (OnPostUpdateBasebody.IsBound())
 	{
@@ -508,6 +508,55 @@ void UHCharacterCustomizationComponent::UpdateBasebodyAnimInstanceAlphas()
 		FProperty* Property = AnimInstance->GetClass()->FindPropertyByName(Elem.Name);
 		Property->SetValue_InContainer(AnimInstance, &Elem.Value);
 	}
+}
+
+void UHCharacterCustomizationComponent::UpdateSkinMaterials()
+{
+	if(CachedOwner == NULL)
+		return;
+
+	USkeletalMeshComponent* BodyComponent = CachedOwner->GetMesh();
+	if(BodyComponent == NULL)
+		return;
+
+	BodyMIDs.Empty();
+	HeadMIDs.Empty();
+
+	TArray<FSlotMaterial_SkinBodyAndHead> LSkinMaterialSets = CurrentAnatomyProfile.Body.SkinMaterialSets;
+	
+	if(CurrentAnatomyProfile.Heads.IsValidIndex(CurrentCusomizationProfile.Basebody.Head.Index) == false)
+		return;
+
+	TArray<FSlotMaterial_SkinHead> CurrentAnatomySkinMaterialSets = CurrentAnatomyProfile.Heads[CurrentCusomizationProfile.Basebody.Head.Index].SkinMaterialSets_Override;
+
+	int OverrideNum = CurrentAnatomySkinMaterialSets.Num();
+	if(LSkinMaterialSets.Num() < OverrideNum)
+		OverrideNum = LSkinMaterialSets.Num();
+
+	for (int i = 0; i < OverrideNum; i++)
+	{
+		if (CurrentAnatomySkinMaterialSets.IsValidIndex(i) == false)
+			continue;
+
+		FSlotMaterial_SkinBodyAndHead Override;
+		Override.Body = LSkinMaterialSets[i].Body;
+		Override.Head = CurrentAnatomySkinMaterialSets[i].Head;
+
+		LSkinMaterialSets[i] = Override;
+	}
+
+	if(LSkinMaterialSets.IsValidIndex(CurrentCusomizationProfile.Basebody.Skin.MaterialIndex) == false)
+		return;
+
+	FSlotMaterial_SkinBodyAndHead SelectedSkinMaterial = LSkinMaterialSets[CurrentCusomizationProfile.Basebody.Skin.MaterialIndex];
+	for (auto& Elem : SelectedSkinMaterial.Body)
+	{
+		BodyComponent->Create
+	}
+}
+
+void UHCharacterCustomizationComponent::UpdateEyesMaterials()
+{
 
 }
 
@@ -565,4 +614,26 @@ void UHCharacterCustomizationComponent::UpdateLODSyncComponent()
 	{
 		OnPostUpdateLODSyncComponent.Broadcast(this, LODSyncComponent);
 	}
+}
+
+#pragma endregion
+
+#pragma region Helper
+void UHCharacterCustomizationComponent::CreateMIDFromSlotAndMaterial(UMeshComponent* MeshComponent, FName MaterialSlotName, UMaterialInterface* SourceMaterial, TArray<UMaterialInstanceDynamic*> MIDs)
+{
+	if(MeshComponent == NULL)
+		return;
+
+	if(MeshComponent->IsMaterialSlotNameValid(MaterialSlotName) == false)
+		return;
+
+	int MaterialIndex = MeshComponent->GetMaterialIndex(MaterialSlotName);
+
+	UMaterialInterface* Material = MeshComponent->GetMaterial(MaterialIndex);
+	FName MIDName = *((SourceMaterial ? SourceMaterial->GetName() : Material->GetName()) + FString("_INST"));
+
+	UMaterialInstanceDynamic* MID = MeshComponent->CreateDynamicMaterialInstance(MaterialIndex, SourceMaterial, MIDName);
+	if(MID)
+		MIDs.Add(MID);
+
 }

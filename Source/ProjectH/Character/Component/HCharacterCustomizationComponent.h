@@ -221,8 +221,8 @@ protected:
 	void UpdateHeadComponent();
 	void UpdateBasebodyMorphTargets();
 	void UpdateBasebodyAnimInstanceAlphas();
-	void UpdateBasebodySkin();
-	void UpdateHeadSkin();
+	void UpdateSkinMaterials();
+	void UpdateEyesMaterials();
 
 public:
 	FOnPostUpdateBodyComponent OnPostUpdateBodyComponent;
@@ -235,5 +235,10 @@ private:
 
 public:
 	FOnPostUpdateLODSyncComponent OnPostUpdateLODSyncComponent;
+#pragma endregion
+
+#pragma region Helper
+private:
+	void CreateMIDFromSlotAndMaterial(UMeshComponent* MeshComponent , FName MaterialSlotName, UMaterialInterface* SourceMaterial, TArray<UMaterialInstanceDynamic*> MIDs);
 #pragma endregion
 };

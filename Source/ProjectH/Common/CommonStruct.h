@@ -474,7 +474,7 @@ struct FAnatomyHeadProfile
 	TSubclassOf<UAnimInstance> AnimInstanceClass_Override;
 
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
-	FSlotMaterial_SkinHead SkinMaterialSets_Override;
+	TArray<FSlotMaterial_SkinHead> SkinMaterialSets_Override;
 
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
 	TMap<FName, FSlotTexture_SkinHead> SkinTextureSets_Override;
