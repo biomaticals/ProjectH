@@ -74,6 +74,11 @@ public:
 
 	};
 
+	const FLinearColor ToLinearColor() const
+	{
+		return FLinearColor(H, S, V * Intensity, A);
+	}
+
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
 	float H;
 
@@ -194,7 +199,7 @@ struct FSkinProfile
 	TArray<FHNamedFloat> ScalarParameters;
 
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
-	TArray<FHNamedFloat> HDRVectorParameters;
+	TArray<FNamedHDRColor> HDRVectorParameters;
 };
 
 USTRUCT(BlueprintType)

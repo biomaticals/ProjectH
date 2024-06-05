@@ -347,6 +347,10 @@ void UHCharacterCustomizationComponent::SetBasebodyAnimInstanceAlpha_Server_Impl
 	{
 		SetBasebodyAnimInstanceAlpha_Multicast(Name, Value);
 	}
+	else
+	{
+		SetBasebodyAnimInstanceAlpha(Name, Value);
+	}
 }
 
 void UHCharacterCustomizationComponent::SetBasebodyAnimInstanceAlpha_Multicast_Implementation(FName Name, float Value)
@@ -360,6 +364,113 @@ void UHCharacterCustomizationComponent::SetBasebodyAnimInstanceAlpha(FName Name,
 }
 #pragma endregion
 
+#pragma region Apply Parameter
+void UHCharacterCustomizationComponent::SetSkinScalarParameter_Replicable(FName Name, float Value)
+{
+	if (CachedOwner == NULL)
+		return;
+
+	if (CheckReplicateIndividualChagnes())
+	{
+		if (CachedOwner->GetLocalRole() == ENetRole::ROLE_Authority)
+			SetSkinScalarParameter_Multicast(Name, Value);
+		else
+			SetSkinScalarParameter_Server(Name, Value);
+	}
+	else
+	{
+		SetSkinScalarParameter(Name, Value);
+	}
+}
+
+void UHCharacterCustomizationComponent::SetSkinScalarParameter_Server_Implementation(FName Name, float Value)
+{
+	if (CheckMulticastIndividualChanges())
+	{
+		SetSkinScalarParameter_Multicast(Name, Value);
+	}
+	else
+	{
+		SetSkinScalarParameter(Name, Value);
+	}
+}
+
+void UHCharacterCustomizationComponent::SetSkinScalarParameter_Multicast_Implementation(FName Name, float Value)
+{
+	SetSkinScalarParameter(Name, Value);
+}
+
+void UHCharacterCustomizationComponent::SetSkinScalarParameter(FName Name, float Value)
+{
+	CurrentCusomizationProfile.Basebody.Skin.ScalarParameters.Add(FHNamedFloat(Name, Value));
+	
+	TArray<UMaterialInstanceDynamic*> MIDs = HeadMIDs;
+	MIDs.Append(BodyMIDs);
+
+	for (UMaterialInstanceDynamic* MID : MIDs)
+	{
+		MID->SetScalarParameterValue(Name, Value);
+	}
+
+	if(OnSetSkinScalarParameter.IsBound())
+		OnSetSkinScalarParameter.Broadcast(this, Name, Value);
+}
+
+void UHCharacterCustomizationComponent::SetSkinHDRVectorParameter_Replicable(FName Name, FHDRColor HDRColor)
+{
+	if (CachedOwner == NULL)
+		return;
+
+	if (CheckReplicateIndividualChagnes())
+	{
+		if (CachedOwner->GetLocalRole() == ENetRole::ROLE_Authority)
+			SetSkinHDRVectorParameter_Multicast(Name, HDRColor);
+		else
+			SetSkinHDRVectorParameter_Server(Name, HDRColor);
+	}
+	else
+	{
+		SetSkinHDRVectorParameter(Name, HDRColor);
+	}
+}
+
+void UHCharacterCustomizationComponent::SetSkinHDRVectorParameter_Server_Implementation(FName Name, FHDRColor HDRColor)
+{
+	if (CheckMulticastIndividualChanges())
+	{
+		SetSkinHDRVectorParameter_Multicast(Name, HDRColor);
+	}
+	else
+	{
+		SetSkinHDRVectorParameter(Name, HDRColor);
+	}
+}
+
+void UHCharacterCustomizationComponent::SetSkinHDRVectorParameter_Multicast_Implementation(FName Name, FHDRColor HDRColor)
+{
+	SetSkinHDRVectorParameter(Name, HDRColor);
+}
+
+void UHCharacterCustomizationComponent::SetSkinHDRVectorParameter(FName Name, FHDRColor HDRColor)
+{
+	CurrentCusomizationProfile.Basebody.Skin.HDRVectorParameters.Add(FNamedHDRColor(Name, HDRColor));
+
+	TArray<UMaterialInstanceDynamic*> MIDs = HeadMIDs;
+	MIDs.Append(BodyMIDs);
+	
+	const FLinearColor LinearColor = HDRColor.ToLinearColor();
+
+	for (UMaterialInstanceDynamic* MID : MIDs)
+	{
+		MID->SetVectorParameterValue(Name, LinearColor);
+	}
+
+	if (OnSetSkinHDRVectorParameter.IsBound())
+		OnSetSkinHDRVectorParameter.Broadcast(this, Name, HDRColor);
+}
+#pragma endregion
+
+#pragma region UpdateComponent
 void UHCharacterCustomizationComponent::UpdateBasebody()
 {
 	if(CachedOwner == NULL)
@@ -401,9 +512,8 @@ void UHCharacterCustomizationComponent::UpdateBasebody()
 
 	if (BodyComponent->GetAnimationMode() == EAnimationMode::AnimationBlueprint)
 	{
-		UpdateBasebodyMorphTargets();//CurrentAnatomyProfile.Customization.Basebody.MorphTargets
+		UpdateBasebodyMorphTargets();
 	}
-
 
 	UpdateBasebodyAnimInstanceAlphas();
 
@@ -508,6 +618,9 @@ void UHCharacterCustomizationComponent::UpdateBasebodyAnimInstanceAlphas()
 		FProperty* Property = AnimInstance->GetClass()->FindPropertyByName(Elem.Name);
 		Property->SetValue_InContainer(AnimInstance, &Elem.Value);
 	}
+
+	if(OnPostUpdateBasebodyAnimInstanceAlphas.IsBound())
+		OnPostUpdateBasebodyAnimInstanceAlphas.Broadcast(this, CurrentCusomizationProfile.Basebody.AnimInstanceAlphas);
 }
 
 void UHCharacterCustomizationComponent::UpdateSkinMaterials()
@@ -518,6 +631,12 @@ void UHCharacterCustomizationComponent::UpdateSkinMaterials()
 	USkeletalMeshComponent* BodyComponent = CachedOwner->GetMesh();
 	if(BodyComponent == NULL)
 		return;
+
+	USkeletalMeshComponent* HeadComponent = CachedOwner->GetHeadMeshComponent();
+	if(HeadComponent == NULL)
+		return;
+
+	/** Step 1. Create MID */
 
 	BodyMIDs.Empty();
 	HeadMIDs.Empty();
@@ -549,10 +668,28 @@ void UHCharacterCustomizationComponent::UpdateSkinMaterials()
 		return;
 
 	FSlotMaterial_SkinBodyAndHead SelectedSkinMaterial = LSkinMaterialSets[CurrentCusomizationProfile.Basebody.Skin.MaterialIndex];
-	for (auto& Elem : SelectedSkinMaterial.Body)
+	for (const auto& Elem : SelectedSkinMaterial.Body)
 	{
-		BodyComponent->Create
+		CreateMIDFromSlotAndMaterial(BodyComponent, Elem.Key, Elem.Value, BodyMIDs);
 	}
+
+	for (const auto& Elem : SelectedSkinMaterial.Head)
+	{
+		CreateMIDFromSlotAndMaterial(HeadComponent, Elem.Key, Elem.Value, HeadMIDs);
+	}
+
+	/** Step 2. Apply Parameters */
+	const FSkinProfile CurrentSkinProfile = CurrentCusomizationProfile.Basebody.Skin;
+	for (const auto& Elem : CurrentSkinProfile.ScalarParameters)
+	{
+		SetSkinScalarParameter(Elem.Name, Elem.Value);
+	}
+
+	for (const auto& Elem : CurrentSkinProfile.HDRVectorParameters)
+	{
+
+	}
+
 }
 
 void UHCharacterCustomizationComponent::UpdateEyesMaterials()
@@ -619,7 +756,7 @@ void UHCharacterCustomizationComponent::UpdateLODSyncComponent()
 #pragma endregion
 
 #pragma region Helper
-void UHCharacterCustomizationComponent::CreateMIDFromSlotAndMaterial(UMeshComponent* MeshComponent, FName MaterialSlotName, UMaterialInterface* SourceMaterial, TArray<UMaterialInstanceDynamic*> MIDs)
+void UHCharacterCustomizationComponent::CreateMIDFromSlotAndMaterial(UMeshComponent* MeshComponent, FName MaterialSlotName, UMaterialInterface* SourceMaterial, TArray<UMaterialInstanceDynamic*>& MIDs)
 {
 	if(MeshComponent == NULL)
 		return;
@@ -635,5 +772,4 @@ void UHCharacterCustomizationComponent::CreateMIDFromSlotAndMaterial(UMeshCompon
 	UMaterialInstanceDynamic* MID = MeshComponent->CreateDynamicMaterialInstance(MaterialIndex, SourceMaterial, MIDName);
 	if(MID)
 		MIDs.Add(MID);
-
 }

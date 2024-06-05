@@ -16,19 +16,35 @@ class UPrimaryAssetLabel;
 class UCCDA_Apparel;
 class ULODSyncComponent;
  
-DECLARE_EVENT(UHCharacterCustomizationComponent, FPreStartLoadAsset);
-DECLARE_EVENT_TwoParams(UHCharacterCustomizationComponent, FOnPreApplyCustomizationProfile, UHCharacterCustomizationComponent*, FCustomizationProfile);
+#pragma region InitializeComponent
 DECLARE_EVENT_ThreeParams(UHCharacterCustomizationComponent, FOnPreUpdateApparel, UHCharacterCustomizationComponent*, FApparelProfile, TArray<USkeletalMeshComponent*>);
 DECLARE_EVENT_FiveParams(UHCharacterCustomizationComponent, FOnPostUpdateApparel, UHCharacterCustomizationComponent*, FApparelProfile, TArray<FCCDA_ApparelProfile>, TArray<USkeletalMeshComponent*>, TArray<FCCDA_ApparelProfile>);
+#pragma endregion
+
+#pragma region ApplyCustomizationProfile
+DECLARE_EVENT_TwoParams(UHCharacterCustomizationComponent, FOnPreApplyCustomizationProfile, UHCharacterCustomizationComponent*, FCustomizationProfile);
+#pragma endregion
+
+#pragma region LoadAsset
+DECLARE_EVENT(UHCharacterCustomizationComponent, FPreStartLoadAsset);
+#pragma endregion
+
+#pragma region UpdateComponent
 DECLARE_EVENT_FourParams(UHCharacterCustomizationComponent, FOnPreUpdateBasebody, UHCharacterCustomizationComponent*, FBasebodyProfile, USkeletalMeshComponent*, USkeletalMeshComponent*);
 DECLARE_EVENT_FourParams(UHCharacterCustomizationComponent, FOnPostUpdateBasebody, UHCharacterCustomizationComponent*, FBasebodyProfile, USkeletalMeshComponent*, USkeletalMeshComponent*);
-
 DECLARE_EVENT_TwoParams(UHCharacterCustomizationComponent, FOnPostUpdateBodyComponent, UHCharacterCustomizationComponent* , USkeletalMeshComponent*);
 DECLARE_EVENT_TwoParams(UHCharacterCustomizationComponent, FOnPostUpdateHeadComponent, UHCharacterCustomizationComponent*, USkeletalMeshComponent*);
 DECLARE_EVENT_TwoParams(UHCharacterCustomizationComponent, FOnPostUpdateLODSyncComponent, UHCharacterCustomizationComponent*, ULODSyncComponent*);
 DECLARE_EVENT_ThreeParams(UHCharacterCustomizationComponent, FOnSetBasebodyMorphTarget, UHCharacterCustomizationComponent*, FName, float);
 DECLARE_EVENT_TwoParams(UHCharacterCustomizationComponent, FOnPostUpdateBaseboyMorphTarget, UHCharacterCustomizationComponent*, TArray<FHNamedFloat>);
 DECLARE_EVENT_TwoParams(UHCharacterCustomizationComponent, FOnPostUpdateBasebodyAnimInstanceAlphas, UHCharacterCustomizationComponent*, TArray<FHNamedFloat>);
+#pragma endregion
+
+
+#pragma region ApplyParameter
+DECLARE_EVENT_ThreeParams(UHCharacterCustomizationComponent, FOnSetSkinScalarParameter, UHCharacterCustomizationComponent*, FName, float);
+DECLARE_EVENT_ThreeParams(UHCharacterCustomizationComponent, FOnSetSkinSHDRVectorParameter, UHCharacterCustomizationComponent*, FName, FHDRColor); 
+#pragma endregion
 
 UCLASS( Blueprintable, ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class PROJECTH_API UHCharacterCustomizationComponent : public UActorComponent
@@ -66,10 +82,10 @@ protected:
 	TMap<EAnatomy, FCustomizationProfile> CachedCustomizationProfiles;
 
 	UPROPERTY(Transient)
-	TArray<UMaterialInstanceDynamic> BodyMIDs;
+	TArray<UMaterialInstanceDynamic*> BodyMIDs;
 	
 	UPROPERTY(Transient)
-	TArray<UMaterialInstanceDynamic> HeadMIDs;
+	TArray<UMaterialInstanceDynamic*> HeadMIDs;
 	/** ~ Transient */
 
 protected:
@@ -155,7 +171,7 @@ protected:
 	void ClearApparelSpecificSettings(UHCharacterCustomizationComponent* CharacterCustomizationComponent, FApparelProfile ApparelProfile, TArray<USkeletalMeshComponent*> RemoveingSkeletalMeshComponents);
 #pragma endregion
 
-#pragma region Load Assets
+#pragma region LoadAssets
 public:
 	UFUNCTION(Category = "Load Assets")
 	void LoadPrimaryAsset();
@@ -173,7 +189,7 @@ private:
 	
 #pragma endregion
 
-#pragma region Repliacte Settings
+#pragma region RepliacteSettings
 protected:
 	bool CheckReplicateIndividualChagnes() const;
 	bool CheckMulticastIndividualChanges() const;
@@ -192,7 +208,7 @@ protected:
 	bool bDebugReplication;
 #pragma endregion
 
-#pragma region Anim Instance Alpha
+#pragma region AnimInstanceAlpha
 public:
 	UFUNCTION(BlueprintCallable)
 	void SetBasebodyAnimInstanceAlpha_Replicable(FName Name, float Value);
@@ -208,7 +224,43 @@ protected:
 	void SetBasebodyAnimInstanceAlpha(FName Name, float Value);
 #pragma endregion
 
-#pragma region Update
+#pragma region ApplyParameter
+public:
+	UFUNCTION(BlueprintCallable)
+	void SetSkinScalarParameter_Replicable(FName Name, float Value);
+
+protected:
+	UFUNCTION(Reliable, Server)
+	void SetSkinScalarParameter_Server(FName Name, float Value);
+
+	UFUNCTION(Reliable, NetMulticast)
+	void SetSkinScalarParameter_Multicast(FName Name, float Value);
+
+	UFUNCTION()
+	void SetSkinScalarParameter(FName Name, float Value);
+
+public:
+	FOnSetSkinScalarParameter OnSetSkinScalarParameter;
+
+public:
+	UFUNCTION(BlueprintCallable)
+	void SetSkinHDRVectorParameter_Replicable(FName Name, FHDRColor HDRColor);
+
+protected:
+	UFUNCTION(Reliable, Server)
+	void SetSkinHDRVectorParameter_Server(FName Name, FHDRColor HDRColor);
+
+	UFUNCTION(Reliable, NetMulticast)
+	void SetSkinHDRVectorParameter_Multicast(FName Name, FHDRColor HDRColor);
+
+	UFUNCTION()
+	void SetSkinHDRVectorParameter(FName Name, FHDRColor HDRColor);
+
+public:
+	FOnSetSkinSHDRVectorParameter OnSetSkinHDRVectorParameter;
+	
+#pragma endregion
+#pragma region UpdateComponent
 public:
 	void UpdateBasebody();
 
@@ -229,7 +281,8 @@ public:
 	FOnPostUpdateHeadComponent OnPostUpdateHeadComponent;
 	FOnSetBasebodyMorphTarget OnSetBasebodyMorphTarget;
 	FOnPostUpdateBaseboyMorphTarget OnPostUpdateBasebodyMorphTarget;
-	
+	FOnPostUpdateBasebodyAnimInstanceAlphas OnPostUpdateBasebodyAnimInstanceAlphas;
+
 private:
 	void UpdateLODSyncComponent();
 
@@ -239,6 +292,6 @@ public:
 
 #pragma region Helper
 private:
-	void CreateMIDFromSlotAndMaterial(UMeshComponent* MeshComponent , FName MaterialSlotName, UMaterialInterface* SourceMaterial, TArray<UMaterialInstanceDynamic*> MIDs);
+	void CreateMIDFromSlotAndMaterial(UMeshComponent* MeshComponent , FName MaterialSlotName, UMaterialInterface* SourceMaterial, TArray<UMaterialInstanceDynamic*>& MIDs);
 #pragma endregion
 };
