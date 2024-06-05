@@ -687,14 +687,71 @@ void UHCharacterCustomizationComponent::UpdateSkinMaterials()
 
 	for (const auto& Elem : CurrentSkinProfile.HDRVectorParameters)
 	{
-
+		SetSkinHDRVectorParameter(Elem.Name, Elem.Value);
 	}
 
+	UpdateSkinTextureSets();
 }
 
 void UHCharacterCustomizationComponent::UpdateEyesMaterials()
 {
+	
+}
 
+void UHCharacterCustomizationComponent::UpdateSkinTextureSets()
+{
+	if(DATATABLE_MANAGER() == NULL)
+		return;
+
+	const UDataTable* DefaultSkinTextureDataTable = DATATABLE_MANAGER()->GetDefaultSkinTexturesDataTable();
+	for (FName ParameterName : ActiveSkinTexntureSetsParameterNames_Body)
+	{
+		for (FName RowName : DefaultSkinTextureDataTable->GetRowNames())
+		{
+			FSkinTextureSetDefaultTexture* Found = DefaultSkinTextureDataTable->FindRow<FSkinTextureSetDefaultTexture>(RowName, GetName());
+			if(Found)
+			{
+				for (UMaterialInstanceDynamic* BodyMID : BodyMIDs)
+				{
+					BodyMID->SetTextureParameterValue(ParameterName, Found->Texture);
+				}
+			}
+		}
+	}
+	ActiveSkinTexntureSetsParameterNames_Body.Empty();
+
+	for (FName ParameterName : ActiveSkinTexntureSetsParameterNames_Head)
+	{
+		for (FName RowName : DefaultSkinTextureDataTable->GetRowNames())
+		{
+			FSkinTextureSetDefaultTexture* Found = DefaultSkinTextureDataTable->FindRow<FSkinTextureSetDefaultTexture>(RowName, GetName());
+			if (Found)
+			{
+				for (UMaterialInstanceDynamic* HeadMID : HeadMIDs)
+				{
+					HeadMID->SetTextureParameterValue(ParameterName, Found->Texture);
+				}
+			}
+		}
+	}
+	ActiveSkinTexntureSetsParameterNames_Head.Empty();
+
+	TMap<FName, FSlotTexture_SkinBodyAndHead> LSkinTextureSets =  CurrentAnatomyProfile.Body.SkinTextureSets;
+
+	if(CurrentAnatomyProfile.Heads.IsValidIndex(CurrentCusomizationProfile.Basebody.Head.Index) == false)
+		return;
+
+	for (const auto& Elem : CurrentAnatomyProfile.Heads[CurrentCusomizationProfile.Basebody.Head.Index].SkinTextureSets_Override)
+	{
+		if (FSlotTexture_SkinBodyAndHead* Found = CurrentAnatomyProfile.Body.SkinTextureSets.Find(Elem.Key))
+		{
+			FSlotTexture_SkinBodyAndHead NewValue;
+			NewValue.Body = LSkinTextureSets.Find(Elem.Key)->Body;
+			NewValue.Head = (CurrentAnatomyProfile.Heads[CurrentCusomizationProfile.Basebody.Head.Index].SkinTextureSets_Override.Find(Elem.Key))->Head;
+			
+			LSkinTextureSets.Add(Elem.Key, NewValue);
+		}
+	}
 }
 
 void UHCharacterCustomizationComponent::UpdateLODSyncComponent()

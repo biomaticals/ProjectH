@@ -86,6 +86,12 @@ protected:
 	
 	UPROPERTY(Transient)
 	TArray<UMaterialInstanceDynamic*> HeadMIDs;
+
+	UPROPERTY(Transient)
+	TArray<FName> ActiveSkinTexntureSetsParameterNames_Body;
+
+	UPROPERTY(Transient)
+	TArray<FName> ActiveSkinTexntureSetsParameterNames_Head;
 	/** ~ Transient */
 
 protected:
@@ -275,6 +281,7 @@ protected:
 	void UpdateBasebodyAnimInstanceAlphas();
 	void UpdateSkinMaterials();
 	void UpdateEyesMaterials();
+	void UpdateSkinTextureSets();
 
 public:
 	FOnPostUpdateBodyComponent OnPostUpdateBodyComponent;

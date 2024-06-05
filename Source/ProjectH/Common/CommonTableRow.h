@@ -7,6 +7,7 @@
 #include "Common/CommonStruct.h"
 #include "CommonTableRow.generated.h"
  
+ #pragma region CharacterCustomization
 USTRUCT(BlueprintType)
 struct FAnatomyProfile : public FTableRowBase
 {
@@ -27,3 +28,15 @@ struct FAnatomyProfile : public FTableRowBase
 	FCustomizationProfile Customization;
 };
 #pragma endregion
+
+USTRUCT(BlueprintType)
+struct FSkinTextureSetDefaultTexture : public FTableRowBase
+{
+	GENERATED_USTRUCT_BODY()
+	FSkinTextureSetDefaultTexture()
+	{
+
+	}
+
+	UTexture* Texture;
+};

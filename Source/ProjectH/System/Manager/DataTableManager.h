@@ -40,12 +40,18 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void SetNeedUpdatePresetCustomizationProfiles();
 
+	UFUNCTION(BlueprintCallable)
+	UDataTable* GetDefaultSkinTexturesDataTable(){return DefaultSkinTexturesDataTable;}
+
 protected:
 	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "CharacterCustomization")
 	UDataTable* AnatomyProfilesDataTable; 
 
 	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "CharacterCustomization")
 	UDataTable* PresetCustomizationProfilesDataTable;
+
+	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "CharacterCustomization")
+	UDataTable* DefaultSkinTexturesDataTable;
 
 private:
 	UPROPERTY(Transient)
