@@ -44,6 +44,66 @@ void UHCharacterCustomizationComponent::BeginPlay()
 	Super::BeginPlay();
 }
 
+TMap<FName, FSlotTexture_SkinBodyAndHead> UHCharacterCustomizationComponent::GetCurrentSkinTextureSets()
+{
+	TMap<FName, FSlotTexture_SkinBodyAndHead> LSkinTextureSets = CurrentAnatomyProfile.Body.SkinTextureSets;
+
+	if (CurrentAnatomyProfile.Heads.IsValidIndex(CurrentCusomizationProfile.Basebody.Head.Index) == false)
+		return LSkinTextureSets;
+
+	for (const auto& Elem : CurrentAnatomyProfile.Heads[CurrentCusomizationProfile.Basebody.Head.Index].SkinTextureSets_Override)
+	{
+		if (FSlotTexture_SkinBodyAndHead* Found = LSkinTextureSets.Find(Elem.Key))
+		{
+			FSlotTexture_SkinBodyAndHead NewValue;
+			NewValue.Body = LSkinTextureSets.Find(Elem.Key)->Body;
+			NewValue.Head = (CurrentAnatomyProfile.Heads[CurrentCusomizationProfile.Basebody.Head.Index].SkinTextureSets_Override.Find(Elem.Key))->Head;
+
+			LSkinTextureSets.Add(Elem.Key, NewValue);
+		}
+	}
+
+	TMap<FName, FSlotTexture_SkinBodyAndHead> LFilteredSkinTextureSets;
+	for (const auto& Elem : LSkinTextureSets)
+	{
+		if (CurrentCusomizationProfile.Basebody.Skin.TextureSets.Contains(Elem.Key))
+		{
+			TPair<FName, FSlotTexture_SkinBodyAndHead> NewTextureSet;
+			NewTextureSet.Key = Elem.Key;
+			NewTextureSet.Value = Elem.Value;
+			LFilteredSkinTextureSets.Add(NewTextureSet);
+		}
+	}
+
+	return LFilteredSkinTextureSets;
+}
+
+FSlotMaterial_Eyes UHCharacterCustomizationComponent::GetCurrentEyesMaterialSet()
+{
+	TArray<FSlotMaterial_Eyes> LEyesMaterialSets = CurrentAnatomyProfile.Body.EyesMaterialSets;
+
+	if (CurrentAnatomyProfile.Heads.IsValidIndex(CurrentCusomizationProfile.Basebody.Head.Index) == false)
+		return FSlotMaterial_Eyes();
+
+	int OverrideNum = LEyesMaterialSets.Num();
+	TArray<FSlotMaterial_Eyes> EyesMaterialSets = CurrentAnatomyProfile.Heads[CurrentCusomizationProfile.Basebody.Head.Index].EyesMaterialSets_Override;
+	if(EyesMaterialSets.Num() < OverrideNum)
+		OverrideNum = EyesMaterialSets.Num();
+
+	for (int i = 0 ; i < OverrideNum ; i++)
+	{
+		if (EyesMaterialSets.IsValidIndex(i))
+		{
+			LEyesMaterialSets[i] = EyesMaterialSets[i];
+		}
+	}
+
+	if (LEyesMaterialSets.IsValidIndex(CurrentCusomizationProfile.Basebody.Eyes.MaterialIndex))
+		return LEyesMaterialSets[CurrentCusomizationProfile.Basebody.Eyes.MaterialIndex];
+
+	return FSlotMaterial_Eyes();
+}
+
 void UHCharacterCustomizationComponent::InitializeComponent()
 {
 	// Network
@@ -468,6 +528,103 @@ void UHCharacterCustomizationComponent::SetSkinHDRVectorParameter(FName Name, FH
 	if (OnSetSkinHDRVectorParameter.IsBound())
 		OnSetSkinHDRVectorParameter.Broadcast(this, Name, HDRColor);
 }
+
+void UHCharacterCustomizationComponent::SetEyesScalarParameter_Replicable(FName Name, float Value)
+{
+	if (CachedOwner == NULL)
+		return;
+
+	if (CheckReplicateIndividualChagnes())
+	{
+		if (CachedOwner->GetLocalRole() == ENetRole::ROLE_Authority)
+			SetEyesScalarParameter_Server(Name, Value);
+		else
+			SetEyesScalarParameter_Multicast(Name, Value);
+	}
+	else
+	{
+		SetEyesScalarParameter(Name, Value);
+	}
+}
+
+void UHCharacterCustomizationComponent::SetEyesScalarParameter_Server_Implementation(FName Name, float Value)
+{
+	if (CheckMulticastIndividualChanges())
+	{
+		SetEyesScalarParameter_Multicast(Name, Value);
+	}
+	else
+	{
+		SetEyesScalarParameter(Name, Value);
+	}
+}
+
+void UHCharacterCustomizationComponent::SetEyesScalarParameter_Multicast_Implementation(FName Name, float Value)
+{
+	SetEyesScalarParameter(Name, Value);
+}
+
+void UHCharacterCustomizationComponent::SetEyesScalarParameter(FName Name, float Value)
+{
+	CurrentCusomizationProfile.Basebody.Eyes.ScalarParameters.Add(FHNamedFloat(Name, Value));
+
+	for (UMaterialInstanceDynamic* MID : EyesMIDs)
+	{
+		if(MID)
+			MID->SetScalarParameterValue(Name, Value);
+	}
+
+	if(OnSetEyesScalarParameter.IsBound())
+		OnSetEyesScalarParameter.Broadcast(this, Name, Value);
+}
+
+void UHCharacterCustomizationComponent::SetEyesHDRVectorParameter_Replicable(FName Name, FHDRColor HDRColor)
+{
+	if (CachedOwner == NULL)
+		return;
+
+	if (CheckReplicateIndividualChagnes())
+	{
+		if (CachedOwner->GetLocalRole() == ENetRole::ROLE_Authority)
+			SetEyesHDRVectorParameter_Server(Name, HDRColor);
+		else
+			SetEyesHDRVectorParameter_Multicast(Name, HDRColor);
+	}
+	else
+	{
+		SetEyesHDRVectorParameter(Name, HDRColor);
+	}
+}
+
+void UHCharacterCustomizationComponent::SetEyesHDRVectorParameter_Server_Implementation(FName Name, FHDRColor HDRColor)
+{
+	if (CheckMulticastIndividualChanges())
+	{
+		SetEyesHDRVectorParameter_Multicast(Name, HDRColor);
+	}
+	else
+	{
+		SetEyesHDRVectorParameter(Name, HDRColor);
+	}
+}
+
+void UHCharacterCustomizationComponent::SetEyesHDRVectorParameter_Multicast_Implementation(FName Name, FHDRColor HDRColor)
+{
+	SetEyesHDRVectorParameter(Name, HDRColor);
+}
+
+void UHCharacterCustomizationComponent::SetEyesHDRVectorParameter(FName Name, FHDRColor HDRColor)
+{
+	CurrentCusomizationProfile.Basebody.Eyes.HDRScalarParameters.Add(FNamedHDRColor(Name, HDRColor));
+
+	for (UMaterialInstanceDynamic* MID : EyesMIDs)
+	{
+		if(MID)
+			MID->SetVectorParameterValue(Name, HDRColor.ToLinearColor());
+	}
+	if (OnSetEyesHDRVectorParameter.IsBound())
+		OnSetEyesHDRVectorParameter.Broadcast(this, Name, HDRColor);
+}
 #pragma endregion
 
 #pragma region UpdateComponent
@@ -691,11 +848,9 @@ void UHCharacterCustomizationComponent::UpdateSkinMaterials()
 	}
 
 	UpdateSkinTextureSets();
-}
 
-void UHCharacterCustomizationComponent::UpdateEyesMaterials()
-{
-	
+	if(OnPostUpdateSkinMaterialSets.IsBound())
+		OnPostUpdateSkinMaterialSets.Broadcast(this, CurrentSkinProfile, BodyMIDs, HeadMIDs);
 }
 
 void UHCharacterCustomizationComponent::UpdateSkinTextureSets()
@@ -704,7 +859,7 @@ void UHCharacterCustomizationComponent::UpdateSkinTextureSets()
 		return;
 
 	const UDataTable* DefaultSkinTextureDataTable = DATATABLE_MANAGER()->GetDefaultSkinTexturesDataTable();
-	for (FName ParameterName : ActiveSkinTexntureSetsParameterNames_Body)
+	for (FName ParameterName : ActiveSkinTextureSetsParameterNames_Body)
 	{
 		for (FName RowName : DefaultSkinTextureDataTable->GetRowNames())
 		{
@@ -718,9 +873,9 @@ void UHCharacterCustomizationComponent::UpdateSkinTextureSets()
 			}
 		}
 	}
-	ActiveSkinTexntureSetsParameterNames_Body.Empty();
+	ActiveSkinTextureSetsParameterNames_Body.Empty();
 
-	for (FName ParameterName : ActiveSkinTexntureSetsParameterNames_Head)
+	for (FName ParameterName : ActiveSkinTextureSetsParameterNames_Head)
 	{
 		for (FName RowName : DefaultSkinTextureDataTable->GetRowNames())
 		{
@@ -734,24 +889,64 @@ void UHCharacterCustomizationComponent::UpdateSkinTextureSets()
 			}
 		}
 	}
-	ActiveSkinTexntureSetsParameterNames_Head.Empty();
+	ActiveSkinTextureSetsParameterNames_Head.Empty();
 
-	TMap<FName, FSlotTexture_SkinBodyAndHead> LSkinTextureSets =  CurrentAnatomyProfile.Body.SkinTextureSets;
-
-	if(CurrentAnatomyProfile.Heads.IsValidIndex(CurrentCusomizationProfile.Basebody.Head.Index) == false)
-		return;
-
-	for (const auto& Elem : CurrentAnatomyProfile.Heads[CurrentCusomizationProfile.Basebody.Head.Index].SkinTextureSets_Override)
+	TMap<FName, FSlotTexture_SkinBodyAndHead> CurrentSkinTextureSets = GetCurrentSkinTextureSets();
+	for (const auto& Elem : CurrentSkinTextureSets)
 	{
-		if (FSlotTexture_SkinBodyAndHead* Found = CurrentAnatomyProfile.Body.SkinTextureSets.Find(Elem.Key))
+		for (const auto& Body : Elem.Value.Body)
 		{
-			FSlotTexture_SkinBodyAndHead NewValue;
-			NewValue.Body = LSkinTextureSets.Find(Elem.Key)->Body;
-			NewValue.Head = (CurrentAnatomyProfile.Heads[CurrentCusomizationProfile.Basebody.Head.Index].SkinTextureSets_Override.Find(Elem.Key))->Head;
+			ActiveSkinTextureSetsParameterNames_Body.Add(Body.Key);
 			
-			LSkinTextureSets.Add(Elem.Key, NewValue);
+			for (UMaterialInstanceDynamic* BodyMID : BodyMIDs)
+			{
+				BodyMID->SetTextureParameterValue(Body.Key, Body.Value);
+			}
+		}
+
+		for (const auto& Head : Elem.Value.Head)
+		{
+			ActiveSkinTextureSetsParameterNames_Head.Add(Head.Key);
+
+			for (UMaterialInstanceDynamic* HeadMID : HeadMIDs)
+			{
+				HeadMID->SetTextureParameterValue(Head.Key, Head.Value);
+			}
 		}
 	}
+
+	if(OnPostUpdateSkinTextureSets.IsBound())
+		OnPostUpdateSkinTextureSets.Broadcast(this,FName());
+}
+
+void UHCharacterCustomizationComponent::UpdateEyesMaterials()
+{
+	if (CachedOwner == NULL)
+		return;
+
+	USkeletalMeshComponent* HeadComponent = CachedOwner->GetHeadMeshComponent();
+	if (HeadComponent == NULL)
+		return;
+
+	EyesMIDs.Empty();
+
+	FSlotMaterial_Eyes CurrentEyeTextureSet = GetCurrentEyesMaterialSet();
+	for (const auto& Elem : CurrentEyeTextureSet.Eyes)
+	{
+		CreateMIDFromSlotAndMaterial(HeadComponent, Elem.Key, Elem.Value, EyesMIDs);
+	}
+
+	for (const auto& Elem : CurrentCusomizationProfile.Basebody.Eyes.ScalarParameters)
+	{
+		SetEyesScalarParameter(Elem.Name, Elem.Value);
+	}
+
+	for (const auto& Elem : CurrentCusomizationProfile.Basebody.Eyes.HDRScalarParameters)
+	{
+		SetEyesHDRVectorParameter(Elem.Name, Elem.Value);
+	}
+
+
 }
 
 void UHCharacterCustomizationComponent::UpdateLODSyncComponent()

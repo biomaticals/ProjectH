@@ -500,6 +500,11 @@ struct FSlotTexture_SkinBodyAndHead
 
 	};
 
+	bool operator==(const FSlotTexture_SkinBodyAndHead& Other) const
+	{
+		return true;
+	}
+
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
 	TMap<FName, UTexture*> Body;
 

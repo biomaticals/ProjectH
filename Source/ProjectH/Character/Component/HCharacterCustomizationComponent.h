@@ -34,16 +34,21 @@ DECLARE_EVENT_FourParams(UHCharacterCustomizationComponent, FOnPreUpdateBasebody
 DECLARE_EVENT_FourParams(UHCharacterCustomizationComponent, FOnPostUpdateBasebody, UHCharacterCustomizationComponent*, FBasebodyProfile, USkeletalMeshComponent*, USkeletalMeshComponent*);
 DECLARE_EVENT_TwoParams(UHCharacterCustomizationComponent, FOnPostUpdateBodyComponent, UHCharacterCustomizationComponent* , USkeletalMeshComponent*);
 DECLARE_EVENT_TwoParams(UHCharacterCustomizationComponent, FOnPostUpdateHeadComponent, UHCharacterCustomizationComponent*, USkeletalMeshComponent*);
-DECLARE_EVENT_TwoParams(UHCharacterCustomizationComponent, FOnPostUpdateLODSyncComponent, UHCharacterCustomizationComponent*, ULODSyncComponent*);
 DECLARE_EVENT_ThreeParams(UHCharacterCustomizationComponent, FOnSetBasebodyMorphTarget, UHCharacterCustomizationComponent*, FName, float);
 DECLARE_EVENT_TwoParams(UHCharacterCustomizationComponent, FOnPostUpdateBaseboyMorphTarget, UHCharacterCustomizationComponent*, TArray<FHNamedFloat>);
 DECLARE_EVENT_TwoParams(UHCharacterCustomizationComponent, FOnPostUpdateBasebodyAnimInstanceAlphas, UHCharacterCustomizationComponent*, TArray<FHNamedFloat>);
+DECLARE_EVENT_FourParams(UHCharacterCustomizationComponent, FOnPostUpdateSkinMaterials, UHCharacterCustomizationComponent*, FSkinProfile, TArray<UMaterialInstanceDynamic*>, TArray<UMaterialInstanceDynamic*>);
+DECLARE_EVENT_TwoParams(UHCharacterCustomizationComponent, FOnPostUpdateSkinTextureSets, UHCharacterCustomizationComponent*, FName);//TMap<FName, FSlotTexture_SkinBodyAndHead>);
+DECLARE_EVENT_ThreeParams(UHCharacterCustomizationComponent, FOnPostUpdateEyesMaterials, UHCharacterCustomizationComponent*, FEyesProfile, TArray<UMaterialInstanceDynamic*>);
+DECLARE_EVENT_TwoParams(UHCharacterCustomizationComponent, FOnPostUpdateLODSyncComponent, UHCharacterCustomizationComponent*, ULODSyncComponent*); 
 #pragma endregion
 
 
 #pragma region ApplyParameter
 DECLARE_EVENT_ThreeParams(UHCharacterCustomizationComponent, FOnSetSkinScalarParameter, UHCharacterCustomizationComponent*, FName, float);
-DECLARE_EVENT_ThreeParams(UHCharacterCustomizationComponent, FOnSetSkinSHDRVectorParameter, UHCharacterCustomizationComponent*, FName, FHDRColor); 
+DECLARE_EVENT_ThreeParams(UHCharacterCustomizationComponent, FOnSetSkinHDRVectorParameter, UHCharacterCustomizationComponent*, FName, FHDRColor); 
+DECLARE_EVENT_ThreeParams(UHCharacterCustomizationComponent, FOnSetEyesScalarParameter, UHCharacterCustomizationComponent*, FName, float);
+DECLARE_EVENT_ThreeParams(UHCharacterCustomizationComponent, FOnSetEyesHDRVectorParameter, UHCharacterCustomizationComponent*, FName, FHDRColor);
 #pragma endregion
 
 UCLASS( Blueprintable, ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
@@ -61,6 +66,13 @@ public:
 
 protected:
 	virtual void BeginPlay() override;
+
+public:
+	UFUNCTION(BlueprintCallable)
+	TMap<FName, FSlotTexture_SkinBodyAndHead> GetCurrentSkinTextureSets();
+
+	UFUNCTION(BlueprintCallable)
+	FSlotMaterial_Eyes GetCurrentEyesMaterialSet();
 
 protected:
 	UPROPERTY(BlueprintReadWrite, EditDefaultsOnly, Category = "CustomizationProfile")
@@ -88,10 +100,13 @@ protected:
 	TArray<UMaterialInstanceDynamic*> HeadMIDs;
 
 	UPROPERTY(Transient)
-	TArray<FName> ActiveSkinTexntureSetsParameterNames_Body;
+	TArray<UMaterialInstanceDynamic*> EyesMIDs;
 
 	UPROPERTY(Transient)
-	TArray<FName> ActiveSkinTexntureSetsParameterNames_Head;
+	TArray<FName> ActiveSkinTextureSetsParameterNames_Body;
+
+	UPROPERTY(Transient)
+	TArray<FName> ActiveSkinTextureSetsParameterNames_Head;
 	/** ~ Transient */
 
 protected:
@@ -263,7 +278,41 @@ protected:
 	void SetSkinHDRVectorParameter(FName Name, FHDRColor HDRColor);
 
 public:
-	FOnSetSkinSHDRVectorParameter OnSetSkinHDRVectorParameter;
+	FOnSetSkinHDRVectorParameter OnSetSkinHDRVectorParameter;
+	
+public:
+	UFUNCTION(BlueprintCallable)
+	void SetEyesScalarParameter_Replicable(FName Name, float Value);
+
+protected:
+	UFUNCTION(Reliable, Server)
+	void SetEyesScalarParameter_Server(FName Name, float Value);
+
+	UFUNCTION(Reliable, NetMulticast)
+	void SetEyesScalarParameter_Multicast(FName Name, float Value);
+
+	UFUNCTION()
+	void SetEyesScalarParameter(FName Name, float Value);
+
+public:
+	FOnSetEyesScalarParameter OnSetEyesScalarParameter;
+
+public:
+	UFUNCTION(BlueprintCallable)
+	void SetEyesHDRVectorParameter_Replicable(FName Name, FHDRColor HDRColor);
+
+protected:
+	UFUNCTION(Reliable, Server)
+	void SetEyesHDRVectorParameter_Server(FName Name, FHDRColor HDRColor);
+
+	UFUNCTION(Reliable, NetMulticast)
+	void SetEyesHDRVectorParameter_Multicast(FName Name, FHDRColor HDRColor);
+
+	UFUNCTION()
+	void SetEyesHDRVectorParameter(FName Name, FHDRColor HDRColor);
+
+public:
+	FOnSetEyesHDRVectorParameter OnSetEyesHDRVectorParameter;
 	
 #pragma endregion
 #pragma region UpdateComponent
@@ -280,21 +329,20 @@ protected:
 	void UpdateBasebodyMorphTargets();
 	void UpdateBasebodyAnimInstanceAlphas();
 	void UpdateSkinMaterials();
+	void UpdateSkinTextureSets(); 
 	void UpdateEyesMaterials();
-	void UpdateSkinTextureSets();
-
+	void UpdateLODSyncComponent();
 public:
 	FOnPostUpdateBodyComponent OnPostUpdateBodyComponent;
 	FOnPostUpdateHeadComponent OnPostUpdateHeadComponent;
 	FOnSetBasebodyMorphTarget OnSetBasebodyMorphTarget;
 	FOnPostUpdateBaseboyMorphTarget OnPostUpdateBasebodyMorphTarget;
 	FOnPostUpdateBasebodyAnimInstanceAlphas OnPostUpdateBasebodyAnimInstanceAlphas;
-
-private:
-	void UpdateLODSyncComponent();
-
-public:
+	FOnPostUpdateSkinTextureSets OnPostUpdateSkinTextureSets;
+	FOnPostUpdateSkinMaterials OnPostUpdateSkinMaterialSets;
+	FOnPostUpdateEyesMaterials OnPostUpdateEyesMaterialSets;
 	FOnPostUpdateLODSyncComponent OnPostUpdateLODSyncComponent;
+	
 #pragma endregion
 
 #pragma region Helper
