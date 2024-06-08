@@ -104,6 +104,43 @@ FSlotMaterial_Eyes UHCharacterCustomizationComponent::GetCurrentEyesMaterialSet(
 	return FSlotMaterial_Eyes();
 }
 
+TArray<UCharacterCustomizationDataAsset*> UHCharacterCustomizationComponent::GetHiddenCDAs()
+{
+	TArray< UCharacterCustomizationDataAsset*> LHiddenCDAs{};
+
+	for (const FCDA_ApparelProfile Asset : CurrentCusomizationProfile.Apparel.DataAssets)
+	{
+		if(Asset.DataAsset)
+			LHiddenCDAs.AddUnique(Asset.DataAsset);
+	}
+
+	for (const FCDA_EquipmentProfile Asset : CurrentCusomizationProfile.Equipment.DataAssets)
+	{
+		if (Asset.DataAsset)
+			LHiddenCDAs.AddUnique(Asset.DataAsset);
+	}
+
+	for (const FCDA_HairstyleProfile Asset : CurrentCusomizationProfile.Hairstyle.DataAssets)
+	{
+		if (Asset.DataAsset)
+			LHiddenCDAs.AddUnique(Asset.DataAsset);
+	}
+
+	for (const FCDA_GroomProfile Asset : CurrentCusomizationProfile.Groom.DataAssets)
+	{
+		if (Asset.DataAssets.Num())
+			LHiddenCDAs.Append(Asset.DataAssets);
+	}
+
+	for (const FCDA_AttachmentProfile Asset : CurrentCusomizationProfile.Attachments.DataAssets)
+	{
+		if (Asset.DataAsset)
+			LHiddenCDAs.AddUnique(Asset.DataAsset);
+	}
+
+	return LHiddenCDAs;
+}
+
 void UHCharacterCustomizationComponent::InitializeComponent()
 {
 	// Network
@@ -178,15 +215,13 @@ void UHCharacterCustomizationComponent::InitializeComponent_Internal()
 
 	// Add Event
 	OnPreUpdateApparel.AddUObject(this, &UHCharacterCustomizationComponent::ClearApparelSpecificSettings);
-	OnpostUpdateApparel.AddUObject(this, &UHCharacterCustomizationComponent::ApplyApparelSpecificSettings);
+	OnPostUpdateApparel.AddUObject(this, &UHCharacterCustomizationComponent::ApplyApparelSpecificSettings);
 
 	DATATABLE_MANAGER()->UpdateAvailableAnatomyProfiles();
 	DATATABLE_MANAGER()->UpdatePresetCustomizationProfiles();
 
 }
-#pragma endregion
 
-#pragma region InitializeCustomziationProfile
 void UHCharacterCustomizationComponent::InitializeCustomizationProfile_Replicable()
 {
 	if (CHECK_REPLIACTE_COMPONENT())
@@ -237,6 +272,136 @@ void UHCharacterCustomizationComponent::InitializeCustomizationProfile_Internal(
 		break;
 	}
 
+}
+
+void UHCharacterCustomizationComponent::InitializeCDASkeletalComponent(USkeletalMeshComponent* TargetSkeletalmeshComponent, UCDA_SkeletalMesh* CDASkeletalMesh, int MaterialVariantIndex, TArray<USkeletalMeshComponent*> SkeletalMeshComponents, TArray<UMaterialInstanceDynamic*> GlobalMIDs, TArray<FName> ActiveAdditionalMorphTargets,
+	TArray<FHNamedFloat> ScalarParameters, TArray<FNamedHDRColor> HDRVectorParameters, FName SocketName, FTransform RelativeTransform, int CDAProfilesIndex)
+{
+	if(CachedOwner == NULL)
+		return;
+
+	if (CDASkeletalMesh == NULL || CDASkeletalMesh->IsValidLowLevel() == false)
+	{
+		if(OnSkippedInitializeCDA.IsBound())
+			OnSkippedInitializeCDA.Broadcast(this, CDASkeletalMesh, MaterialVariantIndex);
+
+		if(OnSkippedInitializeCDASkeletalMeshComponent.IsBound())
+			OnSkippedInitializeCDASkeletalMeshComponent.Broadcast(this, CDASkeletalMesh, MaterialVariantIndex);
+	}
+
+	if (CDASkeletalMesh->SkeletalMesh)
+	{
+		TargetSkeletalmeshComponent->SetSkinnedAssetAndUpdate(CDASkeletalMesh->SkeletalMesh, true);
+	}
+
+	TSubclassOf<UAnimInstance> PPAnimBP = CDASkeletalMesh->SkeletalMesh->GetPostProcessAnimBlueprint();
+	if (PPAnimBP->IsValidLowLevel())
+	{
+		TargetSkeletalmeshComponent->SetTickGroup(TG_PostPhysics);
+		TargetSkeletalmeshComponent->SetLeaderPoseComponent(NULL, true, false);
+	}
+	else
+	{
+		USkeletalMeshComponent* BodyMeshComponent = CachedOwner->GetMesh();
+		TargetSkeletalmeshComponent->SetLeaderPoseComponent(BodyMeshComponent, true, false);
+	}
+
+	CreateMIDFromMaterialVariant(TargetSkeletalmeshComponent, CDASkeletalMesh->MaterialVariants, MaterialVariantIndex, GlobalMIDs, ScalarParameters, HDRVectorParameters);
+}
+
+void UHCharacterCustomizationComponent::CreateMIDFromMaterialVariant(UPrimitiveComponent* PrimitiveComponent, TArray<FMaterialVariants> MaterialVariants, int MaterialVariantIndex, TArray<UMaterialInstanceDynamic*> GlobalMIDs, TArray<FHNamedFloat> ScalarParameters, TArray<FNamedHDRColor> HDRVectorParameters)
+{
+	if(PrimitiveComponent == NULL)
+		return;
+
+	if (MaterialVariantIndex >= 0)
+	{
+		if(MaterialVariants.IsValidIndex(MaterialVariantIndex) == false)
+			return;
+
+		FMaterialVariants NewMaterialVariant = MaterialVariants[MaterialVariantIndex];
+		for (int i = 0 ; i < NewMaterialVariant.Materials.Num() ; i ++)
+		{
+			UMaterialInstanceDynamic* NewMID = PrimitiveComponent->CreateDynamicMaterialInstance(i, NewMaterialVariant.Materials[i]);
+			GlobalMIDs.AddUnique(NewMID);
+		}
+	}
+	else
+	{
+		int MaterialsNum = PrimitiveComponent->GetNumMaterials();
+		for (int i = 0; i < MaterialsNum; i++)
+		{
+			UMaterialInstanceDynamic* NewMID = PrimitiveComponent->CreateDynamicMaterialInstance(i, nullptr);
+			GlobalMIDs.AddUnique(NewMID);
+		}
+	}
+
+	for (UMaterialInstanceDynamic* GlobalMID : GlobalMIDs)
+	{
+		for (FHNamedFloat ScalarParameter : ScalarParameters)
+		{
+			GlobalMID->SetScalarParameterValue(ScalarParameter.Name, ScalarParameter.Value);
+		}
+
+		for (FNamedHDRColor HDRVectorParameter : HDRVectorParameters)
+		{
+			GlobalMID->SetVectorParameterValue(HDRVectorParameter.Name, HDRVectorParameter.Value.ToLinearColor());
+		}
+	}
+}
+
+void UHCharacterCustomizationComponent::CreateMIDFromSlotAndMaterial(UMeshComponent* MeshComponent, FName MaterialSlotName, UMaterialInterface* SourceMaterial, TArray<UMaterialInstanceDynamic*>& MIDs)
+{
+	if (MeshComponent == NULL)
+		return;
+
+	if (MeshComponent->IsMaterialSlotNameValid(MaterialSlotName) == false)
+		return;
+
+	int MaterialIndex = MeshComponent->GetMaterialIndex(MaterialSlotName);
+
+	UMaterialInterface* Material = MeshComponent->GetMaterial(MaterialIndex);
+	FName MIDName = *((SourceMaterial ? SourceMaterial->GetName() : Material->GetName()) + FString("_INST"));
+
+	UMaterialInstanceDynamic* MID = MeshComponent->CreateDynamicMaterialInstance(MaterialIndex, SourceMaterial, MIDName);
+	if (MID)
+		MIDs.Add(MID);
+}
+#pragma endregion
+
+#pragma region LoadAsset
+void UHCharacterCustomizationComponent::LoadPrimaryAsset()
+{
+	UT_LOG(HCharacterCustomizationLog, Log, TEXT("Start Load Asset"));
+
+	if (OnStartLoadAsset.IsBound())
+		OnStartLoadAsset.Broadcast();
+
+	if (AssetPackagesToLoad.IsEmpty())
+	{
+		UT_LOG(HCharacterCustomizationLog, Warning, TEXT("No AssetPackesToLoad"));
+		return;
+	}
+
+	UHAssetManager& AssetManager = UHAssetManager::Get();
+
+	for (UPrimaryAssetLabel* AssetPackageToLoad : AssetPackagesToLoad)
+	{
+		FPrimaryAssetId AssetId = AssetPackageToLoad->GetPrimaryAssetId();
+		AssetManager.LoadPrimaryAsset(AssetId);
+	}
+}
+#pragma endregion
+
+#pragma region RepliacteSettings
+bool UHCharacterCustomizationComponent::CheckReplicateIndividualChagnes() const
+{
+	return bReplicateIndividualChanges && CHECK_REPLIACTE_COMPONENT();
+}
+
+bool UHCharacterCustomizationComponent::CheckMulticastIndividualChanges() const
+{
+	return bMulticastIndividualChanges && CHECK_REPLIACTE_COMPONENT();
 }
 #pragma endregion
 
@@ -329,17 +494,18 @@ void UHCharacterCustomizationComponent::ApplyCustomizationProfile_Internal(FCust
 		return;
 	}
 
-	UpdateBasebody();	
+	UpdateBasebody();
+	UpdateApparel();
 }
 #pragma endregion
 
-void UHCharacterCustomizationComponent::ApplyApparelSpecificSettings(UHCharacterCustomizationComponent* CharacterCustomizationComponent, FApparelProfile ApparelProfile, TArray<FCCDA_ApparelProfile> AddingCCDA_Apparels, TArray<USkeletalMeshComponent*> AddingSkeletalMeshComponents, TArray<FCCDA_ApparelProfile> SkippedCCDA_ApparelProfiles)
+void UHCharacterCustomizationComponent::ApplyApparelSpecificSettings(UHCharacterCustomizationComponent* CharacterCustomizationComponent, FApparelProfile ApparelProfile, TArray<FCDA_ApparelProfile> AddingCCDA_Apparels, TArray<USkeletalMeshComponent*> AddingSkeletalMeshComponents, TArray<FCDA_ApparelProfile> SkippedCCDA_ApparelProfiles)
 {
-	for (FCCDA_ApparelProfile AddingCCDA_Apparel : AddingCCDA_Apparels)
+	for (FCDA_ApparelProfile AddingCCDA_Apparel : AddingCCDA_Apparels)
 	{
-		if (AddingCCDA_Apparel.DataAsset->IsA(UCCDA_Apparel_Feet::StaticClass()))
+		if (AddingCCDA_Apparel.DataAsset->IsA(UCDA_Apparel_Feet::StaticClass()))
 		{
-			UCCDA_Apparel_Feet* CCDA_Apparel_Feet = Cast<UCCDA_Apparel_Feet>(AddingCCDA_Apparel.DataAsset);
+			UCDA_Apparel_Feet* CCDA_Apparel_Feet = Cast<UCDA_Apparel_Feet>(AddingCCDA_Apparel.DataAsset);
 			CCDA_Apparel_Feet->RootOffset;
 		}
 	}
@@ -350,39 +516,7 @@ void UHCharacterCustomizationComponent::ClearApparelSpecificSettings(UHCharacter
 
 }
 
-void UHCharacterCustomizationComponent::LoadPrimaryAsset()
-{
-	UT_LOG(HCharacterCustomizationLog, Log, TEXT("Start Load Asset"));
-
-	if (OnStartLoadAsset.IsBound())
-		OnStartLoadAsset.Broadcast();
-
-	if (AssetPackagesToLoad.IsEmpty())
-	{
-		UT_LOG(HCharacterCustomizationLog, Warning, TEXT("No AssetPackesToLoad"));
-		return;
-	}
-	
-	UHAssetManager& AssetManager = UHAssetManager::Get();
-	
-	for (UPrimaryAssetLabel* AssetPackageToLoad : AssetPackagesToLoad)
-	{
-		FPrimaryAssetId AssetId = AssetPackageToLoad->GetPrimaryAssetId();
-		AssetManager.LoadPrimaryAsset(AssetId);
-	}
-}
-
-bool UHCharacterCustomizationComponent::CheckReplicateIndividualChagnes() const
-{
-	return bReplicateIndividualChanges && CHECK_REPLIACTE_COMPONENT();
-}
-
-bool UHCharacterCustomizationComponent::CheckMulticastIndividualChanges() const
-{
-	return bMulticastIndividualChanges && CHECK_REPLIACTE_COMPONENT();
-}
-
-#pragma region Anim Instance Alpha
+#pragma region AnimInstanceAlpha
 void UHCharacterCustomizationComponent::SetBasebodyAnimInstanceAlpha_Replicable(FName Name, float Value)
 {
 	if(CachedOwner == NULL)
@@ -424,7 +558,7 @@ void UHCharacterCustomizationComponent::SetBasebodyAnimInstanceAlpha(FName Name,
 }
 #pragma endregion
 
-#pragma region Apply Parameter
+#pragma region ApplyParameter
 void UHCharacterCustomizationComponent::SetSkinScalarParameter_Replicable(FName Name, float Value)
 {
 	if (CachedOwner == NULL)
@@ -915,8 +1049,11 @@ void UHCharacterCustomizationComponent::UpdateSkinTextureSets()
 		}
 	}
 
+	TArray<FSlotTexture_SkinBodyAndHead> Out;
+	CurrentSkinTextureSets.GenerateValueArray(Out);
+
 	if(OnPostUpdateSkinTextureSets.IsBound())
-		OnPostUpdateSkinTextureSets.Broadcast(this,FName());
+		OnPostUpdateSkinTextureSets.Broadcast(this, Out);
 }
 
 void UHCharacterCustomizationComponent::UpdateEyesMaterials()
@@ -946,7 +1083,8 @@ void UHCharacterCustomizationComponent::UpdateEyesMaterials()
 		SetEyesHDRVectorParameter(Elem.Name, Elem.Value);
 	}
 
-
+	if(OnPostUpdateEyesMaterialSets.IsBound())
+		OnPostUpdateEyesMaterialSets.Broadcast(this, CurrentCusomizationProfile.Basebody.Eyes, EyesMIDs);
 }
 
 void UHCharacterCustomizationComponent::UpdateLODSyncComponent()
@@ -1007,21 +1145,43 @@ void UHCharacterCustomizationComponent::UpdateLODSyncComponent()
 
 #pragma endregion
 
-#pragma region Helper
-void UHCharacterCustomizationComponent::CreateMIDFromSlotAndMaterial(UMeshComponent* MeshComponent, FName MaterialSlotName, UMaterialInterface* SourceMaterial, TArray<UMaterialInstanceDynamic*>& MIDs)
+#pragma region UpdateApparel
+void UHCharacterCustomizationComponent::UpdateApparel()
 {
-	if(MeshComponent == NULL)
+	if(CachedOwner == NULL)
 		return;
 
-	if(MeshComponent->IsMaterialSlotNameValid(MaterialSlotName) == false)
+	USkeletalMeshComponent* BodyComponent = CachedOwner->GetMesh();
+	if(BodyComponent == NULL)
 		return;
 
-	int MaterialIndex = MeshComponent->GetMaterialIndex(MaterialSlotName);
+	TArray<USkeletalMeshComponent*> ApparelMeshComponents = CachedOwner->GetApparelMeshComponents();
+	if(ApparelMeshComponents.IsEmpty())
+		return;
 
-	UMaterialInterface* Material = MeshComponent->GetMaterial(MaterialIndex);
-	FName MIDName = *((SourceMaterial ? SourceMaterial->GetName() : Material->GetName()) + FString("_INST"));
+	if(OnPreUpdateApparel.IsBound())
+		OnPreUpdateApparel.Broadcast(this, CurrentCusomizationProfile.Apparel, ApparelMeshComponents);
 
-	UMaterialInstanceDynamic* MID = MeshComponent->CreateDynamicMaterialInstance(MaterialIndex, SourceMaterial, MIDName);
-	if(MID)
-		MIDs.Add(MID);
+	for (FName MorphTarget : ActiveAdditionalMorpTargets_Apparel)
+	{
+		BodyComponent->SetMorphTarget(MorphTarget, 0.f, true);
+	}
+
+	ActiveAdditionalMorpTargets_Apparel.Empty();
+
+	if (CurrentCusomizationProfile.Apparel.DataAssets.IsEmpty() == false)
+	{
+		UpdateAdvancedCDAOptions();
+	}
+
+
 }
+
+void UHCharacterCustomizationComponent::UpdateAdvancedCDAOptions()
+{
+	HiddenCDAs = GetHiddenCDAs();
+
+	if(OnUpdateAdvancedCDAOptions.IsBound())
+		OnUpdateAdvancedCDAOptions.Broadcast(this, HiddenCDAs);
+}
+

@@ -109,17 +109,39 @@ struct FNamedHDRColor
 #pragma endregion
 
 #pragma region Character Customizing
-class UCCDA_Hairstyle;
-class UCCDA_Apparel;
-class UCCDA_Attachment;
+class UCDA_Hairstyle;
+class UCDA_Groom;
+class UCDA_Apparel;
+class UCDA_Attachment;
 
 USTRUCT(BlueprintType)
-struct FCCDA_HairstyleProfile
+struct FCDA_GroomProfile
 {
 	GENERATED_USTRUCT_BODY()
 
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
-	UCCDA_Hairstyle* DataAsset;
+	TArray<UCDA_Groom*> DataAssets;
+
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+	TArray<FHNamedFloat> GlobalScalarParamters;
+
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+	TArray<FNamedHDRColor> GlobalHDRVectorParamters;
+};
+
+USTRUCT(BlueprintType)
+struct FCDA_HairstyleProfile
+{
+	GENERATED_USTRUCT_BODY()
+
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+	UCDA_Hairstyle* DataAsset;
+
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+	TArray<FHNamedFloat> ScalarParameters;
+
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+	TArray<FNamedHDRColor> HDRVectorParameters;
 };
 
 USTRUCT(BlueprintType)
@@ -260,7 +282,7 @@ struct FHairStyleProfile
 	};
 
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
-	TArray<FCCDA_HairstyleProfile> DataAssets;
+	TArray<FCDA_HairstyleProfile> DataAssets;
 
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
 	TArray<FHNamedFloat> GlobalScalarParameters;
@@ -279,7 +301,7 @@ struct FGroomProfile
 	};
 
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
-	TArray<FCCDA_HairstyleProfile> DataAssets;
+	TArray<FCDA_GroomProfile> DataAssets;
 
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
 	TArray<FHNamedFloat> GlobalScalarParameters;
@@ -289,17 +311,17 @@ struct FGroomProfile
 };
 
 USTRUCT(BlueprintType)
-struct FCCDA_ApparelProfile
+struct FCDA_ApparelProfile
 {
 	GENERATED_USTRUCT_BODY()
-	FCCDA_ApparelProfile()
+	FCDA_ApparelProfile()
 		: MaterialVariantIndex(0)
 	{
 
 	}
 
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
-	UCCDA_Apparel* DataAsset;
+	UCDA_Apparel* DataAsset;
 
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
 	int MaterialVariantIndex;
@@ -315,7 +337,7 @@ struct FApparelProfile
 	};
 
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
-	TArray<FCCDA_ApparelProfile> DataAssets;
+	TArray<FCDA_ApparelProfile> DataAssets;
 
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
 	TArray<FHNamedFloat> GlobalScalarParameters;
@@ -325,17 +347,17 @@ struct FApparelProfile
 };
 
 USTRUCT(BlueprintType)
-struct FCCDA_EquipmentProfile
+struct FCDA_EquipmentProfile
 {
 	GENERATED_USTRUCT_BODY()
-	FCCDA_EquipmentProfile()
+	FCDA_EquipmentProfile()
 		
 	{
 
 	}
 
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
-	UCCDA_Apparel* DataAsset;
+	UCDA_Apparel* DataAsset;
 
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
 	int MaterialVariantIndex;
@@ -351,7 +373,7 @@ struct FEquipmentProfile
 	};
 
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
-	TArray<FCCDA_EquipmentProfile> DataAssets;
+	TArray<FCDA_EquipmentProfile> DataAssets;
 
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
 	TArray<FHNamedFloat> GlobalScalarParameters;
@@ -361,23 +383,43 @@ struct FEquipmentProfile
 };
 
 USTRUCT(BlueprintType)
-struct FAttachmentProfile
+struct FCDA_AttachmentProfile
 {
 	GENERATED_USTRUCT_BODY()
-	FAttachmentProfile()
+	FCDA_AttachmentProfile()
 	{
 
 	};
 
 public:
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
-	UCCDA_Attachment* DataAssets;
+	UCDA_Attachment* DataAsset;
 
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
 	FName ParentSocket;
 
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
 	FTransform RelativeTransfom;
+};
+
+USTRUCT(BlueprintType)
+struct FAttachmentProfile
+{
+	GENERATED_USTRUCT_BODY()
+	FAttachmentProfile()
+		
+	{
+
+	}
+
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+	TArray<FCDA_AttachmentProfile> DataAssets;
+
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+	TArray<FHNamedFloat> GlobalScalarParameters;
+
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+	TArray<FNamedHDRColor> GlobalHDRVectorParameters;
 };
 
 USTRUCT(BlueprintType)

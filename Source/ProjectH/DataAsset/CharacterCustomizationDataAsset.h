@@ -39,13 +39,13 @@ public:
  * 
  */
 UCLASS(Blueprintable, BlueprintType)
-class PROJECTH_API UCCDA_SkeletalMesh : public UCharacterCustomizationDataAsset
+class PROJECTH_API UCDA_SkeletalMesh : public UCharacterCustomizationDataAsset
 {
 	GENERATED_BODY()
 	
 public:
 	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Mesh")
-	USkeletalMeshComponent* SkeletalMesh;
+	USkeletalMesh* SkeletalMesh;
 
 	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Mesh")
 	TMap<FName, float> AdditionalMorphTargets;
@@ -55,7 +55,7 @@ public:
  * 
  */
 UCLASS(Blueprintable, BlueprintType)
-class PROJECTH_API UCCDA_Apparel: public UCCDA_SkeletalMesh
+class PROJECTH_API UCDA_Apparel: public UCDA_SkeletalMesh
 {
 	GENERATED_BODY()
 	
@@ -71,7 +71,7 @@ public:
  * 
  */
 UCLASS(Blueprintable, BlueprintType)
-class PROJECTH_API UCCDA_Apparel_Feet : public UCCDA_Apparel
+class PROJECTH_API UCDA_Apparel_Feet : public UCDA_Apparel
 {
 	GENERATED_BODY()
 	
@@ -90,7 +90,7 @@ public:
  * 
  */
 UCLASS(Blueprintable, BlueprintType)
-class PROJECTH_API UCCDA_Hairstyle : public UCCDA_SkeletalMesh
+class PROJECTH_API UCDA_Hairstyle : public UCDA_SkeletalMesh
 {
 	GENERATED_BODY()
 };
@@ -99,7 +99,7 @@ class PROJECTH_API UCCDA_Hairstyle : public UCCDA_SkeletalMesh
  * 
  */
 UCLASS(Blueprintable, BlueprintType)
-class PROJECTH_API UCCDA_Groom : public UCharacterCustomizationDataAsset
+class PROJECTH_API UCDA_Groom : public UCharacterCustomizationDataAsset
 {
 	GENERATED_BODY()
 
@@ -115,12 +115,12 @@ public:
  * 
  */
 UCLASS(Blueprintable, BlueprintType)
-class PROJECTH_API UCCDA_Equipment : public UCCDA_SkeletalMesh
+class PROJECTH_API UCDA_Equipment : public UCDA_SkeletalMesh
 {
 	GENERATED_BODY()
 
 public:
-	UCCDA_Equipment()
+	UCDA_Equipment()
 	{
 
 	};
@@ -130,12 +130,12 @@ public:
  * 
  */
 UCLASS(Blueprintable, BlueprintType)
-class PROJECTH_API UCCDA_StaticMesh : public UCharacterCustomizationDataAsset
+class PROJECTH_API UCDA_StaticMesh : public UCharacterCustomizationDataAsset
 {
 	GENERATED_BODY()
 
 public:
-	UCCDA_StaticMesh()
+	UCDA_StaticMesh()
 	{
 		
 	};
@@ -149,12 +149,12 @@ public:
  * 
  */
 UCLASS(Blueprintable, BlueprintType)
-class PROJECTH_API UCCDA_Attachment : public UCCDA_StaticMesh
+class PROJECTH_API UCDA_Attachment : public UCDA_StaticMesh
 {
 	GENERATED_BODY()
 
 public:
-	UCCDA_Attachment()
+	UCDA_Attachment()
 	{
 
 	};

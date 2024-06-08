@@ -13,23 +13,19 @@ enum class EAnatomy : uint8;
 
 class AHCharacter;
 class UPrimaryAssetLabel;
-class UCCDA_Apparel;
+class UCDA_Apparel;
 class ULODSyncComponent;
  
-#pragma region InitializeComponent
-DECLARE_EVENT_ThreeParams(UHCharacterCustomizationComponent, FOnPreUpdateApparel, UHCharacterCustomizationComponent*, FApparelProfile, TArray<USkeletalMeshComponent*>);
-DECLARE_EVENT_FiveParams(UHCharacterCustomizationComponent, FOnPostUpdateApparel, UHCharacterCustomizationComponent*, FApparelProfile, TArray<FCCDA_ApparelProfile>, TArray<USkeletalMeshComponent*>, TArray<FCCDA_ApparelProfile>);
-#pragma endregion
-
-#pragma region ApplyCustomizationProfile
-DECLARE_EVENT_TwoParams(UHCharacterCustomizationComponent, FOnPreApplyCustomizationProfile, UHCharacterCustomizationComponent*, FCustomizationProfile);
-#pragma endregion
+ #pragma region InitializeComponent
+DECLARE_EVENT_ThreeParams(UHCharacterCustomizationComponent, FOnSkippedInitializeCDA, UHCharacterCustomizationComponent*, UCharacterCustomizationDataAsset*, int); 
+DECLARE_EVENT_ThreeParams(UHCharacterCustomizationComponent, FOnSkippedInitializeCDASkeletaMeshlComponent, UHCharacterCustomizationComponent*, UCDA_SkeletalMesh*, int);
+ #pragma endregion
 
 #pragma region LoadAsset
 DECLARE_EVENT(UHCharacterCustomizationComponent, FPreStartLoadAsset);
 #pragma endregion
 
-#pragma region UpdateComponent
+#pragma region UpdateBasebody
 DECLARE_EVENT_FourParams(UHCharacterCustomizationComponent, FOnPreUpdateBasebody, UHCharacterCustomizationComponent*, FBasebodyProfile, USkeletalMeshComponent*, USkeletalMeshComponent*);
 DECLARE_EVENT_FourParams(UHCharacterCustomizationComponent, FOnPostUpdateBasebody, UHCharacterCustomizationComponent*, FBasebodyProfile, USkeletalMeshComponent*, USkeletalMeshComponent*);
 DECLARE_EVENT_TwoParams(UHCharacterCustomizationComponent, FOnPostUpdateBodyComponent, UHCharacterCustomizationComponent* , USkeletalMeshComponent*);
@@ -38,11 +34,20 @@ DECLARE_EVENT_ThreeParams(UHCharacterCustomizationComponent, FOnSetBasebodyMorph
 DECLARE_EVENT_TwoParams(UHCharacterCustomizationComponent, FOnPostUpdateBaseboyMorphTarget, UHCharacterCustomizationComponent*, TArray<FHNamedFloat>);
 DECLARE_EVENT_TwoParams(UHCharacterCustomizationComponent, FOnPostUpdateBasebodyAnimInstanceAlphas, UHCharacterCustomizationComponent*, TArray<FHNamedFloat>);
 DECLARE_EVENT_FourParams(UHCharacterCustomizationComponent, FOnPostUpdateSkinMaterials, UHCharacterCustomizationComponent*, FSkinProfile, TArray<UMaterialInstanceDynamic*>, TArray<UMaterialInstanceDynamic*>);
-DECLARE_EVENT_TwoParams(UHCharacterCustomizationComponent, FOnPostUpdateSkinTextureSets, UHCharacterCustomizationComponent*, FName);//TMap<FName, FSlotTexture_SkinBodyAndHead>);
+DECLARE_EVENT_TwoParams(UHCharacterCustomizationComponent, FOnPostUpdateSkinTextureSets, UHCharacterCustomizationComponent*, TArray<FSlotTexture_SkinBodyAndHead>);
 DECLARE_EVENT_ThreeParams(UHCharacterCustomizationComponent, FOnPostUpdateEyesMaterials, UHCharacterCustomizationComponent*, FEyesProfile, TArray<UMaterialInstanceDynamic*>);
 DECLARE_EVENT_TwoParams(UHCharacterCustomizationComponent, FOnPostUpdateLODSyncComponent, UHCharacterCustomizationComponent*, ULODSyncComponent*); 
 #pragma endregion
 
+#pragma region UpdateApparel
+DECLARE_EVENT_ThreeParams(UHCharacterCustomizationComponent, FOnPreUpdateApparel, UHCharacterCustomizationComponent*, FApparelProfile, TArray<USkeletalMeshComponent*>);
+DECLARE_EVENT_FiveParams(UHCharacterCustomizationComponent, FOnPostUpdateApparel, UHCharacterCustomizationComponent*, FApparelProfile, TArray<FCDA_ApparelProfile>, TArray<USkeletalMeshComponent*>, TArray<FCDA_ApparelProfile>);
+DECLARE_EVENT_TwoParams(UHCharacterCustomizationComponent, FOnPostUpdateAdvancedCDAOptions, UHCharacterCustomizationComponent*, TArray<UCharacterCustomizationDataAsset*>);
+#pragma endregion
+
+#pragma region ApplyCustomizationProfile
+DECLARE_EVENT_TwoParams(UHCharacterCustomizationComponent, FOnPreApplyCustomizationProfile, UHCharacterCustomizationComponent*, FCustomizationProfile);
+#pragma endregion
 
 #pragma region ApplyParameter
 DECLARE_EVENT_ThreeParams(UHCharacterCustomizationComponent, FOnSetSkinScalarParameter, UHCharacterCustomizationComponent*, FName, float);
@@ -51,6 +56,15 @@ DECLARE_EVENT_ThreeParams(UHCharacterCustomizationComponent, FOnSetEyesScalarPar
 DECLARE_EVENT_ThreeParams(UHCharacterCustomizationComponent, FOnSetEyesHDRVectorParameter, UHCharacterCustomizationComponent*, FName, FHDRColor);
 #pragma endregion
 
+/**
+ * HCharacterCustomizationComponent
+ * 
+ * 캐릭터의 몸, 의상, 장비, 커스터마이징등 SkeletalMeshComponent들을 관리한다.
+ * 
+ * HCharacter와 연결
+ * 
+ * CDA ; CustomizationDataAsset
+ */
 UCLASS( Blueprintable, ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class PROJECTH_API UHCharacterCustomizationComponent : public UActorComponent
 {
@@ -73,6 +87,9 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	FSlotMaterial_Eyes GetCurrentEyesMaterialSet();
+
+	UFUNCTION(BlueprintCallable)
+	TArray<UCharacterCustomizationDataAsset*> GetHiddenCDAs();
 
 protected:
 	UPROPERTY(BlueprintReadWrite, EditDefaultsOnly, Category = "CustomizationProfile")
@@ -103,10 +120,22 @@ protected:
 	TArray<UMaterialInstanceDynamic*> EyesMIDs;
 
 	UPROPERTY(Transient)
+	TArray<FName> ActiveAdditionalMorphTargets_Hairstyle;
+
+	UPROPERTY(Transient)
+	TArray<FName> ActiveAdditionalMorpTargets_Apparel;
+
+	UPROPERTY(Transient)
+	TArray<FName> ActiveAdditionalMorpTargets_Equipment;
+
+	UPROPERTY(Transient)
 	TArray<FName> ActiveSkinTextureSetsParameterNames_Body;
 
 	UPROPERTY(Transient)
 	TArray<FName> ActiveSkinTextureSetsParameterNames_Head;
+
+	UPROPERTY(Transient)
+	TArray<UCharacterCustomizationDataAsset*> HiddenCDAs;
 	/** ~ Transient */
 
 protected:
@@ -130,13 +159,6 @@ protected:
 private:
 	void InitializeComponent_Internal();
 
-public:
-	FOnPreUpdateApparel OnPreUpdateApparel;
-	FOnPostUpdateApparel OnpostUpdateApparel;
-
-#pragma endregion
-
-#pragma region InitializeCustomziationProfile
 protected:
 	void InitializeCustomizationProfile_Replicable();
 
@@ -149,6 +171,15 @@ protected:
 private:
 	void InitializeCustomizationProfile_Internal();
 
+private:
+	void InitializeCDASkeletalComponent(USkeletalMeshComponent* TargetSkeletalmeshComponent, UCDA_SkeletalMesh* CDASkeletalMesh, int MaterialVariantIndex, 
+										TArray<USkeletalMeshComponent*> SkeletalMeshComponents, TArray<UMaterialInstanceDynamic*> GlobalMIDs, TArray<FName> ActiveAdditionalMorphTargets,
+										TMap<FName, float> ScalarParameters, TMap<FName, FHDRColor> HDRVectorParameters, FName SocketName, FTransform RelativeTransform, int CDAProfilesIndex);
+
+private:
+		void CreateMIDFromMaterialVariant(UPrimitiveComponent* PrimitiveComponent, TArray<FMaterialVariants> MaterialVariants, int MaterialVariantIndex, TArray<UMaterialInstanceDynamic*> GlobalMIDs, TArray<FHNamedFloat> ScalarParameters, TArray<FNamedHDRColor> HDRVectorParameters);
+		void CreateMIDFromSlotAndMaterial(UMeshComponent* MeshComponent, FName MaterialSlotName, UMaterialInterface* SourceMaterial, TArray<UMaterialInstanceDynamic*>& MIDs);
+
 protected:
 	UPROPERTY(BlueprintReadOnly, EditAnywhere)
 	ECharacterCustomizationInitializationBehavior InitializationBehavior;
@@ -159,6 +190,48 @@ protected:
 	UPROPERTY(BlueprintReadOnly, EditAnywhere, meta = (EditCondition = "InitializationBehavior == ECharacterCustomizationInitializationBehavior::UseSavedProfile || InitializationBehavior == ECharacterCustomizationInitializationBehavior::OpenCharacterEditorWithProfileToLoad"))
 	FString ProfileNameFromSaves;
 
+public:
+	FOnSkippedInitializeCDA OnSkippedInitializeCDA;
+	FOnSkippedInitializeCDASkeletaMeshlComponent OnSkippedInitializeCDASkeletalMeshComponent;
+	
+
+#pragma endregion
+
+#pragma region LoadAssets
+public:
+	UFUNCTION(Category = "Load Assets")
+	void LoadPrimaryAsset();
+
+protected:
+	UPROPERTY(BlueprintReadWrite, EditDefaultsOnly, Category = "Load Assets")
+	TArray<UPrimaryAssetLabel*> AssetPackagesToLoad;
+
+public:
+	FPreStartLoadAsset OnStartLoadAsset;
+
+private:
+	FDelegateHandle OnStartLoadAssetHandle;
+	FDelegateHandle OnBeforeUpdateApparelHandle;
+
+#pragma endregion
+
+#pragma region RepliacteSettings
+protected:
+	bool CheckReplicateIndividualChagnes() const;
+	bool CheckMulticastIndividualChanges() const;
+
+protected:
+	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Repliacte Settings")
+	bool bMulticastProfileApplication;
+
+	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Repliacte Settings")
+	bool bReplicateIndividualChanges;
+
+	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Repliacte Settings")
+	bool bMulticastIndividualChanges;
+
+	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Repliacte Settings")
+	bool bDebugReplication;
 #pragma endregion
 
 #pragma region ApplyCustomizationProfile
@@ -186,47 +259,10 @@ public:
 #pragma region ApparelSpecificSettings
 protected:
 	UFUNCTION()
-	void ApplyApparelSpecificSettings(UHCharacterCustomizationComponent* CharacterCustomizationComponent, FApparelProfile ApparelProfile, TArray<FCCDA_ApparelProfile> AddingCCDA_Apparels, TArray<USkeletalMeshComponent*> AddingSkeletalMeshComponents, TArray<FCCDA_ApparelProfile> SkippedCCDA_ApparelProfiles);
+	void ApplyApparelSpecificSettings(UHCharacterCustomizationComponent* CharacterCustomizationComponent, FApparelProfile ApparelProfile, TArray<FCDA_ApparelProfile> AddingCCDA_Apparels, TArray<USkeletalMeshComponent*> AddingSkeletalMeshComponents, TArray<FCDA_ApparelProfile> SkippedCCDA_ApparelProfiles);
 
 	UFUNCTION()
 	void ClearApparelSpecificSettings(UHCharacterCustomizationComponent* CharacterCustomizationComponent, FApparelProfile ApparelProfile, TArray<USkeletalMeshComponent*> RemoveingSkeletalMeshComponents);
-#pragma endregion
-
-#pragma region LoadAssets
-public:
-	UFUNCTION(Category = "Load Assets")
-	void LoadPrimaryAsset();
-
-protected:
-	UPROPERTY(BlueprintReadWrite, EditDefaultsOnly, Category = "Load Assets")
-	TArray<UPrimaryAssetLabel*> AssetPackagesToLoad;
-
-public:
-	FPreStartLoadAsset OnStartLoadAsset;
-
-private:
-	FDelegateHandle OnStartLoadAssetHandle;
-	FDelegateHandle OnBeforeUpdateApparelHandle;	
-	
-#pragma endregion
-
-#pragma region RepliacteSettings
-protected:
-	bool CheckReplicateIndividualChagnes() const;
-	bool CheckMulticastIndividualChanges() const;
-
-protected:
-	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Repliacte Settings")
-	bool bMulticastProfileApplication;
-
-	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Repliacte Settings")
-	bool bReplicateIndividualChanges;
-
-	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Repliacte Settings")
-	bool bMulticastIndividualChanges;
-
-	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Repliacte Settings")
-	bool bDebugReplication;
 #pragma endregion
 
 #pragma region AnimInstanceAlpha
@@ -312,10 +348,10 @@ protected:
 	void SetEyesHDRVectorParameter(FName Name, FHDRColor HDRColor);
 
 public:
-	FOnSetEyesHDRVectorParameter OnSetEyesHDRVectorParameter;
-	
+	FOnSetEyesHDRVectorParameter OnSetEyesHDRVectorParameter;	
 #pragma endregion
-#pragma region UpdateComponent
+
+#pragma region UpdateBasebody
 public:
 	void UpdateBasebody();
 
@@ -332,6 +368,7 @@ protected:
 	void UpdateSkinTextureSets(); 
 	void UpdateEyesMaterials();
 	void UpdateLODSyncComponent();
+
 public:
 	FOnPostUpdateBodyComponent OnPostUpdateBodyComponent;
 	FOnPostUpdateHeadComponent OnPostUpdateHeadComponent;
@@ -342,11 +379,16 @@ public:
 	FOnPostUpdateSkinMaterials OnPostUpdateSkinMaterialSets;
 	FOnPostUpdateEyesMaterials OnPostUpdateEyesMaterialSets;
 	FOnPostUpdateLODSyncComponent OnPostUpdateLODSyncComponent;
-	
 #pragma endregion
 
-#pragma region Helper
-private:
-	void CreateMIDFromSlotAndMaterial(UMeshComponent* MeshComponent , FName MaterialSlotName, UMaterialInterface* SourceMaterial, TArray<UMaterialInstanceDynamic*>& MIDs);
-#pragma endregion
+#pragma region UpdateApparel
+public:
+	void UpdateApparel();
+	void UpdateAdvancedCDAOptions();
+
+public:
+	FOnPreUpdateApparel OnPreUpdateApparel;
+	FOnPostUpdateApparel OnPostUpdateApparel;
+
+	FOnPostUpdateAdvancedCDAOptions OnUpdateAdvancedCDAOptions;
 };
