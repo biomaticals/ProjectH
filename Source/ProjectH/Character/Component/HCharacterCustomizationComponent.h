@@ -23,6 +23,8 @@ DECLARE_EVENT_FourParams(UHCharacterCustomizationComponent, FOnPostAddedCDA, UHC
 DECLARE_EVENT_FourParams(UHCharacterCustomizationComponent, FOnPostAddedCDASkeletal, UHCharacterCustomizationComponent*, UCDA_SkeletalMesh*, USkeletalMeshComponent*, int);
 DECLARE_EVENT_ThreeParams(UHCharacterCustomizationComponent, FOnSkippedCDAApparelProfile, UHCharacterCustomizationComponent*, FCDA_ApparelProfile, int)
 DECLARE_EVENT_FourParams(UHCharacterCustomizationComponent, FOnPostAddedCDAApparelProfile, UHCharacterCustomizationComponent*, FCDA_ApparelProfile, USkeletalMeshComponent*, int);
+DECLARE_EVENT_ThreeParams(UHCharacterCustomizationComponent, FOnSkippedCDAEquipmentProfile, UHCharacterCustomizationComponent*, FCDA_EquipmentProfile, int)
+DECLARE_EVENT_FourParams(UHCharacterCustomizationComponent, FOnPostAddedCDAEquipmentProfile, UHCharacterCustomizationComponent*, FCDA_EquipmentProfile, USkeletalMeshComponent*, int);
  #pragma endregion
 
 #pragma region LoadAsset
@@ -52,6 +54,7 @@ DECLARE_EVENT_ThreeParams(UHCharacterCustomizationComponent, FOnPostUpdateAppare
 
 #pragma region UpdateEquipment
 DECLARE_EVENT_ThreeParams(UHCharacterCustomizationComponent, FOnPreUpdateEquipment, UHCharacterCustomizationComponent*, FEquipmentProfile, TArray<USkeletalMeshComponent*>);
+DECLARE_EVENT_FiveParams(UHCharacterCustomizationComponent, FOnPostUpdateEquipment, UHCharacterCustomizationComponent*, FEquipmentProfile, TArray<FCDA_EquipmentProfile> AddedCDAEquipProfiles, TArray<USkeletalMeshComponent*> EquipmentMeshComponents, TArray<FCDA_EquipmentProfile> SkippedCDAEquipmentProfiles);
 #pragma endregion
 
 #pragma region ApplyCustomizationProfile
@@ -113,7 +116,7 @@ protected:
 	
 	/** Transient ~ */
 	UPROPERTY(BlueprintReadOnly, VIsibleAnywhere, Transient, Category = "CustomizationProfile")
-	FCustomizationProfile CurrentCusomizationProfile;
+	FCustomizationProfile CurrentCustomizationProfile;
 
 	UPROPERTY(BlueprintReadOnly, VisibleAnywhere, Transient, Category = "CustomizationProfile")
 	FAnatomyProfile CurrentAnatomyProfile;
@@ -224,7 +227,8 @@ public:
 	FOnPostAddedCDASkeletal OnPostAddedCDASkeletal;
 	FOnSkippedCDAApparelProfile OnSkippedCDAAparelProfile;
 	FOnPostAddedCDAApparelProfile OnPostAddedCDAApparelProfile;
-	
+	FOnSkippedCDAEquipmentProfile OnSkippedCDAEquipmentProfile;
+	FOnPostAddedCDAEquipmentProfile OnPostAddedCDAEquipmentProfile;
 
 #pragma endregion
 
@@ -415,7 +419,7 @@ public:
 #pragma region UpdateApparel
 public:
 	void UpdateApparel();
-	void UpdateApparelBaseboyMasks();
+	void UpdateApparelBasebodyMasks();
 	void UpdateAdvancedCDAOptions();
 
 public:
@@ -435,6 +439,11 @@ private:
 #pragma endregion
 
 #pragma region UpdateEquipment
+public:
+	void UpdateEquipment();
 
+public:
+	FOnPreUpdateEquipment OnPreUpdateEquipment;
+	FOnPostUpdateEquipment OnPostUpdateEquipment;
 #pragma endregion
 };

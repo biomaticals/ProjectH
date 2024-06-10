@@ -55,31 +55,31 @@ TArray<TSubclassOf<UCharacterCustomizationDataAsset>> UHCharacterCustomizationCo
 {
 	TArray<TSubclassOf<UCharacterCustomizationDataAsset>> LHiddenCDAs{};
 
-	for (const FCDA_ApparelProfile Asset : CurrentCusomizationProfile.Apparel.DataAssets)
+	for (const FCDA_ApparelProfile Asset : CurrentCustomizationProfile.Apparel.DataAssets)
 	{
 		if(Asset.DataAsset->HiddenCCDAClasses.Num())
 			LHiddenCDAs.Append(Asset.DataAsset->HiddenCCDAClasses);
 	}
 
-	for (const FCDA_EquipmentProfile Asset : CurrentCusomizationProfile.Equipment.DataAssets)
+	for (const FCDA_EquipmentProfile Asset : CurrentCustomizationProfile.Equipment.DataAssets)
 	{
 		if (Asset.DataAsset->HiddenCCDAClasses.Num())
 			LHiddenCDAs.Append(Asset.DataAsset->HiddenCCDAClasses);
 	}
 
-	for (const FCDA_HairstyleProfile Asset : CurrentCusomizationProfile.Hairstyle.DataAssets)
+	for (const FCDA_HairstyleProfile Asset : CurrentCustomizationProfile.Hairstyle.DataAssets)
 	{
 		if (Asset.DataAsset->HiddenCCDAClasses.Num())
 			LHiddenCDAs.Append(Asset.DataAsset->HiddenCCDAClasses);
 	}
 
-	for (const FCDA_GroomProfile Asset : CurrentCusomizationProfile.Groom.DataAssets)
+	for (const FCDA_GroomProfile Asset : CurrentCustomizationProfile.Groom.DataAssets)
 	{
 		if (Asset.DataAsset->HiddenCCDAClasses.Num())
 			LHiddenCDAs.Append(Asset.DataAsset->HiddenCCDAClasses);
 	}
 
-	for (const FCDA_AttachmentProfile Asset : CurrentCusomizationProfile.Attachments.DataAssets)
+	for (const FCDA_AttachmentProfile Asset : CurrentCustomizationProfile.Attachments.DataAssets)
 	{
 		if (Asset.DataAsset->HiddenCCDAClasses.Num())
 			LHiddenCDAs.Append(Asset.DataAsset->HiddenCCDAClasses);
@@ -92,16 +92,16 @@ TMap<FName, FSlotTexture_SkinBodyAndHead> UHCharacterCustomizationComponent::Get
 {
 	TMap<FName, FSlotTexture_SkinBodyAndHead> LSkinTextureSets = CurrentAnatomyProfile.Body.SkinTextureSets;
 
-	if (CurrentAnatomyProfile.Heads.IsValidIndex(CurrentCusomizationProfile.Basebody.Head.Index) == false)
+	if (CurrentAnatomyProfile.Heads.IsValidIndex(CurrentCustomizationProfile.Basebody.Head.Index) == false)
 		return LSkinTextureSets;
 
-	for (const auto& Elem : CurrentAnatomyProfile.Heads[CurrentCusomizationProfile.Basebody.Head.Index].SkinTextureSets_Override)
+	for (const auto& Elem : CurrentAnatomyProfile.Heads[CurrentCustomizationProfile.Basebody.Head.Index].SkinTextureSets_Override)
 	{
 		if (FSlotTexture_SkinBodyAndHead* Found = LSkinTextureSets.Find(Elem.Key))
 		{
 			FSlotTexture_SkinBodyAndHead NewValue;
 			NewValue.Body = LSkinTextureSets.Find(Elem.Key)->Body;
-			NewValue.Head = (CurrentAnatomyProfile.Heads[CurrentCusomizationProfile.Basebody.Head.Index].SkinTextureSets_Override.Find(Elem.Key))->Head;
+			NewValue.Head = (CurrentAnatomyProfile.Heads[CurrentCustomizationProfile.Basebody.Head.Index].SkinTextureSets_Override.Find(Elem.Key))->Head;
 
 			LSkinTextureSets.Add(Elem.Key, NewValue);
 		}
@@ -110,7 +110,7 @@ TMap<FName, FSlotTexture_SkinBodyAndHead> UHCharacterCustomizationComponent::Get
 	TMap<FName, FSlotTexture_SkinBodyAndHead> LFilteredSkinTextureSets;
 	for (const auto& Elem : LSkinTextureSets)
 	{
-		if (CurrentCusomizationProfile.Basebody.Skin.TextureSets.Contains(Elem.Key))
+		if (CurrentCustomizationProfile.Basebody.Skin.TextureSets.Contains(Elem.Key))
 		{
 			TPair<FName, FSlotTexture_SkinBodyAndHead> NewTextureSet;
 			NewTextureSet.Key = Elem.Key;
@@ -126,11 +126,11 @@ FSlotMaterial_Eyes UHCharacterCustomizationComponent::GetCurrentEyesMaterialSet(
 {
 	TArray<FSlotMaterial_Eyes> LEyesMaterialSets = CurrentAnatomyProfile.Body.EyesMaterialSets;
 
-	if (CurrentAnatomyProfile.Heads.IsValidIndex(CurrentCusomizationProfile.Basebody.Head.Index) == false)
+	if (CurrentAnatomyProfile.Heads.IsValidIndex(CurrentCustomizationProfile.Basebody.Head.Index) == false)
 		return FSlotMaterial_Eyes();
 
 	int OverrideNum = LEyesMaterialSets.Num();
-	TArray<FSlotMaterial_Eyes> EyesMaterialSets = CurrentAnatomyProfile.Heads[CurrentCusomizationProfile.Basebody.Head.Index].EyesMaterialSets_Override;
+	TArray<FSlotMaterial_Eyes> EyesMaterialSets = CurrentAnatomyProfile.Heads[CurrentCustomizationProfile.Basebody.Head.Index].EyesMaterialSets_Override;
 	if(EyesMaterialSets.Num() < OverrideNum)
 		OverrideNum = EyesMaterialSets.Num();
 
@@ -142,8 +142,8 @@ FSlotMaterial_Eyes UHCharacterCustomizationComponent::GetCurrentEyesMaterialSet(
 		}
 	}
 
-	if (LEyesMaterialSets.IsValidIndex(CurrentCusomizationProfile.Basebody.Eyes.MaterialIndex))
-		return LEyesMaterialSets[CurrentCusomizationProfile.Basebody.Eyes.MaterialIndex];
+	if (LEyesMaterialSets.IsValidIndex(CurrentCustomizationProfile.Basebody.Eyes.MaterialIndex))
+		return LEyesMaterialSets[CurrentCustomizationProfile.Basebody.Eyes.MaterialIndex];
 
 	return FSlotMaterial_Eyes();
 }
@@ -551,7 +551,7 @@ void UHCharacterCustomizationComponent::ApplyCustomizationProfile_Internal(FCust
 
 	UT_LOG(HCharacterCustomizationLog, Log, TEXT("ApplyCustomizationProfile %s to %s."), *InCustomizationProfile.MetaData.ToString(), CachedOwner->GetFName());
 
-	CurrentCusomizationProfile = InCustomizationProfile;
+	CurrentCustomizationProfile = InCustomizationProfile;
 
 	TMap<EAnatomy, FAnatomyProfile> AvailableAnatomyProfiles = DATATABLE_MANAGER()->GetAvailableAnatomyProfiles();
 	if (AvailableAnatomyProfiles.IsEmpty())
@@ -560,7 +560,7 @@ void UHCharacterCustomizationComponent::ApplyCustomizationProfile_Internal(FCust
 		return;
 	}
 	
-	CurrentAnatomyProfile = *AvailableAnatomyProfiles.Find(CurrentCusomizationProfile.MetaData.Anatomy);
+	CurrentAnatomyProfile = *AvailableAnatomyProfiles.Find(CurrentCustomizationProfile.MetaData.Anatomy);
 	if (CurrentAnatomyProfile.IsValid() == false)
 	{	
 		UT_LOG(HCharacterCustomizationLog, Error, TEXT("CurrentCustomizationProfile's Anatomy is not available."));
@@ -627,7 +627,7 @@ void UHCharacterCustomizationComponent::SetBasebodyAnimInstanceAlpha_Multicast_I
 
 void UHCharacterCustomizationComponent::SetBasebodyAnimInstanceAlpha(FName Name, float Value)
 {
-	CurrentCusomizationProfile.Basebody.AnimInstanceAlphas.AddUnique(FHNamedFloat(Name, Value));
+	CurrentCustomizationProfile.Basebody.AnimInstanceAlphas.AddUnique(FHNamedFloat(Name, Value));
 }
 #pragma endregion
 
@@ -669,7 +669,7 @@ void UHCharacterCustomizationComponent::SetSkinScalarParameter_Multicast_Impleme
 
 void UHCharacterCustomizationComponent::SetSkinScalarParameter(FName Name, float Value)
 {
-	CurrentCusomizationProfile.Basebody.Skin.ScalarParameters.Add(FHNamedFloat(Name, Value));
+	CurrentCustomizationProfile.Basebody.Skin.ScalarParameters.Add(FHNamedFloat(Name, Value));
 	
 	TArray<UMaterialInstanceDynamic*> MIDs = BasebodyHeadSkinMIDs;
 	MIDs.Append(BasebodyBodySkinMIDs);
@@ -720,7 +720,7 @@ void UHCharacterCustomizationComponent::SetSkinHDRVectorParameter_Multicast_Impl
 
 void UHCharacterCustomizationComponent::SetSkinHDRVectorParameter(FName Name, FHDRColor HDRColor)
 {
-	CurrentCusomizationProfile.Basebody.Skin.HDRVectorParameters.Add(FNamedHDRColor(Name, HDRColor));
+	CurrentCustomizationProfile.Basebody.Skin.HDRVectorParameters.Add(FNamedHDRColor(Name, HDRColor));
 
 	TArray<UMaterialInstanceDynamic*> MIDs = BasebodyHeadSkinMIDs;
 	MIDs.Append(BasebodyBodySkinMIDs);
@@ -773,7 +773,7 @@ void UHCharacterCustomizationComponent::SetEyesScalarParameter_Multicast_Impleme
 
 void UHCharacterCustomizationComponent::SetEyesScalarParameter(FName Name, float Value)
 {
-	CurrentCusomizationProfile.Basebody.Eyes.ScalarParameters.Add(FHNamedFloat(Name, Value));
+	CurrentCustomizationProfile.Basebody.Eyes.ScalarParameters.Add(FHNamedFloat(Name, Value));
 
 	for (UMaterialInstanceDynamic* MID : EyesMIDs)
 	{
@@ -822,7 +822,7 @@ void UHCharacterCustomizationComponent::SetEyesHDRVectorParameter_Multicast_Impl
 
 void UHCharacterCustomizationComponent::SetEyesHDRVectorParameter(FName Name, FHDRColor HDRColor)
 {
-	CurrentCusomizationProfile.Basebody.Eyes.HDRScalarParameters.Add(FNamedHDRColor(Name, HDRColor));
+	CurrentCustomizationProfile.Basebody.Eyes.HDRScalarParameters.Add(FNamedHDRColor(Name, HDRColor));
 
 	for (UMaterialInstanceDynamic* MID : EyesMIDs)
 	{
@@ -853,7 +853,7 @@ void UHCharacterCustomizationComponent::UpdateBasebody()
 
 	if (OnPreUpdateBasebody.IsBound())
 	{
-		OnPreUpdateBasebody.Broadcast(this, CurrentCusomizationProfile.Basebody, BodyComponent, HeadComponent);
+		OnPreUpdateBasebody.Broadcast(this, CurrentCustomizationProfile.Basebody, BodyComponent, HeadComponent);
 	}
 
 	if(BodyComponent->GetAnimationMode() == EAnimationMode::AnimationBlueprint)
@@ -898,7 +898,7 @@ void UHCharacterCustomizationComponent::UpdateBasebody()
 
 	if (OnPostUpdateBasebody.IsBound())
 	{
-		OnPostUpdateBasebody.Broadcast(this, CurrentCusomizationProfile.Basebody, BodyComponent, HeadComponent);
+		OnPostUpdateBasebody.Broadcast(this, CurrentCustomizationProfile.Basebody, BodyComponent, HeadComponent);
 	}
 }
 
@@ -952,7 +952,7 @@ void UHCharacterCustomizationComponent::UpdateBasebodyMorphTargets()
 	if(BodyComponent == NULL)
 		return;
 
-	for (const auto Elem : CurrentCusomizationProfile.Basebody.MorphTargets)
+	for (const auto Elem : CurrentCustomizationProfile.Basebody.MorphTargets)
 	{
 		BodyComponent->SetMorphTarget(Elem.Name, Elem.Value, true);
 		if(OnSetBasebodyMorphTarget.IsBound())
@@ -960,7 +960,7 @@ void UHCharacterCustomizationComponent::UpdateBasebodyMorphTargets()
 	}
 
 	if(OnPostUpdateBasebodyMorphTarget.IsBound())
-		OnPostUpdateBasebodyMorphTarget.Broadcast(this, CurrentCusomizationProfile.Basebody.MorphTargets);
+		OnPostUpdateBasebodyMorphTarget.Broadcast(this, CurrentCustomizationProfile.Basebody.MorphTargets);
 }
 
 void UHCharacterCustomizationComponent::UpdateBasebodyAnimInstanceAlphas()
@@ -977,14 +977,14 @@ void UHCharacterCustomizationComponent::UpdateBasebodyAnimInstanceAlphas()
 	if(AnimInstance == NULL)
 		return;
 
-	for (const auto& Elem : CurrentCusomizationProfile.Basebody.AnimInstanceAlphas)
+	for (const auto& Elem : CurrentCustomizationProfile.Basebody.AnimInstanceAlphas)
 	{
 		FProperty* Property = AnimInstance->GetClass()->FindPropertyByName(Elem.Name);
 		Property->SetValue_InContainer(AnimInstance, &Elem.Value);
 	}
 
 	if(OnPostUpdateBasebodyAnimInstanceAlphas.IsBound())
-		OnPostUpdateBasebodyAnimInstanceAlphas.Broadcast(this, CurrentCusomizationProfile.Basebody.AnimInstanceAlphas);
+		OnPostUpdateBasebodyAnimInstanceAlphas.Broadcast(this, CurrentCustomizationProfile.Basebody.AnimInstanceAlphas);
 }
 
 void UHCharacterCustomizationComponent::UpdateSkinMaterials()
@@ -1007,10 +1007,10 @@ void UHCharacterCustomizationComponent::UpdateSkinMaterials()
 
 	TArray<FSlotMaterial_SkinBodyAndHead> LSkinMaterialSets = CurrentAnatomyProfile.Body.SkinMaterialSets;
 	
-	if(CurrentAnatomyProfile.Heads.IsValidIndex(CurrentCusomizationProfile.Basebody.Head.Index) == false)
+	if(CurrentAnatomyProfile.Heads.IsValidIndex(CurrentCustomizationProfile.Basebody.Head.Index) == false)
 		return;
 
-	TArray<FSlotMaterial_SkinHead> CurrentAnatomySkinMaterialSets = CurrentAnatomyProfile.Heads[CurrentCusomizationProfile.Basebody.Head.Index].SkinMaterialSets_Override;
+	TArray<FSlotMaterial_SkinHead> CurrentAnatomySkinMaterialSets = CurrentAnatomyProfile.Heads[CurrentCustomizationProfile.Basebody.Head.Index].SkinMaterialSets_Override;
 
 	int OverrideNum = CurrentAnatomySkinMaterialSets.Num();
 	if(LSkinMaterialSets.Num() < OverrideNum)
@@ -1028,10 +1028,10 @@ void UHCharacterCustomizationComponent::UpdateSkinMaterials()
 		LSkinMaterialSets[i] = Override;
 	}
 
-	if(LSkinMaterialSets.IsValidIndex(CurrentCusomizationProfile.Basebody.Skin.MaterialIndex) == false)
+	if(LSkinMaterialSets.IsValidIndex(CurrentCustomizationProfile.Basebody.Skin.MaterialIndex) == false)
 		return;
 
-	FSlotMaterial_SkinBodyAndHead SelectedSkinMaterial = LSkinMaterialSets[CurrentCusomizationProfile.Basebody.Skin.MaterialIndex];
+	FSlotMaterial_SkinBodyAndHead SelectedSkinMaterial = LSkinMaterialSets[CurrentCustomizationProfile.Basebody.Skin.MaterialIndex];
 	for (const auto& Elem : SelectedSkinMaterial.Body)
 	{
 		CreateMIDFromSlotAndMaterial(BodyComponent, Elem.Key, Elem.Value, BasebodyBodySkinMIDs);
@@ -1043,7 +1043,7 @@ void UHCharacterCustomizationComponent::UpdateSkinMaterials()
 	}
 
 	/** Step 2. Apply Parameters */
-	const FSkinProfile CurrentSkinProfile = CurrentCusomizationProfile.Basebody.Skin;
+	const FSkinProfile CurrentSkinProfile = CurrentCustomizationProfile.Basebody.Skin;
 	for (const auto& Elem : CurrentSkinProfile.ScalarParameters)
 	{
 		SetSkinScalarParameter(Elem.Name, Elem.Value);
@@ -1146,18 +1146,18 @@ void UHCharacterCustomizationComponent::UpdateEyesMaterials()
 		CreateMIDFromSlotAndMaterial(HeadComponent, Elem.Key, Elem.Value, EyesMIDs);
 	}
 
-	for (const auto& Elem : CurrentCusomizationProfile.Basebody.Eyes.ScalarParameters)
+	for (const auto& Elem : CurrentCustomizationProfile.Basebody.Eyes.ScalarParameters)
 	{
 		SetEyesScalarParameter(Elem.Name, Elem.Value);
 	}
 
-	for (const auto& Elem : CurrentCusomizationProfile.Basebody.Eyes.HDRScalarParameters)
+	for (const auto& Elem : CurrentCustomizationProfile.Basebody.Eyes.HDRScalarParameters)
 	{
 		SetEyesHDRVectorParameter(Elem.Name, Elem.Value);
 	}
 
 	if(OnPostUpdateEyesMaterialSets.IsBound())
-		OnPostUpdateEyesMaterialSets.Broadcast(this, CurrentCusomizationProfile.Basebody.Eyes, EyesMIDs);
+		OnPostUpdateEyesMaterialSets.Broadcast(this, CurrentCustomizationProfile.Basebody.Eyes, EyesMIDs);
 }
 
 void UHCharacterCustomizationComponent::UpdateLODSyncComponent()
@@ -1233,7 +1233,7 @@ void UHCharacterCustomizationComponent::UpdateApparel()
 		return;
 
 	if(OnPreUpdateApparel.IsBound())
-		OnPreUpdateApparel.Broadcast(this, CurrentCusomizationProfile.Apparel, ApparelMeshComponents);
+		OnPreUpdateApparel.Broadcast(this, CurrentCustomizationProfile.Apparel, ApparelMeshComponents);
 
 	TArray<UPrimitiveComponent*> ApparelMeshComponents_Primitive;
 	for (USkeletalMeshComponent* ApparelMeshComponent : ApparelMeshComponents)
@@ -1244,31 +1244,34 @@ void UHCharacterCustomizationComponent::UpdateApparel()
 
 	TArray<FCDA_ApparelProfile> SkippedApparelProfiles;
 	TArray<FCDA_ApparelProfile> AddedApaarelProfiles;
-	if (CleanCDAs(ApparelMeshComponents_Primitive, ApparelMIDs, ActiveAdditionalMorpTargets_Apparel, CurrentCusomizationProfile.Apparel.DataAssets.Num(), "Apparel"))
+	FApparelProfile ApparelProfile = CurrentCustomizationProfile.Apparel;
+	if (CleanCDAs(ApparelMeshComponents_Primitive, ApparelMIDs, ActiveAdditionalMorpTargets_Apparel, CurrentCustomizationProfile.Apparel.DataAssets.Num(), "Apparel"))
 	{
-		for (int i = 0 ; i < CurrentCusomizationProfile.Apparel.DataAssets.Num() ; i ++)
+		for (int i = 0 ; i < CurrentCustomizationProfile.Apparel.DataAssets.Num() ; i ++)
 		{
-			if (USkeletalMeshComponent* NewSkeletalComponent = AddCDASkeletalComponent(CurrentCusomizationProfile.Apparel.DataAssets[i].DataAsset, CurrentCusomizationProfile.Apparel.DataAssets[i].MaterialVariantIndex, ApparelMeshComponents, ApparelMIDs, ActiveAdditionalMorpTargets_Apparel, CurrentCusomizationProfile.Apparel.GlobalScalarParameters, CurrentCusomizationProfile.Apparel.GlobalHDRVectorParameters, "", FTransform::Identity, i))
+			if (USkeletalMeshComponent* NewSkeletalComponent = AddCDASkeletalComponent(ApparelProfile.DataAssets[i].DataAsset, ApparelProfile.DataAssets[i].MaterialVariantIndex,
+			ApparelMeshComponents, ApparelMIDs, ActiveAdditionalMorpTargets_Apparel, ApparelProfile.GlobalScalarParameters,
+			ApparelProfile.GlobalHDRVectorParameters, "", FTransform::Identity, i))
 			{
 				if(OnPostAddedCDAApparelProfile.IsBound())
-					OnPostAddedCDAApparelProfile.Broadcast(this, CurrentCusomizationProfile.Apparel.DataAssets[i], NewSkeletalComponent, i);
+					OnPostAddedCDAApparelProfile.Broadcast(this, CurrentCustomizationProfile.Apparel.DataAssets[i], NewSkeletalComponent, i);
 
-				AddedApaarelProfiles.AddUnique(CurrentCusomizationProfile.Apparel.DataAssets[i]);
+				AddedApaarelProfiles.AddUnique(CurrentCustomizationProfile.Apparel.DataAssets[i]);
 			}
 			else
 			{
 				if(OnSkippedCDAAparelProfile.IsBound())
-					OnSkippedCDAAparelProfile.Broadcast(this, CurrentCusomizationProfile.Apparel.DataAssets[i], i);
+					OnSkippedCDAAparelProfile.Broadcast(this, CurrentCustomizationProfile.Apparel.DataAssets[i], i);
 
-				SkippedApparelProfiles.AddUnique(CurrentCusomizationProfile.Apparel.DataAssets[i]);
+				SkippedApparelProfiles.AddUnique(CurrentCustomizationProfile.Apparel.DataAssets[i]);
 			}	
 		}
 	}
 
-	UpdateApparelBaseboyMasks();
+	UpdateApparelBasebodyMasks();
 
 	bool bUseAlternativeSkinTextures = false;
-	for (FCDA_ApparelProfile Profile : CurrentCusomizationProfile.Apparel.DataAssets)
+	for (FCDA_ApparelProfile Profile : CurrentCustomizationProfile.Apparel.DataAssets)
 	{
 		if(Profile.DataAsset && Profile.DataAsset->UseAlternativeSkinTexture)
 		{
@@ -1282,10 +1285,10 @@ void UHCharacterCustomizationComponent::UpdateApparel()
 	UpdateLODSyncComponent();
 
 	if(OnPostUpdateApparel.IsBound())
-		OnPostUpdateApparel.Broadcast(this, CurrentCusomizationProfile.Apparel, AddedApaarelProfiles, ApparelMeshComponents, SkippedApparelProfiles);
+		OnPostUpdateApparel.Broadcast(this, CurrentCustomizationProfile.Apparel, AddedApaarelProfiles, ApparelMeshComponents, SkippedApparelProfiles);
 }
 
-void UHCharacterCustomizationComponent::UpdateApparelBaseboyMasks()
+void UHCharacterCustomizationComponent::UpdateApparelBasebodyMasks()
 {
 	for (FName SkinMask : SkinMasks)
 	{
@@ -1297,7 +1300,7 @@ void UHCharacterCustomizationComponent::UpdateApparelBaseboyMasks()
 	}
 
 	TArray<FName> LSelectedSkinMasks;
-	for (FCDA_ApparelProfile ApparelProfile : CurrentCusomizationProfile.Apparel.DataAssets)
+	for (FCDA_ApparelProfile ApparelProfile : CurrentCustomizationProfile.Apparel.DataAssets)
 	{
 		if (ApparelProfile.DataAsset && IsCDAVisible(ApparelProfile.DataAsset) && ApparelProfile.DataAsset->BasebodyMask)
 		{
@@ -1325,3 +1328,61 @@ void UHCharacterCustomizationComponent::UpdateAdvancedCDAOptions()
 		OnUpdateAdvancedCDAOptions.Broadcast(this, HiddenCDAs);
 }
 #pragma endregion
+
+#pragma region UpdateEquipment
+void UHCharacterCustomizationComponent::UpdateEquipment()
+{
+	if(CachedOwner == NULL)
+		return;
+
+	TArray<USkeletalMeshComponent*> EquipmentMeshComponents = CachedOwner->GetEquipmentMeshComponents();
+
+	if(OnPreUpdateEquipment.IsBound())
+		OnPreUpdateEquipment.Broadcast(this, CurrentCustomizationProfile.Equipment, EquipmentMeshComponents);
+
+	TArray<UPrimitiveComponent*> EquipmentMeshComponents_Primitive;
+	for (USkeletalMeshComponent* EquipmentMesh : EquipmentMeshComponents)
+	{
+		if (UPrimitiveComponent* EquipmentMesh_Primitive = Cast<UPrimitiveComponent>(EquipmentMesh))
+		{
+			EquipmentMeshComponents_Primitive.AddUnique(EquipmentMesh_Primitive);
+		}
+	}
+
+	TArray<FCDA_EquipmentProfile> SkippedEquipmentProfiles;
+	TArray<FCDA_EquipmentProfile> AddedEquipmentProfiles;
+	FEquipmentProfile EquipmentProfile = CurrentCustomizationProfile.Equipment;
+	if (CleanCDAs(EquipmentMeshComponents_Primitive, EquipmentMIDs, ActiveAdditionalMorpTargets_Equipment, CurrentCustomizationProfile.Equipment.DataAssets.Num(), "Equipment"))
+	{
+		for (int i = 0 ; i < CurrentCustomizationProfile.Equipment.DataAssets.Num(); i ++)
+		{
+			if (USkeletalMeshComponent* NewSkeletalMeshComponents = AddCDASkeletalComponent(EquipmentProfile.DataAssets[i].DataAsset,
+				EquipmentProfile.DataAssets[i].MaterialVariantIndex, EquipmentMeshComponents, EquipmentMIDs, ActiveAdditionalMorpTargets_Equipment,
+				EquipmentProfile.GlobalScalarParameters, EquipmentProfile.GlobalHDRVectorParameters, EquipmentProfile.DataAssets[i].ParentSocket, EquipmentProfile.DataAssets[i].RelativeTransform, i))
+			{
+				if (OnPostAddedCDAEquipmentProfile.IsBound())
+				{
+					OnPostAddedCDAEquipmentProfile.Broadcast(this, EquipmentProfile.DataAssets[i], NewSkeletalMeshComponents, i);
+				}
+
+				AddedEquipmentProfiles.AddUnique(EquipmentProfile.DataAssets[i]);
+			}
+			else
+			{
+				if (OnSkippedCDAEquipmentProfile.IsBound())
+				{
+					OnSkippedCDAEquipmentProfile.Broadcast(this, EquipmentProfile.DataAssets[i], i);
+				}
+
+				SkippedEquipmentProfiles.AddUnique(EquipmentProfile.DataAssets[i]);
+			}
+		}
+	}
+
+	UpdateLODSyncComponent();
+
+	if (OnPostUpdateEquipment.IsBound())
+	{
+		OnPostUpdateEquipment.Broadcast(this, EquipmentProfile, AddedEquipmentProfiles, EquipmentMeshComponents, SkippedEquipmentProfiles);
+	}
+}

@@ -360,6 +360,12 @@ struct FCDA_EquipmentProfile
 
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
 	int MaterialVariantIndex;
+
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+	FName ParentSocket;
+
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+	FTransform RelativeTransform;
 };
 
 USTRUCT(BlueprintType)
