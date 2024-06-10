@@ -7,18 +7,22 @@
 #include "ProjectH.h"
 #include "Common/CommonStruct.h"
 #include "Common/CommonTableRow.h"
+#include "DataAsset/CharacterCustomizationDataAsset.h"
 #include "HCharacterCustomizationComponent.generated.h"
 
 enum class EAnatomy : uint8;
 
 class AHCharacter;
-class UPrimaryAssetLabel;
-class UCDA_Apparel;
 class ULODSyncComponent;
+class UPrimaryAssetLabel;
  
  #pragma region InitializeComponent
-DECLARE_EVENT_ThreeParams(UHCharacterCustomizationComponent, FOnSkippedInitializeCDA, UHCharacterCustomizationComponent*, UCharacterCustomizationDataAsset*, int); 
-DECLARE_EVENT_ThreeParams(UHCharacterCustomizationComponent, FOnSkippedInitializeCDASkeletaMeshlComponent, UHCharacterCustomizationComponent*, UCDA_SkeletalMesh*, int);
+DECLARE_EVENT_ThreeParams(UHCharacterCustomizationComponent, FOnSkippedCDA, UHCharacterCustomizationComponent*, UCharacterCustomizationDataAsset*, int); 
+DECLARE_EVENT_ThreeParams(UHCharacterCustomizationComponent, FOnSkippedCDASkeleta, UHCharacterCustomizationComponent*, UCDA_SkeletalMesh*, int);
+DECLARE_EVENT_FourParams(UHCharacterCustomizationComponent, FOnPostAddedCDA, UHCharacterCustomizationComponent*, UCharacterCustomizationDataAsset*, UMeshComponent*, int);
+DECLARE_EVENT_FourParams(UHCharacterCustomizationComponent, FOnPostAddedCDASkeletal, UHCharacterCustomizationComponent*, UCDA_SkeletalMesh*, USkeletalMeshComponent*, int);
+DECLARE_EVENT_ThreeParams(UHCharacterCustomizationComponent, FOnSkippedCDAApparelProfile, UHCharacterCustomizationComponent*, FCDA_ApparelProfile, int)
+DECLARE_EVENT_FourParams(UHCharacterCustomizationComponent, FOnPostAddedCDAApparelProfile, UHCharacterCustomizationComponent*, FCDA_ApparelProfile, USkeletalMeshComponent*, int);
  #pragma endregion
 
 #pragma region LoadAsset
@@ -41,8 +45,13 @@ DECLARE_EVENT_TwoParams(UHCharacterCustomizationComponent, FOnPostUpdateLODSyncC
 
 #pragma region UpdateApparel
 DECLARE_EVENT_ThreeParams(UHCharacterCustomizationComponent, FOnPreUpdateApparel, UHCharacterCustomizationComponent*, FApparelProfile, TArray<USkeletalMeshComponent*>);
-DECLARE_EVENT_FiveParams(UHCharacterCustomizationComponent, FOnPostUpdateApparel, UHCharacterCustomizationComponent*, FApparelProfile, TArray<FCDA_ApparelProfile>, TArray<USkeletalMeshComponent*>, TArray<FCDA_ApparelProfile>);
-DECLARE_EVENT_TwoParams(UHCharacterCustomizationComponent, FOnPostUpdateAdvancedCDAOptions, UHCharacterCustomizationComponent*, TArray<UCharacterCustomizationDataAsset*>);
+DECLARE_EVENT_FiveParams(UHCharacterCustomizationComponent, FOnPostUpdateApparel, UHCharacterCustomizationComponent*, FApparelProfile CurrentApparelProfile, TArray<FCDA_ApparelProfile> AddedApaarelProfiles, TArray<USkeletalMeshComponent*> ApparelMeshComponents, TArray<FCDA_ApparelProfile> SkippedApparelProfiles);
+DECLARE_EVENT_TwoParams(UHCharacterCustomizationComponent, FOnPostUpdateAdvancedCDAOptions, UHCharacterCustomizationComponent*, TArray<TSubclassOf<UCharacterCustomizationDataAsset>>);
+DECLARE_EVENT_ThreeParams(UHCharacterCustomizationComponent, FOnPostUpdateApparelBasebodyMasks, UHCharacterCustomizationComponent*, TArray<FName> AvailableSkinMasks, TArray<FName> SelectedSkinMasks);
+#pragma endregion
+
+#pragma region UpdateEquipment
+DECLARE_EVENT_ThreeParams(UHCharacterCustomizationComponent, FOnPreUpdateEquipment, UHCharacterCustomizationComponent*, FEquipmentProfile, TArray<USkeletalMeshComponent*>);
 #pragma endregion
 
 #pragma region ApplyCustomizationProfile
@@ -71,7 +80,7 @@ class PROJECTH_API UHCharacterCustomizationComponent : public UActorComponent
 	GENERATED_BODY()
 
 public:	
-	UHCharacterCustomizationComponent();
+	UHCharacterCustomizationComponent(const FObjectInitializer& ObjectInitializer);
 
 public:
 	virtual void InitializeComponent() override;
@@ -83,14 +92,16 @@ protected:
 
 public:
 	UFUNCTION(BlueprintCallable)
+	TArray<TSubclassOf<UCharacterCustomizationDataAsset>> GetHiddenCDAs();
+	
+	UFUNCTION(BlueprintCallable)
 	TMap<FName, FSlotTexture_SkinBodyAndHead> GetCurrentSkinTextureSets();
 
 	UFUNCTION(BlueprintCallable)
 	FSlotMaterial_Eyes GetCurrentEyesMaterialSet();
 
 	UFUNCTION(BlueprintCallable)
-	TArray<UCharacterCustomizationDataAsset*> GetHiddenCDAs();
-
+	bool IsCDAVisible(const UCharacterCustomizationDataAsset* CDA) const;
 protected:
 	UPROPERTY(BlueprintReadWrite, EditDefaultsOnly, Category = "CustomizationProfile")
 	FAnatomyProfile FallbackAnatomyProfile;
@@ -111,14 +122,29 @@ protected:
 	TMap<EAnatomy, FCustomizationProfile> CachedCustomizationProfiles;
 
 	UPROPERTY(Transient)
-	TArray<UMaterialInstanceDynamic*> BodyMIDs;
+	TArray<UMaterialInstanceDynamic*> BasebodyBodySkinMIDs;
 	
 	UPROPERTY(Transient)
-	TArray<UMaterialInstanceDynamic*> HeadMIDs;
+	TArray<UMaterialInstanceDynamic*> BasebodyHeadSkinMIDs;
 
 	UPROPERTY(Transient)
 	TArray<UMaterialInstanceDynamic*> EyesMIDs;
+	
+	UPROPERTY(Transient)
+	TArray<UMaterialInstanceDynamic*> HairstyleMIDs;
+	
+	UPROPERTY(Transient)
+	TArray<UMaterialInstanceDynamic*> ApparelMIDs;
+	
+	UPROPERTY(Transient)
+	TArray<UMaterialInstanceDynamic*> AttachmentsMIDs;	
 
+	UPROPERTY(Transient)
+	TArray<UMaterialInstanceDynamic*> EquipmentMIDs;
+
+	UPROPERTY(Transient)
+	TArray<UMaterialInstanceDynamic*> GroomMIDs;	
+	
 	UPROPERTY(Transient)
 	TArray<FName> ActiveAdditionalMorphTargets_Hairstyle;
 
@@ -135,7 +161,7 @@ protected:
 	TArray<FName> ActiveSkinTextureSetsParameterNames_Head;
 
 	UPROPERTY(Transient)
-	TArray<UCharacterCustomizationDataAsset*> HiddenCDAs;
+	TArray<TSubclassOf<UCharacterCustomizationDataAsset>> HiddenCDAs;
 	/** ~ Transient */
 
 protected:
@@ -172,10 +198,11 @@ private:
 	void InitializeCustomizationProfile_Internal();
 
 private:
-	void InitializeCDASkeletalComponent(USkeletalMeshComponent* TargetSkeletalmeshComponent, UCDA_SkeletalMesh* CDASkeletalMesh, int MaterialVariantIndex, 
-										TArray<USkeletalMeshComponent*> SkeletalMeshComponents, TArray<UMaterialInstanceDynamic*> GlobalMIDs, TArray<FName> ActiveAdditionalMorphTargets,
-										TMap<FName, float> ScalarParameters, TMap<FName, FHDRColor> HDRVectorParameters, FName SocketName, FTransform RelativeTransform, int CDAProfilesIndex);
+	USkeletalMeshComponent* AddCDASkeletalComponent(UCDA_SkeletalMesh* CDASkeletalMesh, int MaterialVariantIndex,
+										TArray<USkeletalMeshComponent*> SkeletalMeshComponents, TArray<UMaterialInstanceDynamic*> GlobalMIDs, TArray<FName> ActiveAdditionalMorphTargets,								   
+										TArray<FHNamedFloat> ScalarParameters, TArray<FNamedHDRColor> HDRVectorParameters, FName SocketName, FTransform RelativeTransform, int CDAProfilesIndex);
 
+	bool CleanCDAs(TArray<UPrimitiveComponent*> PrimitiveComponents, TArray<UMaterialInstanceDynamic*> GlobalMIDs, TArray<FName> ActiveAdditionalMorphTargets, int CDACount, FString DebugName);
 private:
 		void CreateMIDFromMaterialVariant(UPrimitiveComponent* PrimitiveComponent, TArray<FMaterialVariants> MaterialVariants, int MaterialVariantIndex, TArray<UMaterialInstanceDynamic*> GlobalMIDs, TArray<FHNamedFloat> ScalarParameters, TArray<FNamedHDRColor> HDRVectorParameters);
 		void CreateMIDFromSlotAndMaterial(UMeshComponent* MeshComponent, FName MaterialSlotName, UMaterialInterface* SourceMaterial, TArray<UMaterialInstanceDynamic*>& MIDs);
@@ -191,8 +218,12 @@ protected:
 	FString ProfileNameFromSaves;
 
 public:
-	FOnSkippedInitializeCDA OnSkippedInitializeCDA;
-	FOnSkippedInitializeCDASkeletaMeshlComponent OnSkippedInitializeCDASkeletalMeshComponent;
+	FOnSkippedCDA OnSkippedCDA;
+	FOnPostAddedCDA OnPostAddedCDA;
+	FOnSkippedCDASkeleta OnSkippedCDASkeletal;
+	FOnPostAddedCDASkeletal OnPostAddedCDASkeletal;
+	FOnSkippedCDAApparelProfile OnSkippedCDAAparelProfile;
+	FOnPostAddedCDAApparelProfile OnPostAddedCDAApparelProfile;
 	
 
 #pragma endregion
@@ -384,11 +415,26 @@ public:
 #pragma region UpdateApparel
 public:
 	void UpdateApparel();
+	void UpdateApparelBaseboyMasks();
 	void UpdateAdvancedCDAOptions();
 
 public:
 	FOnPreUpdateApparel OnPreUpdateApparel;
 	FOnPostUpdateApparel OnPostUpdateApparel;
-
+	FOnPostUpdateApparelBasebodyMasks OnPostUpdateApparelBasebodyMasks;
 	FOnPostUpdateAdvancedCDAOptions OnUpdateAdvancedCDAOptions;
+
+protected:
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+	TArray<FName> SkinMasks;
+
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+	FName ShowAlternativeTexturesParameterName;
+private:
+	UTexture* DefaultTexture;
+#pragma endregion
+
+#pragma region UpdateEquipment
+
+#pragma endregion
 };

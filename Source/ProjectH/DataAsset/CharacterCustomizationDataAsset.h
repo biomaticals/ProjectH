@@ -58,10 +58,15 @@ UCLASS(Blueprintable, BlueprintType)
 class PROJECTH_API UCDA_Apparel: public UCDA_SkeletalMesh
 {
 	GENERATED_BODY()
-	
+public:
+	FORCEINLINE FName ToMaterialParameterName() const
+	{
+		return GetClass()->GetFName();
+	}
+
 public:
 	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Mesh")
-	UTexture2D* BasebodyMast;
+	UTexture2D* BasebodyMask;
 
 	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Mesh")
 	bool UseAlternativeSkinTexture;

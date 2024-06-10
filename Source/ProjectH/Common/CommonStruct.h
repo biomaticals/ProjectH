@@ -120,13 +120,7 @@ struct FCDA_GroomProfile
 	GENERATED_USTRUCT_BODY()
 
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
-	TArray<UCDA_Groom*> DataAssets;
-
-	UPROPERTY(BlueprintReadWrite, EditAnywhere)
-	TArray<FHNamedFloat> GlobalScalarParamters;
-
-	UPROPERTY(BlueprintReadWrite, EditAnywhere)
-	TArray<FNamedHDRColor> GlobalHDRVectorParamters;
+	UCDA_Groom* DataAsset;
 };
 
 USTRUCT(BlueprintType)
@@ -318,6 +312,11 @@ struct FCDA_ApparelProfile
 		: MaterialVariantIndex(0)
 	{
 
+	}
+
+	FORCEINLINE bool operator==(const FCDA_ApparelProfile& Other) const
+	{
+		return DataAsset == Other.DataAsset && MaterialVariantIndex == Other.MaterialVariantIndex;
 	}
 
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
