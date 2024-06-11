@@ -25,6 +25,8 @@ DECLARE_EVENT_ThreeParams(UHCharacterCustomizationComponent, FOnSkippedCDAAppare
 DECLARE_EVENT_FourParams(UHCharacterCustomizationComponent, FOnPostAddedCDAApparelProfile, UHCharacterCustomizationComponent*, FCDA_ApparelProfile, USkeletalMeshComponent*, int);
 DECLARE_EVENT_ThreeParams(UHCharacterCustomizationComponent, FOnSkippedCDAEquipmentProfile, UHCharacterCustomizationComponent*, FCDA_EquipmentProfile, int)
 DECLARE_EVENT_FourParams(UHCharacterCustomizationComponent, FOnPostAddedCDAEquipmentProfile, UHCharacterCustomizationComponent*, FCDA_EquipmentProfile, USkeletalMeshComponent*, int);
+DECLARE_EVENT_ThreeParams(UHCharacterCustomizationComponent, FOnSkippedCDAHairstyleProfile, UHCharacterCustomizationComponent*, FCDA_HairstyleProfile, int)
+DECLARE_EVENT_FourParams(UHCharacterCustomizationComponent, FOnPostAddedCDAHairstyleProfile, UHCharacterCustomizationComponent*, FCDA_HairstyleProfile, USkeletalMeshComponent*, int);
  #pragma endregion
 
 #pragma region LoadAsset
@@ -55,6 +57,11 @@ DECLARE_EVENT_ThreeParams(UHCharacterCustomizationComponent, FOnPostUpdateAppare
 #pragma region UpdateEquipment
 DECLARE_EVENT_ThreeParams(UHCharacterCustomizationComponent, FOnPreUpdateEquipment, UHCharacterCustomizationComponent*, FEquipmentProfile, TArray<USkeletalMeshComponent*>);
 DECLARE_EVENT_FiveParams(UHCharacterCustomizationComponent, FOnPostUpdateEquipment, UHCharacterCustomizationComponent*, FEquipmentProfile, TArray<FCDA_EquipmentProfile> AddedCDAEquipProfiles, TArray<USkeletalMeshComponent*> EquipmentMeshComponents, TArray<FCDA_EquipmentProfile> SkippedCDAEquipmentProfiles);
+#pragma endregion
+
+#pragma region UpdateHairstype
+DECLARE_EVENT_ThreeParams(UHCharacterCustomizationComponent, FOnPreUpdateHairstyle, UHCharacterCustomizationComponent*, FHairstyleProfile, TArray<USkeletalMeshComponent*>);
+DECLARE_EVENT_FiveParams(UHCharacterCustomizationComponent, FOnPostUpdateHairstyle, UHCharacterCustomizationComponent*, FHairstyleProfile, TArray<FCDA_HairstyleProfile> AddedCDAHairstyleProfiles, TArray<USkeletalMeshComponent*> HairstyleMeshComponents, TArray<FCDA_HairstyleProfile> SkippedCDAHairstyleProfiles);
 #pragma endregion
 
 #pragma region ApplyCustomizationProfile
@@ -152,10 +159,10 @@ protected:
 	TArray<FName> ActiveAdditionalMorphTargets_Hairstyle;
 
 	UPROPERTY(Transient)
-	TArray<FName> ActiveAdditionalMorpTargets_Apparel;
+	TArray<FName> ActiveAdditionalMorphTargets_Apparel;
 
 	UPROPERTY(Transient)
-	TArray<FName> ActiveAdditionalMorpTargets_Equipment;
+	TArray<FName> ActiveAdditionalMorphTargets_Equipment;
 
 	UPROPERTY(Transient)
 	TArray<FName> ActiveSkinTextureSetsParameterNames_Body;
@@ -229,7 +236,8 @@ public:
 	FOnPostAddedCDAApparelProfile OnPostAddedCDAApparelProfile;
 	FOnSkippedCDAEquipmentProfile OnSkippedCDAEquipmentProfile;
 	FOnPostAddedCDAEquipmentProfile OnPostAddedCDAEquipmentProfile;
-
+	FOnSkippedCDAHairstyleProfile OnSkippedCDAHairstyleProfile;
+	FOnPostAddedCDAHairstyleProfile OnAddedCDAHairstyleProfile;
 #pragma endregion
 
 #pragma region LoadAssets
@@ -446,4 +454,12 @@ public:
 	FOnPreUpdateEquipment OnPreUpdateEquipment;
 	FOnPostUpdateEquipment OnPostUpdateEquipment;
 #pragma endregion
+
+#pragma region UpdateHairstype
+public:
+	void UpdateHairstyle();
+
+public:
+	FOnPreUpdateHairstyle OnPreUpdateHairstyle;
+	FOnPostUpdateHairstyle OnPostUpdateHairstyle;
 };

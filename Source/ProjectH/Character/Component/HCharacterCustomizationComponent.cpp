@@ -569,6 +569,8 @@ void UHCharacterCustomizationComponent::ApplyCustomizationProfile_Internal(FCust
 
 	UpdateBasebody();
 	UpdateApparel();
+	UpdateEquipment();
+	UpdateHairstyle();
 }
 #pragma endregion
 
@@ -1245,25 +1247,25 @@ void UHCharacterCustomizationComponent::UpdateApparel()
 	TArray<FCDA_ApparelProfile> SkippedApparelProfiles;
 	TArray<FCDA_ApparelProfile> AddedApaarelProfiles;
 	FApparelProfile ApparelProfile = CurrentCustomizationProfile.Apparel;
-	if (CleanCDAs(ApparelMeshComponents_Primitive, ApparelMIDs, ActiveAdditionalMorpTargets_Apparel, CurrentCustomizationProfile.Apparel.DataAssets.Num(), "Apparel"))
+	if (CleanCDAs(ApparelMeshComponents_Primitive, ApparelMIDs, ActiveAdditionalMorphTargets_Apparel, CurrentCustomizationProfile.Apparel.DataAssets.Num(), "Apparel"))
 	{
 		for (int i = 0 ; i < CurrentCustomizationProfile.Apparel.DataAssets.Num() ; i ++)
 		{
 			if (USkeletalMeshComponent* NewSkeletalComponent = AddCDASkeletalComponent(ApparelProfile.DataAssets[i].DataAsset, ApparelProfile.DataAssets[i].MaterialVariantIndex,
-			ApparelMeshComponents, ApparelMIDs, ActiveAdditionalMorpTargets_Apparel, ApparelProfile.GlobalScalarParameters,
+			ApparelMeshComponents, ApparelMIDs, ActiveAdditionalMorphTargets_Apparel, ApparelProfile.GlobalScalarParameters,
 			ApparelProfile.GlobalHDRVectorParameters, "", FTransform::Identity, i))
 			{
 				if(OnPostAddedCDAApparelProfile.IsBound())
 					OnPostAddedCDAApparelProfile.Broadcast(this, CurrentCustomizationProfile.Apparel.DataAssets[i], NewSkeletalComponent, i);
 
-				AddedApaarelProfiles.AddUnique(CurrentCustomizationProfile.Apparel.DataAssets[i]);
+				AddedApaarelProfiles.AddUnique(ApparelProfile.DataAssets[i]);
 			}
 			else
 			{
 				if(OnSkippedCDAAparelProfile.IsBound())
 					OnSkippedCDAAparelProfile.Broadcast(this, CurrentCustomizationProfile.Apparel.DataAssets[i], i);
 
-				SkippedApparelProfiles.AddUnique(CurrentCustomizationProfile.Apparel.DataAssets[i]);
+				SkippedApparelProfiles.AddUnique(ApparelProfile.DataAssets[i]);
 			}	
 		}
 	}
@@ -1352,12 +1354,12 @@ void UHCharacterCustomizationComponent::UpdateEquipment()
 	TArray<FCDA_EquipmentProfile> SkippedEquipmentProfiles;
 	TArray<FCDA_EquipmentProfile> AddedEquipmentProfiles;
 	FEquipmentProfile EquipmentProfile = CurrentCustomizationProfile.Equipment;
-	if (CleanCDAs(EquipmentMeshComponents_Primitive, EquipmentMIDs, ActiveAdditionalMorpTargets_Equipment, CurrentCustomizationProfile.Equipment.DataAssets.Num(), "Equipment"))
+	if (CleanCDAs(EquipmentMeshComponents_Primitive, EquipmentMIDs, ActiveAdditionalMorphTargets_Equipment, CurrentCustomizationProfile.Equipment.DataAssets.Num(), "Equipment"))
 	{
 		for (int i = 0 ; i < CurrentCustomizationProfile.Equipment.DataAssets.Num(); i ++)
 		{
 			if (USkeletalMeshComponent* NewSkeletalMeshComponents = AddCDASkeletalComponent(EquipmentProfile.DataAssets[i].DataAsset,
-				EquipmentProfile.DataAssets[i].MaterialVariantIndex, EquipmentMeshComponents, EquipmentMIDs, ActiveAdditionalMorpTargets_Equipment,
+				EquipmentProfile.DataAssets[i].MaterialVariantIndex, EquipmentMeshComponents, EquipmentMIDs, ActiveAdditionalMorphTargets_Equipment,
 				EquipmentProfile.GlobalScalarParameters, EquipmentProfile.GlobalHDRVectorParameters, EquipmentProfile.DataAssets[i].ParentSocket, EquipmentProfile.DataAssets[i].RelativeTransform, i))
 			{
 				if (OnPostAddedCDAEquipmentProfile.IsBound())
@@ -1365,7 +1367,7 @@ void UHCharacterCustomizationComponent::UpdateEquipment()
 					OnPostAddedCDAEquipmentProfile.Broadcast(this, EquipmentProfile.DataAssets[i], NewSkeletalMeshComponents, i);
 				}
 
-				AddedEquipmentProfiles.AddUnique(EquipmentProfile.DataAssets[i]);
+				//AddedEquipmentProfiles.AddUnique(EquipmentProfile.DataAssets[i]);
 			}
 			else
 			{
@@ -1384,5 +1386,66 @@ void UHCharacterCustomizationComponent::UpdateEquipment()
 	if (OnPostUpdateEquipment.IsBound())
 	{
 		OnPostUpdateEquipment.Broadcast(this, EquipmentProfile, AddedEquipmentProfiles, EquipmentMeshComponents, SkippedEquipmentProfiles);
+	}
+}
+#pragma endregion
+
+#pragma region UpdateHairstyle
+void UHCharacterCustomizationComponent::UpdateHairstyle()
+{
+	if(CachedOwner == NULL)
+		return;
+
+	FHairstyleProfile HairstyleProfile = CurrentCustomizationProfile.Hairstyle;
+	TArray<USkeletalMeshComponent*> HairstyleMeshComponents = CachedOwner->GetHairstyleMeshComponents();
+
+	if (OnPreUpdateHairstyle.IsBound())
+	{
+		OnPreUpdateHairstyle.Broadcast(this, HairstyleProfile, HairstyleMeshComponents);
+	}
+
+	TArray<UPrimitiveComponent*> HairstyleMeshComponents_Primitive;
+	for (USkeletalMeshComponent* HairstyleMesh : HairstyleMeshComponents)
+	{
+		if (UPrimitiveComponent* HairstyleMesh_Primitive = Cast<UPrimitiveComponent>(HairstyleMesh))
+		{
+			HairstyleMeshComponents_Primitive.AddUnique(HairstyleMesh);
+		}
+	}
+
+	TArray<FCDA_HairstyleProfile> SkippedHairstyleProfiles;
+	TArray<FCDA_HairstyleProfile> AddedHairstyleProfiles;
+	if (CleanCDAs(HairstyleMeshComponents_Primitive, HairstyleMIDs, ActiveAdditionalMorphTargets_Hairstyle, CurrentCustomizationProfile.Hairstyle.DataAssets.Num(), "Hairstyle"))
+	{
+		for (int i = 0; i < CurrentCustomizationProfile.Hairstyle.DataAssets.Num(); i++)
+		{
+			if (USkeletalMeshComponent* NewSkeletalMeshComponents = AddCDASkeletalComponent(HairstyleProfile.DataAssets[i].DataAsset, -1, 
+			HairstyleMeshComponents, HairstyleMIDs, ActiveAdditionalMorphTargets_Hairstyle, HairstyleProfile.GlobalScalarParameters, 
+				HairstyleProfile.GlobalHDRVectorParameters, "", FTransform::Identity, i))
+			{
+				if (OnAddedCDAHairstyleProfile.IsBound())
+				{
+					OnAddedCDAHairstyleProfile.Broadcast(this, HairstyleProfile.DataAssets[i], NewSkeletalMeshComponents, i);
+				}
+
+				AddedHairstyleProfiles.AddUnique(HairstyleProfile.DataAssets[i]);
+			}
+			else
+			{
+				if (OnSkippedCDAHairstyleProfile.IsBound())
+				{
+					OnSkippedCDAHairstyleProfile.Broadcast(this, HairstyleProfile.DataAssets[i], i);
+				}
+
+				SkippedHairstyleProfiles.AddUnique(HairstyleProfile.DataAssets[i]);
+			}
+		}
+	}
+
+	UpdateLODSyncComponent();
+
+	if (OnPostUpdateHairstyle.IsBound())
+	{
+		OnPostUpdateHairstyle.Broadcast(this, HairstyleProfile, AddedHairstyleProfiles, HairstyleMeshComponents, SkippedHairstyleProfiles);
 	}
 }

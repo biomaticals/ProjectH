@@ -128,6 +128,13 @@ struct FCDA_HairstyleProfile
 {
 	GENERATED_USTRUCT_BODY()
 
+public:
+	FORCEINLINE bool operator==(const FCDA_HairstyleProfile& Other) const
+	{
+		return DataAsset == Other.DataAsset && ScalarParameters.Num() == Other.ScalarParameters.Num()&& HDRVectorParameters.Num() && Other.HDRVectorParameters.Num();
+	}
+
+public:
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
 	UCDA_Hairstyle* DataAsset;
 
@@ -267,10 +274,10 @@ struct FBasebodyProfile
 };
 
 USTRUCT(BlueprintType)
-struct FHairStyleProfile
+struct FHairstyleProfile
 {
 	GENERATED_USTRUCT_BODY()
-	FHairStyleProfile()
+	FHairstyleProfile()
 	{
 
 	};
@@ -349,10 +356,15 @@ USTRUCT(BlueprintType)
 struct FCDA_EquipmentProfile
 {
 	GENERATED_USTRUCT_BODY()
-	FCDA_EquipmentProfile()
-		
+	FCDA_EquipmentProfile()		
 	{
 
+	}
+
+	FORCEINLINE bool operator==(const FCDA_EquipmentProfile& Other) const
+	{
+		return DataAsset == Other.DataAsset && MaterialVariantIndex == Other.MaterialVariantIndex &&
+		ParentSocket == Other.ParentSocket && RelativeTransform.Equals(Other.RelativeTransform);
 	}
 
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
@@ -397,6 +409,11 @@ struct FCDA_AttachmentProfile
 	};
 
 public:
+	FORCEINLINE bool operator==(const FCDA_AttachmentProfile& Other) const
+	{
+		return DataAsset == Other.DataAsset && ParentSocket == Other.ParentSocket && RelativeTransform.Equals(Other.RelativeTransform);
+	}
+public:
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
 	UCDA_Attachment* DataAsset;
 
@@ -404,7 +421,7 @@ public:
 	FName ParentSocket;
 
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
-	FTransform RelativeTransfom;
+	FTransform RelativeTransform;
 };
 
 USTRUCT(BlueprintType)
@@ -444,7 +461,7 @@ public:
 	FBasebodyProfile Basebody;
 
 	UPROPERTY(BlueprintReadOnly, EditAnywhere)
-	FHairStyleProfile Hairstyle;
+	FHairstyleProfile Hairstyle;
 
 	UPROPERTY(BlueprintReadOnly, EditAnywhere)
 	FGroomProfile Groom;
