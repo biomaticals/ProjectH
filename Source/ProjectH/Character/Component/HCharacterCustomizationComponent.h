@@ -48,7 +48,8 @@ DECLARE_EVENT_TwoParams(UHCharacterCustomizationComponent, FOnPostUpdateBasebody
 DECLARE_EVENT_FourParams(UHCharacterCustomizationComponent, FOnPostUpdateSkinMaterials, UHCharacterCustomizationComponent*, FSkinProfile, TArray<UMaterialInstanceDynamic*>, TArray<UMaterialInstanceDynamic*>);
 DECLARE_EVENT_TwoParams(UHCharacterCustomizationComponent, FOnPostUpdateSkinTextureSets, UHCharacterCustomizationComponent*, TArray<FSlotTexture_SkinBodyAndHead>);
 DECLARE_EVENT_ThreeParams(UHCharacterCustomizationComponent, FOnPostUpdateEyesMaterials, UHCharacterCustomizationComponent*, FEyesProfile, TArray<UMaterialInstanceDynamic*>);
-DECLARE_EVENT_TwoParams(UHCharacterCustomizationComponent, FOnPostUpdateLODSyncComponent, UHCharacterCustomizationComponent*, ULODSyncComponent*); 
+DECLARE_EVENT_TwoParams(UHCharacterCustomizationComponent, FOnPostUpdateLODSyncComponent, UHCharacterCustomizationComponent*, ULODSyncComponent*);
+DECLARE_EVENT_FiveParams(UHCharacterCustomizationComponent, FOnPostUpdateMorphTargetOnAllMeshes, UHCharacterCustomizationComponent*, TArray<FHNamedFloat>, TArray<FName> ActiveAdditionalMorphTargets_Apparel, TArray<FName> ActiveAdditionalMorphTargets_Hairstyle, TArray<FName> ActiveAdditionalMorphTargets_Equipment);
 #pragma endregion
 
 #pragma region UpdateApparel
@@ -432,6 +433,7 @@ protected:
 	void UpdateSkinTextureSets(); 
 	void UpdateEyesMaterials();
 	void UpdateLODSyncComponent();
+	void UpdateMorphTargetsOnAllMeshes();
 
 public:
 	FOnPostUpdateBodyComponent OnPostUpdateBodyComponent;
@@ -443,6 +445,7 @@ public:
 	FOnPostUpdateSkinMaterials OnPostUpdateSkinMaterialSets;
 	FOnPostUpdateEyesMaterials OnPostUpdateEyesMaterialSets;
 	FOnPostUpdateLODSyncComponent OnPostUpdateLODSyncComponent;
+	FOnPostUpdateMorphTargetOnAllMeshes OnPostUpdateMorphTargetOnAllMeshes;
 #pragma endregion
 
 #pragma region UpdateApparel
@@ -492,4 +495,5 @@ public:
 public:
 	FOnPreUpdateAttachment OnPreUpdateAttachment;
 	FOnPostUpdateAttachment OnPostUpdateAttachment;
+#pragma endregion
 };

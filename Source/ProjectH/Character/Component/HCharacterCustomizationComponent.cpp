@@ -623,6 +623,8 @@ void UHCharacterCustomizationComponent::ApplyCustomizationProfile_Internal(FCust
 	UpdateApparel();
 	UpdateEquipment();
 	UpdateHairstyle();
+	UpdateAttachment();
+	UpdateMorphTargetsOnAllMeshes();
 }
 #pragma endregion
 
@@ -1270,6 +1272,58 @@ void UHCharacterCustomizationComponent::UpdateLODSyncComponent()
 	}
 }
 
+void UHCharacterCustomizationComponent::UpdateMorphTargetsOnAllMeshes()
+{
+	if(CachedOwner == NULL)
+		return;
+
+	USkeletalMeshComponent* BodyMeshComponent = CachedOwner->GetMesh();
+	if(BodyMeshComponent == NULL)
+		return;
+
+	TArray<USkeletalMeshComponent*> SkeletalMeshComponents;
+	CachedOwner->GetComponents<USkeletalMeshComponent>(SkeletalMeshComponents);
+
+	for (FHNamedFloat MorphTarget : CurrentCustomizationProfile.Basebody.MorphTargets)
+	{
+		for (USkeletalMeshComponent* SkeletalMeshComponent : SkeletalMeshComponents)
+		{
+			SkeletalMeshComponent->SetMorphTarget(MorphTarget.Name, MorphTarget.Value);
+		}
+	}
+
+	for (FName MorphTargetName : ActiveAdditionalMorphTargets_Apparel)
+	{
+		float Value = BodyMeshComponent->GetMorphTarget(MorphTargetName);
+		for (USkeletalMeshComponent* SkeletalMeshComponent : SkeletalMeshComponents)
+		{
+			SkeletalMeshComponent->SetMorphTarget(MorphTargetName, Value);
+		}
+	}
+
+	for (FName MorphTargetName : ActiveAdditionalMorphTargets_Hairstyle)
+	{
+		float Value = BodyMeshComponent->GetMorphTarget(MorphTargetName);
+		for (USkeletalMeshComponent* SkeletalMeshComponent : SkeletalMeshComponents)
+		{
+			SkeletalMeshComponent->SetMorphTarget(MorphTargetName, Value);
+		}
+	}
+
+	for (FName MorphTargetName : ActiveAdditionalMorphTargets_Equipment)
+	{
+		float Value = BodyMeshComponent->GetMorphTarget(MorphTargetName);
+		for (USkeletalMeshComponent* SkeletalMeshComponent : SkeletalMeshComponents)
+		{
+			SkeletalMeshComponent->SetMorphTarget(MorphTargetName, Value);
+		}
+	}
+
+	if (OnPostUpdateMorphTargetOnAllMeshes.IsBound())
+	{
+		OnPostUpdateMorphTargetOnAllMeshes.Broadcast(this, CurrentCustomizationProfile.Basebody.MorphTargets, ActiveAdditionalMorphTargets_Apparel, ActiveAdditionalMorphTargets_Hairstyle, ActiveAdditionalMorphTargets_Equipment);
+	}
+}
 #pragma endregion
 
 #pragma region UpdateApparel
