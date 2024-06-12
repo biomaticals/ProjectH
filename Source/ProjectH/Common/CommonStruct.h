@@ -473,7 +473,7 @@ public:
 	FEquipmentProfile Equipment;
 
 	UPROPERTY(BlueprintReadOnly, EditAnywhere)
-	FAttachmentProfile Attachments;
+	FAttachmentProfile Attachment;
 };
 
 USTRUCT(BlueprintType)

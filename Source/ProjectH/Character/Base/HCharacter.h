@@ -48,7 +48,7 @@ public:
 	TArray<USkeletalMeshComponent*> GetApparelMeshComponents();
 
 	UFUNCTION(BlueprintCallable, BlueprintPure)
-	TArray<USkeletalMeshComponent*> GetAttachmentMeshComponents();
+	TArray<UStaticMeshComponent*> GetAttachmentMeshComponents();
 
 	UFUNCTION(BlueprintCallable, BlueprintPure)
 	TArray<USkeletalMeshComponent*> GetEquipmentMeshComponents();
@@ -73,7 +73,7 @@ protected:
 	TArray<TObjectPtr<USkeletalMeshComponent>> ApparelMeshComponents;
 
 	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, SaveGame)
-	TArray<TObjectPtr<USkeletalMeshComponent>> AttachmentMeshComponents;
+	TArray<TObjectPtr<UStaticMeshComponent>> AttachmentMeshComponents;
 
 	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, SaveGame)
 	TArray<TObjectPtr<USkeletalMeshComponent>> EquipmentMeshComponents;

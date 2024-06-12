@@ -77,7 +77,7 @@ TArray<USkeletalMeshComponent*> AHCharacter::GetApparelMeshComponents()
 	return ApparelMeshComponents;
 }
 
-TArray<USkeletalMeshComponent*> AHCharacter::GetAttachmentMeshComponents()
+TArray<UStaticMeshComponent*> AHCharacter::GetAttachmentMeshComponents()
 {
 	return AttachmentMeshComponents;
 }

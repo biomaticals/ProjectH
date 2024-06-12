@@ -147,7 +147,7 @@ public:
 
 public:
 	UPROPERTY(BlueprintReadOnly, EditAnywhere)
-	UStaticMeshComponent* StaticMesh;
+	UStaticMesh* StaticMesh;
 };
 
 /**

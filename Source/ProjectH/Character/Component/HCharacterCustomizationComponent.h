@@ -18,15 +18,19 @@ class UPrimaryAssetLabel;
  
  #pragma region InitializeComponent
 DECLARE_EVENT_ThreeParams(UHCharacterCustomizationComponent, FOnSkippedCDA, UHCharacterCustomizationComponent*, UCharacterCustomizationDataAsset*, int); 
-DECLARE_EVENT_ThreeParams(UHCharacterCustomizationComponent, FOnSkippedCDASkeleta, UHCharacterCustomizationComponent*, UCDA_SkeletalMesh*, int);
+DECLARE_EVENT_ThreeParams(UHCharacterCustomizationComponent, FOnSkippedCDASkeletal, UHCharacterCustomizationComponent*, UCDA_SkeletalMesh*, int);
+DECLARE_EVENT_ThreeParams(UHCharacterCustomizationComponent, FOnSkippedCDAStaticMesh, UHCharacterCustomizationComponent*, UCDA_StaticMesh*, int);
 DECLARE_EVENT_FourParams(UHCharacterCustomizationComponent, FOnPostAddedCDA, UHCharacterCustomizationComponent*, UCharacterCustomizationDataAsset*, UMeshComponent*, int);
 DECLARE_EVENT_FourParams(UHCharacterCustomizationComponent, FOnPostAddedCDASkeletal, UHCharacterCustomizationComponent*, UCDA_SkeletalMesh*, USkeletalMeshComponent*, int);
+DECLARE_EVENT_FourParams(UHCharacterCustomizationComponent, FOnPostAddedCDAStaticMesh, UHCharacterCustomizationComponent*, UCDA_StaticMesh*, UStaticMeshComponent*, int);
 DECLARE_EVENT_ThreeParams(UHCharacterCustomizationComponent, FOnSkippedCDAApparelProfile, UHCharacterCustomizationComponent*, FCDA_ApparelProfile, int)
 DECLARE_EVENT_FourParams(UHCharacterCustomizationComponent, FOnPostAddedCDAApparelProfile, UHCharacterCustomizationComponent*, FCDA_ApparelProfile, USkeletalMeshComponent*, int);
 DECLARE_EVENT_ThreeParams(UHCharacterCustomizationComponent, FOnSkippedCDAEquipmentProfile, UHCharacterCustomizationComponent*, FCDA_EquipmentProfile, int)
 DECLARE_EVENT_FourParams(UHCharacterCustomizationComponent, FOnPostAddedCDAEquipmentProfile, UHCharacterCustomizationComponent*, FCDA_EquipmentProfile, USkeletalMeshComponent*, int);
 DECLARE_EVENT_ThreeParams(UHCharacterCustomizationComponent, FOnSkippedCDAHairstyleProfile, UHCharacterCustomizationComponent*, FCDA_HairstyleProfile, int)
 DECLARE_EVENT_FourParams(UHCharacterCustomizationComponent, FOnPostAddedCDAHairstyleProfile, UHCharacterCustomizationComponent*, FCDA_HairstyleProfile, USkeletalMeshComponent*, int);
+DECLARE_EVENT_ThreeParams(UHCharacterCustomizationComponent, FOnSkippedCDAAttachmentProfile, UHCharacterCustomizationComponent*, FCDA_AttachmentProfile, int)
+DECLARE_EVENT_FourParams(UHCharacterCustomizationComponent, FOnPostAddedCDAAttachmentProfile, UHCharacterCustomizationComponent*, FCDA_AttachmentProfile, UStaticMeshComponent*, int);
  #pragma endregion
 
 #pragma region LoadAsset
@@ -62,6 +66,11 @@ DECLARE_EVENT_FiveParams(UHCharacterCustomizationComponent, FOnPostUpdateEquipme
 #pragma region UpdateHairstype
 DECLARE_EVENT_ThreeParams(UHCharacterCustomizationComponent, FOnPreUpdateHairstyle, UHCharacterCustomizationComponent*, FHairstyleProfile, TArray<USkeletalMeshComponent*>);
 DECLARE_EVENT_FiveParams(UHCharacterCustomizationComponent, FOnPostUpdateHairstyle, UHCharacterCustomizationComponent*, FHairstyleProfile, TArray<FCDA_HairstyleProfile> AddedCDAHairstyleProfiles, TArray<USkeletalMeshComponent*> HairstyleMeshComponents, TArray<FCDA_HairstyleProfile> SkippedCDAHairstyleProfiles);
+#pragma endregion
+
+#pragma region UpdateAttachments
+DECLARE_EVENT_ThreeParams(UHCharacterCustomizationComponent, FOnPreUpdateAttachment, UHCharacterCustomizationComponent*, FAttachmentProfile, TArray<UStaticMeshComponent*>);
+DECLARE_EVENT_FiveParams(UHCharacterCustomizationComponent, FOnPostUpdateAttachment, UHCharacterCustomizationComponent*, FAttachmentProfile, TArray<FCDA_AttachmentProfile> AddedCDAAttachmentProfiles, TArray<UStaticMeshComponent*> AttachmentsMeshComponents, TArray<FCDA_AttachmentProfile> SkippedCDAAttachmentProfiles);
 #pragma endregion
 
 #pragma region ApplyCustomizationProfile
@@ -164,6 +173,9 @@ protected:
 	UPROPERTY(Transient)
 	TArray<FName> ActiveAdditionalMorphTargets_Equipment;
 
+		UPROPERTY(Transient)
+	TArray<FName> ActiveAdditionalMorphTargets_Attachment;
+
 	UPROPERTY(Transient)
 	TArray<FName> ActiveSkinTextureSetsParameterNames_Body;
 
@@ -212,6 +224,10 @@ private:
 										TArray<USkeletalMeshComponent*> SkeletalMeshComponents, TArray<UMaterialInstanceDynamic*> GlobalMIDs, TArray<FName> ActiveAdditionalMorphTargets,								   
 										TArray<FHNamedFloat> ScalarParameters, TArray<FNamedHDRColor> HDRVectorParameters, FName SocketName, FTransform RelativeTransform, int CDAProfilesIndex);
 
+	UStaticMeshComponent* AddCDAStaticMeshComponent(UCDA_StaticMesh* CDAStaticMesh, int MaterialVariantIndex,
+										TArray<UStaticMeshComponent*> StaticMeshComponents, TArray<UMaterialInstanceDynamic*> GlobalMIDs,
+										TArray<FHNamedFloat> ScalarParameters, TArray<FNamedHDRColor> HDRVectorParameters, FName SocketName, FTransform RelativeTransform, int CDAProfilesIndex);
+
 	bool CleanCDAs(TArray<UPrimitiveComponent*> PrimitiveComponents, TArray<UMaterialInstanceDynamic*> GlobalMIDs, TArray<FName> ActiveAdditionalMorphTargets, int CDACount, FString DebugName);
 private:
 		void CreateMIDFromMaterialVariant(UPrimitiveComponent* PrimitiveComponent, TArray<FMaterialVariants> MaterialVariants, int MaterialVariantIndex, TArray<UMaterialInstanceDynamic*> GlobalMIDs, TArray<FHNamedFloat> ScalarParameters, TArray<FNamedHDRColor> HDRVectorParameters);
@@ -230,14 +246,19 @@ protected:
 public:
 	FOnSkippedCDA OnSkippedCDA;
 	FOnPostAddedCDA OnPostAddedCDA;
-	FOnSkippedCDASkeleta OnSkippedCDASkeletal;
+	FOnSkippedCDASkeletal OnSkippedCDASkeletal;
 	FOnPostAddedCDASkeletal OnPostAddedCDASkeletal;
+	FOnSkippedCDAStaticMesh OnSkippedCDAStaticMesh;
+	FOnPostAddedCDAStaticMesh OnPostAddedCDAStaticMesh;
+		
 	FOnSkippedCDAApparelProfile OnSkippedCDAAparelProfile;
 	FOnPostAddedCDAApparelProfile OnPostAddedCDAApparelProfile;
 	FOnSkippedCDAEquipmentProfile OnSkippedCDAEquipmentProfile;
 	FOnPostAddedCDAEquipmentProfile OnPostAddedCDAEquipmentProfile;
 	FOnSkippedCDAHairstyleProfile OnSkippedCDAHairstyleProfile;
 	FOnPostAddedCDAHairstyleProfile OnAddedCDAHairstyleProfile;
+	FOnSkippedCDAAttachmentProfile OnSkippedCDAAttachmentProfile;
+	FOnPostAddedCDAAttachmentProfile OnPostAddedCDAAttachmentProfile;
 #pragma endregion
 
 #pragma region LoadAssets
@@ -462,4 +483,13 @@ public:
 public:
 	FOnPreUpdateHairstyle OnPreUpdateHairstyle;
 	FOnPostUpdateHairstyle OnPostUpdateHairstyle;
+#pragma endregion
+
+#pragma region UpdateAttachments
+public:
+	void UpdateAttachment();
+
+public:
+	FOnPreUpdateAttachment OnPreUpdateAttachment;
+	FOnPostUpdateAttachment OnPostUpdateAttachment;
 };

@@ -79,7 +79,7 @@ TArray<TSubclassOf<UCharacterCustomizationDataAsset>> UHCharacterCustomizationCo
 			LHiddenCDAs.Append(Asset.DataAsset->HiddenCCDAClasses);
 	}
 
-	for (const FCDA_AttachmentProfile Asset : CurrentCustomizationProfile.Attachments.DataAssets)
+	for (const FCDA_AttachmentProfile Asset : CurrentCustomizationProfile.Attachment.DataAssets)
 	{
 		if (Asset.DataAsset->HiddenCCDAClasses.Num())
 			LHiddenCDAs.Append(Asset.DataAsset->HiddenCCDAClasses);
@@ -352,6 +352,58 @@ USkeletalMeshComponent* UHCharacterCustomizationComponent::AddCDASkeletalCompone
 
 	return NewSkeletalMeshComponent;
 }
+
+UStaticMeshComponent* UHCharacterCustomizationComponent::AddCDAStaticMeshComponent(UCDA_StaticMesh* CDAStaticMesh, int MaterialVariantIndex,
+	TArray<UStaticMeshComponent*> StaticMeshComponents, TArray<UMaterialInstanceDynamic*> GlobalMIDs,
+	TArray<FHNamedFloat> ScalarParameters, TArray<FNamedHDRColor> HDRVectorParameters, FName SocketName, FTransform RelativeTransform, int CDAProfilesIndex)
+{
+	if (CachedOwner == NULL)
+		return nullptr;
+
+	USkeletalMeshComponent* BodyComponent = CachedOwner->GetMesh();
+	if (BodyComponent == NULL)
+		return nullptr;
+
+	if (CDAStaticMesh == NULL || CDAStaticMesh->IsValidLowLevel() == false)
+	{
+		if (OnSkippedCDA.IsBound())
+			OnSkippedCDA.Broadcast(this, CDAStaticMesh, MaterialVariantIndex);
+
+		if (OnSkippedCDAStaticMesh.IsBound())
+			OnSkippedCDAStaticMesh.Broadcast(this, CDAStaticMesh, MaterialVariantIndex);
+	}
+
+	UStaticMeshComponent* NewStaticMeshComponent = Cast<UStaticMeshComponent>(CachedOwner->AddComponentByClass(UStaticMeshComponent::StaticClass(), true, RelativeTransform, false));
+	StaticMeshComponents.AddUnique(NewStaticMeshComponent);
+
+	NewStaticMeshComponent->RegisterComponent();
+	CachedOwner->AddInstanceComponent(NewStaticMeshComponent);
+
+	NewStaticMeshComponent->AttachToComponent(BodyComponent, FAttachmentTransformRules::SnapToTargetNotIncludingScale, SocketName);
+	NewStaticMeshComponent->SetRelativeTransform(RelativeTransform);
+
+	if (CDAStaticMesh->StaticMesh)
+	{
+		NewStaticMeshComponent->SetStaticMesh(CDAStaticMesh->StaticMesh);
+		
+		CreateMIDFromMaterialVariant(NewStaticMeshComponent, CDAStaticMesh->MaterialVariants, MaterialVariantIndex, GlobalMIDs, ScalarParameters, HDRVectorParameters);
+	}
+
+
+
+	if (OnPostAddedCDA.IsBound())
+	{
+		OnPostAddedCDA.Broadcast(this, CDAStaticMesh, NewStaticMeshComponent, CDAProfilesIndex);
+	}
+
+	if (OnPostAddedCDAStaticMesh.IsBound())
+	{
+		OnPostAddedCDAStaticMesh.Broadcast(this, CDAStaticMesh, NewStaticMeshComponent, CDAProfilesIndex);
+	}
+
+	return NewStaticMeshComponent;
+}
+
 
 bool UHCharacterCustomizationComponent::CleanCDAs(TArray<UPrimitiveComponent*> PrimitiveComponents, TArray<UMaterialInstanceDynamic*> GlobalMIDs, TArray<FName> ActiveAdditionalMorphTargets, int CDACount, FString DebugName)
 {
@@ -1174,17 +1226,17 @@ void UHCharacterCustomizationComponent::UpdateLODSyncComponent()
 	LODSyncComponent->ComponentsToSync.Empty();
 	LODSyncComponent->CustomLODMapping.Empty();
 
-	TArray<USkeletalMeshComponent*> NewLODDriverMeshComponents;
+	TArray<UMeshComponent*> NewLODDriverMeshComponents;
 	NewLODDriverMeshComponents.AddUnique(CachedOwner->GetMesh());
 	NewLODDriverMeshComponents.AddUnique(CachedOwner->GetHeadMeshComponent());
 	
-	for (USkeletalMeshComponent* NewLODDriverMeshComponent : NewLODDriverMeshComponents)
+	for (UMeshComponent* NewLODDriverMeshComponent : NewLODDriverMeshComponents)
 	{
 		FComponentSync NewComponentSync(NewLODDriverMeshComponent->GetFName(), ESyncOption::Drive);
 		LODSyncComponent->ComponentsToSync.Add(NewComponentSync);
 	}
 
-	TArray<USkeletalMeshComponent*> NewLODPassiveMeshComponents;
+	TArray<UMeshComponent*> NewLODPassiveMeshComponents;
 	NewLODPassiveMeshComponents.Append(CachedOwner->GetHairstyleMeshComponents());
 	NewLODPassiveMeshComponents.Append(CachedOwner->GetAttachmentMeshComponents());
 	NewLODPassiveMeshComponents.Append(CachedOwner->GetEquipmentMeshComponents());
@@ -1192,20 +1244,20 @@ void UHCharacterCustomizationComponent::UpdateLODSyncComponent()
 	if(bUseSkeletalMerging)
 		NewLODPassiveMeshComponents.Append(CachedOwner->GetApparelMeshComponents());
 	
-	for (USkeletalMeshComponent* NewLODPassiveMeshComponent : NewLODPassiveMeshComponents)
+	for (UMeshComponent* NewLODPassiveMeshComponent : NewLODPassiveMeshComponents)
 	{
 		FComponentSync NewComponentSync(NewLODPassiveMeshComponent->GetFName(), ESyncOption::Passive);
 		LODSyncComponent->ComponentsToSync.Add(NewComponentSync);
 	}
 	
-	TArray<USkeletalMeshComponent*> New4LODMeshComponents;
+	TArray<UMeshComponent*> New4LODMeshComponents;
 	New4LODMeshComponents.AddUnique(CachedOwner->GetMesh());
 	New4LODMeshComponents.Append(CachedOwner->GetAttachmentMeshComponents());
 	New4LODMeshComponents.Append(CachedOwner->GetEquipmentMeshComponents());
 	if(bUseSkeletalMerging)
 		New4LODMeshComponents.Append(CachedOwner->GetApparelMeshComponents());
 	
-	for (USkeletalMeshComponent* New4LODMeshComponent : New4LODMeshComponents)
+	for (UMeshComponent* New4LODMeshComponent : New4LODMeshComponents)
 	{
 		FLODMappingData CustomLODMappingData;
 		CustomLODMappingData.Mapping = {0, 0, 1, 1, 2, 2, 3, 3};
@@ -1447,5 +1499,66 @@ void UHCharacterCustomizationComponent::UpdateHairstyle()
 	if (OnPostUpdateHairstyle.IsBound())
 	{
 		OnPostUpdateHairstyle.Broadcast(this, HairstyleProfile, AddedHairstyleProfiles, HairstyleMeshComponents, SkippedHairstyleProfiles);
+	}
+}
+#pragma endregion
+
+#pragma region
+void UHCharacterCustomizationComponent::UpdateAttachment()
+{
+	if (CachedOwner == NULL)
+		return;
+
+	FAttachmentProfile AttachmentProfile = CurrentCustomizationProfile.Attachment;
+	TArray<UStaticMeshComponent*> AttachmentMeshComponents = CachedOwner->GetAttachmentMeshComponents();
+
+	if (OnPreUpdateAttachment.IsBound())
+	{
+		OnPreUpdateAttachment.Broadcast(this, AttachmentProfile, AttachmentMeshComponents);
+	}
+
+	TArray<UPrimitiveComponent*> AttachmentMeshComponents_Primitive;
+	for (UStaticMeshComponent* AttachmentMesh : AttachmentMeshComponents)
+	{
+		if (UPrimitiveComponent* AttachmentMesh_Primitive = Cast<UPrimitiveComponent>(AttachmentMesh))
+		{
+			AttachmentMeshComponents_Primitive.AddUnique(AttachmentMesh);
+		}
+	}
+
+	TArray<FCDA_AttachmentProfile> SkippedAttachmentProfiles;
+	TArray<FCDA_AttachmentProfile> AddedAttachmentProfiles;
+	if (CleanCDAs(AttachmentMeshComponents_Primitive, AttachmentsMIDs, ActiveAdditionalMorphTargets_Attachment, AttachmentProfile.DataAssets.Num(), "Attachment"))
+	{
+		for (int i = 0; i < AttachmentProfile.DataAssets.Num(); i++)
+		{
+			if (UStaticMeshComponent* NewStaticMeshComponent = AddCDAStaticMeshComponent(AttachmentProfile.DataAssets[i].DataAsset, -1,
+				AttachmentMeshComponents, AttachmentsMIDs, AttachmentProfile.GlobalScalarParameters,
+				AttachmentProfile.GlobalHDRVectorParameters, AttachmentProfile.DataAssets[i].ParentSocket, AttachmentProfile.DataAssets[i].RelativeTransform, i))
+			{
+				if (OnPostAddedCDAAttachmentProfile.IsBound())
+				{
+					OnPostAddedCDAAttachmentProfile.Broadcast(this, AttachmentProfile.DataAssets[i], NewStaticMeshComponent, i);
+				}
+
+				AddedAttachmentProfiles.AddUnique(AttachmentProfile.DataAssets[i]);
+			}
+			else
+			{
+				if (OnSkippedCDAAttachmentProfile.IsBound())
+				{
+					OnSkippedCDAAttachmentProfile.Broadcast(this, AttachmentProfile.DataAssets[i], i);
+				}
+
+				SkippedAttachmentProfiles.AddUnique(AttachmentProfile.DataAssets[i]);
+			}
+		}
+	}
+
+	UpdateLODSyncComponent();
+
+	if (OnPostUpdateAttachment.IsBound())
+	{
+		OnPostUpdateAttachment.Broadcast(this, AttachmentProfile, AddedAttachmentProfiles, AttachmentMeshComponents, SkippedAttachmentProfiles);
 	}
 }
