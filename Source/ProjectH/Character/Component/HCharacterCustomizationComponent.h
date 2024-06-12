@@ -50,6 +50,7 @@ DECLARE_EVENT_TwoParams(UHCharacterCustomizationComponent, FOnPostUpdateSkinText
 DECLARE_EVENT_ThreeParams(UHCharacterCustomizationComponent, FOnPostUpdateEyesMaterials, UHCharacterCustomizationComponent*, FEyesProfile, TArray<UMaterialInstanceDynamic*>);
 DECLARE_EVENT_TwoParams(UHCharacterCustomizationComponent, FOnPostUpdateLODSyncComponent, UHCharacterCustomizationComponent*, ULODSyncComponent*);
 DECLARE_EVENT_FiveParams(UHCharacterCustomizationComponent, FOnPostUpdateMorphTargetOnAllMeshes, UHCharacterCustomizationComponent*, TArray<FHNamedFloat>, TArray<FName> ActiveAdditionalMorphTargets_Apparel, TArray<FName> ActiveAdditionalMorphTargets_Hairstyle, TArray<FName> ActiveAdditionalMorphTargets_Equipment);
+DECLARE_EVENT_ThreeParams(UHCharacterCustomizationComponent, FOnPostUpdateSkeletalMerging, UHCharacterCustomizationComponent*, bool, USkeletalMeshComponent* MergedBodyComponent);
 #pragma endregion
 
 #pragma region UpdateApparel
@@ -434,6 +435,7 @@ protected:
 	void UpdateEyesMaterials();
 	void UpdateLODSyncComponent();
 	void UpdateMorphTargetsOnAllMeshes();
+	void UpdateSkeletalMerging();
 
 public:
 	FOnPostUpdateBodyComponent OnPostUpdateBodyComponent;
@@ -446,6 +448,7 @@ public:
 	FOnPostUpdateEyesMaterials OnPostUpdateEyesMaterialSets;
 	FOnPostUpdateLODSyncComponent OnPostUpdateLODSyncComponent;
 	FOnPostUpdateMorphTargetOnAllMeshes OnPostUpdateMorphTargetOnAllMeshes;
+	FOnPostUpdateSkeletalMerging OnPostUpdateSkeletalMerging;
 #pragma endregion
 
 #pragma region UpdateApparel

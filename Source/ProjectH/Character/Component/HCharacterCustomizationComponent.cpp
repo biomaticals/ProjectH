@@ -1324,6 +1324,48 @@ void UHCharacterCustomizationComponent::UpdateMorphTargetsOnAllMeshes()
 		OnPostUpdateMorphTargetOnAllMeshes.Broadcast(this, CurrentCustomizationProfile.Basebody.MorphTargets, ActiveAdditionalMorphTargets_Apparel, ActiveAdditionalMorphTargets_Hairstyle, ActiveAdditionalMorphTargets_Equipment);
 	}
 }
+
+void UHCharacterCustomizationComponent::UpdateSkeletalMerging()
+{
+	if(CachedOwner == NULL)
+		return;
+
+	USkeletalMeshComponent* BodyMeshComponent = CachedOwner->GetMesh();
+	if(BodyMeshComponent == NULL)
+		return;
+
+	if (bUseSkeletalMerging == false)
+	{
+		return;
+	}
+
+	TArray<USkeletalMeshComponent*> LSkeletalMeshComponents;
+	LSkeletalMeshComponents.AddUnique(BodyMeshComponent);
+	LSkeletalMeshComponents.Append(CachedOwner->GetApparelMeshComponents());
+
+	TArray<USkeletalMesh*> LSkeletalMeshes;
+	for (USkeletalMeshComponent* SkeletalMeshComponent : LSkeletalMeshComponents)
+	{
+		if(SkeletalMeshComponent->GetSkeletalMeshAsset())
+			LSkeletalMeshes.AddUnique(SkeletalMeshComponent->GetSkeletalMeshAsset());
+	}
+
+	//USkeletalMergingLibrary::MergeMeshes(const FSkeletalMeshMergeParams & Params)
+	//BodyMeshComponent->SkeletalMesh->GetSkeleton()->USkeletalMesh*
+	//SetSkinnedAssetandUpdate
+
+	LSkeletalMeshComponents.Remove(BodyMeshComponent);
+	for (USkeletalMeshComponent* SkeletalMeshComponent : LSkeletalMeshComponents)
+	{
+		if(SkeletalMeshComponent)
+			SkeletalMeshComponent->Deactivate();
+	}
+
+	if (OnPostUpdateSkeletalMerging.IsBound())
+	{
+		OnPostUpdateSkeletalMerging.Broadcast(this, bUseSkeletalMerging, BodyMeshComponent);
+	}
+}
 #pragma endregion
 
 #pragma region UpdateApparel
