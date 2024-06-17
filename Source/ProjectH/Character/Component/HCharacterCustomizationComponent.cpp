@@ -8,6 +8,7 @@
 #include "Common/HUtilityHelpers.h"
 #include "Components/LODSyncComponent.h"
 #include "DataAsset/CharacterCustomizationDataAsset.h"
+#include "DelayAction.h"
 #include "Engine/AssetManager.h"
 #include "Engine/PrimaryAssetLabel.h"
 #include "Kismet/KismetSystemLibrary.h"
@@ -589,6 +590,8 @@ void UHCharacterCustomizationComponent::ApplyCustomizationProfile_Client_Impleme
 
 void UHCharacterCustomizationComponent::ApplyCustomizationProfile_Internal(FCustomizationProfile InCustomizationProfile)
 {
+	if(GetWorld() == NULL)
+		return;
 	if(CachedOwner == NULL)
 		return;
 
@@ -625,6 +628,30 @@ void UHCharacterCustomizationComponent::ApplyCustomizationProfile_Internal(FCust
 	UpdateHairstyle();
 	UpdateAttachment();
 	UpdateMorphTargetsOnAllMeshes();
+	UpdateSkeletalMerging();
+
+	FLatentActionManager& LatentActionManager = GetWorld()->GetLatentActionManager();
+	int32 LatentActionUUID = HUtilityHelpers::StringHasher(__FUNCTION__);
+	if (FDelayUntilNextTickAction* ApplyCustomizationProfile_NextTick = LatentActionManager.FindExistingAction<FDelayUntilNextTickAction>(GetOwner(), LatentActionUUID))
+	{
+		ApplyCustomizationProfile_NextTick;
+	}
+	else
+	{
+		FLatentActionInfo NewLatentActionInfo{};
+		NewLatentActionInfo.ExecutionFunction = "ApplyCustomizationProfile_Internal_NextTick";
+		NewLatentActionInfo.CallbackTarget = this;
+		NewLatentActionInfo.UUID = HUtilityHelpers::StringHasher(__FUNCTION__);
+		NewLatentActionInfo.Linkage = 1;
+
+		FDelayUntilNextTickAction* NewApplyCustomizationProfile_NextTick = new FDelayUntilNextTickAction(NewLatentActionInfo);
+		LatentActionManager.AddNewAction(this,GetUniqueID(), NewApplyCustomizationProfile_NextTick);
+	}
+}
+
+void UHCharacterCustomizationComponent::ApplyCustomizationProfile_Internal_NextTick(FCustomizationProfile InCustomizationProfile)
+{
+
 }
 #pragma endregion
 

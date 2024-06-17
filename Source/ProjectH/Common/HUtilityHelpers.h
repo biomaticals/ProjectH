@@ -11,4 +11,6 @@ class HUtilityHelpers
 {
 public:
 	static FString EnumToString(int32 Value, const TCHAR* EnumType);
+	static int32 NameHasher(const FName& Name);
+	static int32 StringHasher(const FString& String);
  };

@@ -2,12 +2,12 @@
 
 #pragma once
 
-#include "CoreMinimal.h"
-#include "Components/ActorComponent.h"
-#include "ProjectH.h"
 #include "Common/CommonStruct.h"
 #include "Common/CommonTableRow.h"
+#include "Components/ActorComponent.h"
+#include "CoreMinimal.h"
 #include "DataAsset/CharacterCustomizationDataAsset.h"
+#include "ProjectH.h"
 #include "HCharacterCustomizationComponent.generated.h"
 
 enum class EAnatomy : uint8;
@@ -317,7 +317,7 @@ protected:
 
 private:
 	void ApplyCustomizationProfile_Internal(FCustomizationProfile InCustomizationProfile);
-
+	void ApplyCustomizationProfile_Internal_NextTick(FCustomizationProfile InCustomizationProfile);
 public:
 	FOnPreApplyCustomizationProfile OnPreApplyCustomizationProfile;
 #pragma endregion
