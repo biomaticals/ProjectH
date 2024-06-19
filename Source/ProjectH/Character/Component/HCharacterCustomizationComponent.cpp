@@ -17,6 +17,7 @@
 #include "System/HGameSingleton.h"
 #include "System/Manager/DataTableManager.h"
 #include "System/Manager/HAssetManager.h"
+#include "GroomComponent.h"
 
 UHCharacterCustomizationComponent::UHCharacterCustomizationComponent(const FObjectInitializer& ObjectInitializer)
 :Super(ObjectInitializer)
@@ -304,6 +305,8 @@ USkeletalMeshComponent* UHCharacterCustomizationComponent::AddCDASkeletalCompone
 
 		if(OnSkippedCDASkeletal.IsBound())
 			OnSkippedCDASkeletal.Broadcast(this, CDASkeletalMesh, MaterialVariantIndex);
+
+		return nullptr;
 	}
 
 	USkeletalMeshComponent* NewSkeletalMeshComponent = Cast<USkeletalMeshComponent>(CachedOwner->AddComponentByClass(USkeletalMeshComponent::StaticClass(), true, RelativeTransform, false));
@@ -372,6 +375,8 @@ UStaticMeshComponent* UHCharacterCustomizationComponent::AddCDAStaticMeshCompone
 
 		if (OnSkippedCDAStaticMesh.IsBound())
 			OnSkippedCDAStaticMesh.Broadcast(this, CDAStaticMesh, MaterialVariantIndex);
+
+		return nullptr;
 	}
 
 	UStaticMeshComponent* NewStaticMeshComponent = Cast<UStaticMeshComponent>(CachedOwner->AddComponentByClass(UStaticMeshComponent::StaticClass(), true, RelativeTransform, false));
@@ -390,8 +395,6 @@ UStaticMeshComponent* UHCharacterCustomizationComponent::AddCDAStaticMeshCompone
 		CreateMIDFromMaterialVariant(NewStaticMeshComponent, CDAStaticMesh->MaterialVariants, MaterialVariantIndex, GlobalMIDs, ScalarParameters, HDRVectorParameters);
 	}
 
-
-
 	if (OnPostAddedCDA.IsBound())
 	{
 		OnPostAddedCDA.Broadcast(this, CDAStaticMesh, NewStaticMeshComponent, CDAProfilesIndex);
@@ -405,6 +408,37 @@ UStaticMeshComponent* UHCharacterCustomizationComponent::AddCDAStaticMeshCompone
 	return NewStaticMeshComponent;
 }
 
+UGroomComponent* UHCharacterCustomizationComponent::AddCDAGroomComponent(UCDA_Groom* CDAGroom, int MaterialVariantIndex,
+	TArray<UGroomComponent*> GroomComponents, TArray<UMaterialInstanceDynamic*> GlobalMIDs,
+	TArray<FHNamedFloat> ScalarParameters, TArray<FNamedHDRColor> HDRVectorParameters, int CDAProfilesIndex)
+{
+	if(CachedOwner == NULL)
+		return nullptr;
+
+	USkeletalMeshComponent* HeadComponent = CachedOwner->GetHeadMeshComponent();
+	if(HeadComponent == NULL)
+		return nullptr;
+
+	if (CDAGroom == NULL)
+	{
+		if(OnSkippedCDA.IsBound())
+			OnSkippedCDA.Broadcast(this, CDAGroom, MaterialVariantIndex);
+
+		if(OnSkippedCDAGroom.IsBound())
+			OnSkippedCDAGroom.Broadcast(this, CDAGroom, MaterialVariantIndex);
+	}
+
+	UGroomComponent* NewGroomComponent = Cast<UGroomComponent>(CachedOwner->AddComponentByClass(UGroomComponent::StaticClass(), true, FTransform::Identity, false));
+	GroomComponents.AddUnique(NewGroomComponent);
+
+	NewGroomComponent->RegisterComponent();
+	CachedOwner->AddInstanceComponent(NewGroomComponent);
+
+	if (CDAGroom->GroomAsset)
+	{
+		NewGroomComponent->SetGroomAsset()
+	}
+}
 
 bool UHCharacterCustomizationComponent::CleanCDAs(TArray<UPrimitiveComponent*> PrimitiveComponents, TArray<UMaterialInstanceDynamic*> GlobalMIDs, TArray<FName> ActiveAdditionalMorphTargets, int CDACount, FString DebugName)
 {
@@ -1511,7 +1545,8 @@ void UHCharacterCustomizationComponent::UpdateEquipment()
 {
 	if(CachedOwner == NULL)
 		return;
-
+	const FEquipmentProfile EquipmentProfile = CurrentCustomizationProfile.Equipment;
+	
 	TArray<USkeletalMeshComponent*> EquipmentMeshComponents = CachedOwner->GetEquipmentMeshComponents();
 
 	if(OnPreUpdateEquipment.IsBound())
@@ -1527,8 +1562,7 @@ void UHCharacterCustomizationComponent::UpdateEquipment()
 	}
 
 	TArray<FCDA_EquipmentProfile> SkippedEquipmentProfiles;
-	TArray<FCDA_EquipmentProfile> AddedEquipmentProfiles;
-	FEquipmentProfile EquipmentProfile = CurrentCustomizationProfile.Equipment;
+	TArray<FCDA_EquipmentProfile> AddedEquipmentProfiles;	
 	if (CleanCDAs(EquipmentMeshComponents_Primitive, EquipmentMIDs, ActiveAdditionalMorphTargets_Equipment, CurrentCustomizationProfile.Equipment.DataAssets.Num(), "Equipment"))
 	{
 		for (int i = 0 ; i < CurrentCustomizationProfile.Equipment.DataAssets.Num(); i ++)
@@ -1571,7 +1605,7 @@ void UHCharacterCustomizationComponent::UpdateHairstyle()
 	if(CachedOwner == NULL)
 		return;
 
-	FHairstyleProfile HairstyleProfile = CurrentCustomizationProfile.Hairstyle;
+	const FHairstyleProfile HairstyleProfile = CurrentCustomizationProfile.Hairstyle;
 	TArray<USkeletalMeshComponent*> HairstyleMeshComponents = CachedOwner->GetHairstyleMeshComponents();
 
 	if (OnPreUpdateHairstyle.IsBound())
@@ -1632,7 +1666,7 @@ void UHCharacterCustomizationComponent::UpdateAttachment()
 	if (CachedOwner == NULL)
 		return;
 
-	FAttachmentProfile AttachmentProfile = CurrentCustomizationProfile.Attachment;
+	const FAttachmentProfile AttachmentProfile = CurrentCustomizationProfile.Attachment;
 	TArray<UStaticMeshComponent*> AttachmentMeshComponents = CachedOwner->GetAttachmentMeshComponents();
 
 	if (OnPreUpdateAttachment.IsBound())
@@ -1683,5 +1717,53 @@ void UHCharacterCustomizationComponent::UpdateAttachment()
 	if (OnPostUpdateAttachment.IsBound())
 	{
 		OnPostUpdateAttachment.Broadcast(this, AttachmentProfile, AddedAttachmentProfiles, AttachmentMeshComponents, SkippedAttachmentProfiles);
+	}
+}
+
+void UHCharacterCustomizationComponent::UpdateGroom()
+{
+	if(CachedOwner == NULL)
+		return;
+
+	const FGroomProfile GroomProfile = CurrentCustomizationProfile.Groom;
+	TArray<UGroomComponent*> GroomComponents = CachedOwner->GetGroomComponents();
+
+	if(OnPreUpdateGroom.IsBound())
+		OnPreUpdateGroom.Broadcast(this, CurrentCustomizationProfile.Groom, GroomComponents);
+
+
+	TArray<UPrimitiveComponent*> GroomComponents_Primitive;
+	for (UGroomComponent* GroomComponent: GroomComponents)
+	{
+		if (UPrimitiveComponent* GroomComponent_Primitive = Cast<UPrimitiveComponent>(GroomComponent))
+		{
+			GroomComponents_Primitive.AddUnique(GroomComponent_Primitive);
+		}
+	}
+	if (CleanCDAs(GroomComponents_Primitive, GroomMIDs, TArray<FName>(), GroomProfile.DataAssets.Num(), "Groom"))
+	{
+		for (int i = 0; i < GroomProfile.DataAssets.Num(); i++)
+		{
+			if (UGroomComponent* NewGroomComponent = Add(GroomProfile.DataAssets[i].DataAsset, -1,
+				GroomComponents, GroomsMIDs, GroomProfile.GlobalScalarParameters,
+				GroomProfile.GlobalHDRVectorParameters, GroomProfile.DataAssets[i].ParentSocket, GroomProfile.DataAssets[i].RelativeTransform, i))
+			{
+				if (OnPostAddedCDAGroomProfile.IsBound())
+				{
+					OnPostAddedCDAGroomProfile.Broadcast(this, GroomProfile.DataAssets[i], NewStaticComponent, i);
+				}
+
+				AddedGroomProfiles.AddUnique(GroomProfile.DataAssets[i]);
+			}
+			else
+			{
+				if (OnSkippedCDAGroomProfile.IsBound())
+				{
+					OnSkippedCDAGroomProfile.Broadcast(this, GroomProfile.DataAssets[i], i);
+				}
+
+				SkippedGroomProfiles.AddUnique(GroomProfile.DataAssets[i]);
+			}
+		}
 	}
 }

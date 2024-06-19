@@ -87,7 +87,7 @@ TArray<USkeletalMeshComponent*> AHCharacter::GetEquipmentMeshComponents()
 	return EquipmentMeshComponents;
 }
 
-TArray<USkeletalMeshComponent*> AHCharacter::GetGroomComponents()
+TArray<UGroomComponent*> AHCharacter::GetGroomComponents()
 {
 	return GroomComponents;
 }

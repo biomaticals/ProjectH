@@ -15,14 +15,17 @@ enum class EAnatomy : uint8;
 class AHCharacter;
 class ULODSyncComponent;
 class UPrimaryAssetLabel;
+class UGroomComponent;
  
  #pragma region InitializeComponent
 DECLARE_EVENT_ThreeParams(UHCharacterCustomizationComponent, FOnSkippedCDA, UHCharacterCustomizationComponent*, UCharacterCustomizationDataAsset*, int); 
 DECLARE_EVENT_ThreeParams(UHCharacterCustomizationComponent, FOnSkippedCDASkeletal, UHCharacterCustomizationComponent*, UCDA_SkeletalMesh*, int);
 DECLARE_EVENT_ThreeParams(UHCharacterCustomizationComponent, FOnSkippedCDAStaticMesh, UHCharacterCustomizationComponent*, UCDA_StaticMesh*, int);
+DECLARE_EVENT_ThreeParams(UHCharacterCustomizationComponent, FOnSkippedCDAGroom, UHCharacterCustomizationComponent*, UCDA_Groom*, int);
 DECLARE_EVENT_FourParams(UHCharacterCustomizationComponent, FOnPostAddedCDA, UHCharacterCustomizationComponent*, UCharacterCustomizationDataAsset*, UMeshComponent*, int);
 DECLARE_EVENT_FourParams(UHCharacterCustomizationComponent, FOnPostAddedCDASkeletal, UHCharacterCustomizationComponent*, UCDA_SkeletalMesh*, USkeletalMeshComponent*, int);
 DECLARE_EVENT_FourParams(UHCharacterCustomizationComponent, FOnPostAddedCDAStaticMesh, UHCharacterCustomizationComponent*, UCDA_StaticMesh*, UStaticMeshComponent*, int);
+DECLARE_EVENT_FourParams(UHCharacterCustomizationComponent, FOnPostAddedCDAGroom, UHCharacterCustomizationComponent*, UCDA_Groom*, UGroomComponent*, int);
 DECLARE_EVENT_ThreeParams(UHCharacterCustomizationComponent, FOnSkippedCDAApparelProfile, UHCharacterCustomizationComponent*, FCDA_ApparelProfile, int)
 DECLARE_EVENT_FourParams(UHCharacterCustomizationComponent, FOnPostAddedCDAApparelProfile, UHCharacterCustomizationComponent*, FCDA_ApparelProfile, USkeletalMeshComponent*, int);
 DECLARE_EVENT_ThreeParams(UHCharacterCustomizationComponent, FOnSkippedCDAEquipmentProfile, UHCharacterCustomizationComponent*, FCDA_EquipmentProfile, int)
@@ -51,6 +54,8 @@ DECLARE_EVENT_ThreeParams(UHCharacterCustomizationComponent, FOnPostUpdateEyesMa
 DECLARE_EVENT_TwoParams(UHCharacterCustomizationComponent, FOnPostUpdateLODSyncComponent, UHCharacterCustomizationComponent*, ULODSyncComponent*);
 DECLARE_EVENT_FiveParams(UHCharacterCustomizationComponent, FOnPostUpdateMorphTargetOnAllMeshes, UHCharacterCustomizationComponent*, TArray<FHNamedFloat>, TArray<FName> ActiveAdditionalMorphTargets_Apparel, TArray<FName> ActiveAdditionalMorphTargets_Hairstyle, TArray<FName> ActiveAdditionalMorphTargets_Equipment);
 DECLARE_EVENT_ThreeParams(UHCharacterCustomizationComponent, FOnPostUpdateSkeletalMerging, UHCharacterCustomizationComponent*, bool, USkeletalMeshComponent* MergedBodyComponent);
+DECLARE_EVENT_ThreeParams(UHCharacterCustomizationComponent, FOnPreUpdateGroom, UHCharacterCustomizationComponent*, FGroomProfile, TArray<UGroomComponent*>);
+DECLARE_EVENT_FiveParams(UHCharacterCustomizationComponent, FOnPostUpdateGroom, UHCharacterCustomizationComponent*, FGroomProfile, TArray<FCDA_GroomProfile> AddedCDAGroomProfiles, TArray<UGroomComponent> AddedGroomComponents, TArray<FCDA_GroomProfile> SkippedCDAGroomProfiles);
 #pragma endregion
 
 #pragma region UpdateApparel
@@ -175,7 +180,7 @@ protected:
 	UPROPERTY(Transient)
 	TArray<FName> ActiveAdditionalMorphTargets_Equipment;
 
-		UPROPERTY(Transient)
+	UPROPERTY(Transient)
 	TArray<FName> ActiveAdditionalMorphTargets_Attachment;
 
 	UPROPERTY(Transient)
@@ -230,6 +235,10 @@ private:
 										TArray<UStaticMeshComponent*> StaticMeshComponents, TArray<UMaterialInstanceDynamic*> GlobalMIDs,
 										TArray<FHNamedFloat> ScalarParameters, TArray<FNamedHDRColor> HDRVectorParameters, FName SocketName, FTransform RelativeTransform, int CDAProfilesIndex);
 
+	UGroomComponent* AddCDAGroomComponent(UCDA_Groom* CDAGroom, int MaterialVariantIndex,
+									TArray<UGroomComponent*> GroomComponents, TArray<UMaterialInstanceDynamic*> GlobalMIDs,
+									TArray<FHNamedFloat> ScalarParameters, TArray<FNamedHDRColor> HDRVectorParameters, int CDAProfilesIndex);
+	
 	bool CleanCDAs(TArray<UPrimitiveComponent*> PrimitiveComponents, TArray<UMaterialInstanceDynamic*> GlobalMIDs, TArray<FName> ActiveAdditionalMorphTargets, int CDACount, FString DebugName);
 private:
 		void CreateMIDFromMaterialVariant(UPrimitiveComponent* PrimitiveComponent, TArray<FMaterialVariants> MaterialVariants, int MaterialVariantIndex, TArray<UMaterialInstanceDynamic*> GlobalMIDs, TArray<FHNamedFloat> ScalarParameters, TArray<FNamedHDRColor> HDRVectorParameters);
@@ -239,10 +248,10 @@ protected:
 	UPROPERTY(BlueprintReadOnly, EditAnywhere)
 	ECharacterCustomizationInitializationBehavior InitializationBehavior;
 
-	UPROPERTY(BlueprintReadOnly, EditAnywhere, meta = (EditCondition = "InitializationBehavior == ECharacterCustomizationInitializationBehavior::UseProfile || InitializationBehavior == ECharacterCustomizationInitializationBehavior::OpenCharacterEditorWithCurrentProfile"))
+	UPROPERTY(BlueprintReadOnly, EditAnywhere, meta = (EditCondition = "InitializationBehavior == ECharacterCustomizationInitializationBehavior::UseCurrentProfile || InitializationBehavior == ECharacterCustomizationInitializationBehavior::OpenCharacterEditorWithCurrentProfile"))
 	FCustomizationProfile CustomizationProfile;
 
-	UPROPERTY(BlueprintReadOnly, EditAnywhere, meta = (EditCondition = "InitializationBehavior == ECharacterCustomizationInitializationBehavior::UseSavedProfile || InitializationBehavior == ECharacterCustomizationInitializationBehavior::OpenCharacterEditorWithProfileToLoad"))
+	UPROPERTY(BlueprintReadOnly, EditAnywhere, meta = (EditCondition = "InitializationBehavior == ECharacterCustomizationInitializationBehavior::UseProfileToLoad || InitializationBehavior == ECharacterCustomizationInitializationBehavior::OpenCharacterEditorWithProfileToLoad"))
 	FString ProfileNameFromSaves;
 
 public:
@@ -252,6 +261,8 @@ public:
 	FOnPostAddedCDASkeletal OnPostAddedCDASkeletal;
 	FOnSkippedCDAStaticMesh OnSkippedCDAStaticMesh;
 	FOnPostAddedCDAStaticMesh OnPostAddedCDAStaticMesh;
+	FOnSkippedCDAGroom OnSkippedCDAGroom;
+	FOnPostAddedCDAGroom OnPostCDAGroom;
 		
 	FOnSkippedCDAApparelProfile OnSkippedCDAAparelProfile;
 	FOnPostAddedCDAApparelProfile OnPostAddedCDAApparelProfile;
@@ -498,5 +509,14 @@ public:
 public:
 	FOnPreUpdateAttachment OnPreUpdateAttachment;
 	FOnPostUpdateAttachment OnPostUpdateAttachment;
+#pragma endregion
+
+#pragma region UpdateGroom
+public:
+	void UpdateGroom();
+
+public:
+	FOnPreUpdateGroom OnPreUpdateGroom;
+	FOnPostUpdateGroom OnPostUpdateGroom;
 #pragma endregion
 };

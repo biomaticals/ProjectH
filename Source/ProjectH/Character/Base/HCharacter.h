@@ -54,7 +54,7 @@ public:
 	TArray<USkeletalMeshComponent*> GetEquipmentMeshComponents();
 
 	UFUNCTION(BlueprintCallable, BlueprintPure)
-	TArray<USkeletalMeshComponent*> GetGroomComponents();
+	TArray<UGroomComponent*> GetGroomComponents();
 
 	UFUNCTION(BlueprintCallable, BlueprintPure)
 	UHCharacterCustomizationComponent* GetCharacterCustomizationComponent();
@@ -79,7 +79,7 @@ protected:
 	TArray<TObjectPtr<USkeletalMeshComponent>> EquipmentMeshComponents;
 
 	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, SaveGame)
-	TArray<TObjectPtr<USkeletalMeshComponent>> GroomComponents;
+	TArray<TObjectPtr<UGroomComponent>> GroomComponents;
 
 	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, SaveGame)
 	TObjectPtr<ULODSyncComponent> LODSyncComponent; 
