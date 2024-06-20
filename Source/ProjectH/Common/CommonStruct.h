@@ -119,6 +119,13 @@ struct FCDA_GroomProfile
 {
 	GENERATED_USTRUCT_BODY()
 
+public:
+	FORCEINLINE bool operator==(const FCDA_GroomProfile& Other) const
+	{
+		return DataAsset == Other.DataAsset;
+	}
+
+public:
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
 	UCDA_Groom* DataAsset;
 };

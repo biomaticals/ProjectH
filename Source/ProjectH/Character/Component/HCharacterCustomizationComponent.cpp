@@ -371,10 +371,10 @@ UStaticMeshComponent* UHCharacterCustomizationComponent::AddCDAStaticMeshCompone
 	if (CDAStaticMesh == NULL || CDAStaticMesh->IsValidLowLevel() == false)
 	{
 		if (OnSkippedCDA.IsBound())
-			OnSkippedCDA.Broadcast(this, CDAStaticMesh, MaterialVariantIndex);
+			OnSkippedCDA.Broadcast(this, CDAStaticMesh, CDAProfilesIndex);
 
 		if (OnSkippedCDAStaticMesh.IsBound())
-			OnSkippedCDAStaticMesh.Broadcast(this, CDAStaticMesh, MaterialVariantIndex);
+			OnSkippedCDAStaticMesh.Broadcast(this, CDAStaticMesh, CDAProfilesIndex);
 
 		return nullptr;
 	}
@@ -422,10 +422,10 @@ UGroomComponent* UHCharacterCustomizationComponent::AddCDAGroomComponent(UCDA_Gr
 	if (CDAGroom == NULL)
 	{
 		if(OnSkippedCDA.IsBound())
-			OnSkippedCDA.Broadcast(this, CDAGroom, MaterialVariantIndex);
+			OnSkippedCDA.Broadcast(this, CDAGroom, CDAProfilesIndex);
 
 		if(OnSkippedCDAGroom.IsBound())
-			OnSkippedCDAGroom.Broadcast(this, CDAGroom, MaterialVariantIndex);
+			OnSkippedCDAGroom.Broadcast(this, CDAGroom, CDAProfilesIndex);
 	}
 
 	UGroomComponent* NewGroomComponent = Cast<UGroomComponent>(CachedOwner->AddComponentByClass(UGroomComponent::StaticClass(), true, FTransform::Identity, false));
@@ -436,8 +436,51 @@ UGroomComponent* UHCharacterCustomizationComponent::AddCDAGroomComponent(UCDA_Gr
 
 	if (CDAGroom->GroomAsset)
 	{
-		NewGroomComponent->SetGroomAsset()
+		NewGroomComponent->SetGroomAsset(CDAGroom->GroomAsset);
+
+		TArray<UGroomBindingAsset*> GroomAssets = CDAGroom->BindingAssets;
+		if (GroomAssets.Num())
+		{
+			if (GroomAssets.IsValidIndex(CurrentCustomizationProfile.Basebody.Head.Index))
+			{
+				if (GroomAssets[CurrentCustomizationProfile.Basebody.Head.Index]->GetGroom() == CDAGroom->GroomAsset)
+				{
+					NewGroomComponent->SetGroomAsset(CDAGroom->GroomAsset);
+				}
+			}
+			else
+			{
+				if (GroomAssets.IsValidIndex(0))
+				{
+					NewGroomComponent->SetGroomAsset(GroomAssets[0]->GetGroom());
+				}
+				else
+					NewGroomComponent->SetGroomAsset(nullptr);
+			}
+		}
+		else
+		{
+			UT_LOG(HCharacterCustomizationLog, Log, TEXT("GroomProfile's BindingAssets is absent."));
+		}
 	}
+	else
+	{
+		UT_LOG(HCharacterCustomizationLog, Log, TEXT("GroomProfile's GroomAsset is absent."));
+	}
+
+	CreateMIDFromMaterialVariant(NewGroomComponent, CDAGroom->MaterialVariants, MaterialVariantIndex, GlobalMIDs, ScalarParameters, HDRVectorParameters);
+
+	if (OnPostAddedCDA.IsBound())
+	{
+		OnPostAddedCDA.Broadcast(this, CDAGroom, NewGroomComponent, CDAProfilesIndex);
+	}
+
+	if (OnPostAddedCDAGroom.IsBound())
+	{
+		OnPostAddedCDAGroom.Broadcast(this, CDAGroom, NewGroomComponent, CDAProfilesIndex);
+	}
+
+	return NewGroomComponent;
 }
 
 bool UHCharacterCustomizationComponent::CleanCDAs(TArray<UPrimitiveComponent*> PrimitiveComponents, TArray<UMaterialInstanceDynamic*> GlobalMIDs, TArray<FName> ActiveAdditionalMorphTargets, int CDACount, FString DebugName)
@@ -462,8 +505,7 @@ bool UHCharacterCustomizationComponent::CleanCDAs(TArray<UPrimitiveComponent*> P
 	}
 	else
 	{
-		UT_LOG(HCharacterCustomizationLog, Error, TEXT("%s is absent in CustomizationProfile."));
-		return false;
+		UT_LOG(HCharacterCustomizationLog, Log, TEXT("No CDAs."));
 	}
 
 	return true;
@@ -668,7 +710,7 @@ void UHCharacterCustomizationComponent::ApplyCustomizationProfile_Internal(FCust
 	int32 LatentActionUUID = HUtilityHelpers::StringHasher(__FUNCTION__);
 	if (FDelayUntilNextTickAction* ApplyCustomizationProfile_NextTick = LatentActionManager.FindExistingAction<FDelayUntilNextTickAction>(GetOwner(), LatentActionUUID))
 	{
-		ApplyCustomizationProfile_NextTick;
+		
 	}
 	else
 	{
@@ -685,7 +727,7 @@ void UHCharacterCustomizationComponent::ApplyCustomizationProfile_Internal(FCust
 
 void UHCharacterCustomizationComponent::ApplyCustomizationProfile_Internal_NextTick(FCustomizationProfile InCustomizationProfile)
 {
-
+	UpdateGroom();
 }
 #pragma endregion
 
@@ -1740,17 +1782,20 @@ void UHCharacterCustomizationComponent::UpdateGroom()
 			GroomComponents_Primitive.AddUnique(GroomComponent_Primitive);
 		}
 	}
+
+	TArray<FCDA_GroomProfile> SkippedGroomProfiles;
+	TArray<FCDA_GroomProfile> AddedGroomProfiles;
 	if (CleanCDAs(GroomComponents_Primitive, GroomMIDs, TArray<FName>(), GroomProfile.DataAssets.Num(), "Groom"))
 	{
 		for (int i = 0; i < GroomProfile.DataAssets.Num(); i++)
 		{
-			if (UGroomComponent* NewGroomComponent = Add(GroomProfile.DataAssets[i].DataAsset, -1,
-				GroomComponents, GroomsMIDs, GroomProfile.GlobalScalarParameters,
-				GroomProfile.GlobalHDRVectorParameters, GroomProfile.DataAssets[i].ParentSocket, GroomProfile.DataAssets[i].RelativeTransform, i))
+			if (UGroomComponent* NewGroomComponent = AddCDAGroomComponent(GroomProfile.DataAssets[i].DataAsset, -1,
+				GroomComponents, GroomMIDs, GroomProfile.GlobalScalarParameters,
+				GroomProfile.GlobalHDRVectorParameters, i))
 			{
 				if (OnPostAddedCDAGroomProfile.IsBound())
 				{
-					OnPostAddedCDAGroomProfile.Broadcast(this, GroomProfile.DataAssets[i], NewStaticComponent, i);
+					OnPostAddedCDAGroomProfile.Broadcast(this, GroomProfile.DataAssets[i], NewGroomComponent, i);
 				}
 
 				AddedGroomProfiles.AddUnique(GroomProfile.DataAssets[i]);
@@ -1765,5 +1810,12 @@ void UHCharacterCustomizationComponent::UpdateGroom()
 				SkippedGroomProfiles.AddUnique(GroomProfile.DataAssets[i]);
 			}
 		}
+	}
+
+	UpdateLODSyncComponent();
+
+	if (OnPostUpdateGroom.IsBound())
+	{
+		OnPostUpdateGroom.Broadcast(this, GroomProfile, AddedGroomProfiles, GroomComponents, SkippedGroomProfiles);
 	}
 }

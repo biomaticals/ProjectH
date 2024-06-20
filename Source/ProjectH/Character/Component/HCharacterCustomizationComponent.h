@@ -34,6 +34,8 @@ DECLARE_EVENT_ThreeParams(UHCharacterCustomizationComponent, FOnSkippedCDAHairst
 DECLARE_EVENT_FourParams(UHCharacterCustomizationComponent, FOnPostAddedCDAHairstyleProfile, UHCharacterCustomizationComponent*, FCDA_HairstyleProfile, USkeletalMeshComponent*, int);
 DECLARE_EVENT_ThreeParams(UHCharacterCustomizationComponent, FOnSkippedCDAAttachmentProfile, UHCharacterCustomizationComponent*, FCDA_AttachmentProfile, int)
 DECLARE_EVENT_FourParams(UHCharacterCustomizationComponent, FOnPostAddedCDAAttachmentProfile, UHCharacterCustomizationComponent*, FCDA_AttachmentProfile, UStaticMeshComponent*, int);
+DECLARE_EVENT_ThreeParams(UHCharacterCustomizationComponent, FOnSkippedCDAGroomProfile, UHCharacterCustomizationComponent*, FCDA_GroomProfile, int);
+DECLARE_EVENT_FourParams(UHCharacterCustomizationComponent, FOnPostAddedCDAGroomProfile, UHCharacterCustomizationComponent*, FCDA_GroomProfile, UGroomComponent*, int);
  #pragma endregion
 
 #pragma region LoadAsset
@@ -55,7 +57,7 @@ DECLARE_EVENT_TwoParams(UHCharacterCustomizationComponent, FOnPostUpdateLODSyncC
 DECLARE_EVENT_FiveParams(UHCharacterCustomizationComponent, FOnPostUpdateMorphTargetOnAllMeshes, UHCharacterCustomizationComponent*, TArray<FHNamedFloat>, TArray<FName> ActiveAdditionalMorphTargets_Apparel, TArray<FName> ActiveAdditionalMorphTargets_Hairstyle, TArray<FName> ActiveAdditionalMorphTargets_Equipment);
 DECLARE_EVENT_ThreeParams(UHCharacterCustomizationComponent, FOnPostUpdateSkeletalMerging, UHCharacterCustomizationComponent*, bool, USkeletalMeshComponent* MergedBodyComponent);
 DECLARE_EVENT_ThreeParams(UHCharacterCustomizationComponent, FOnPreUpdateGroom, UHCharacterCustomizationComponent*, FGroomProfile, TArray<UGroomComponent*>);
-DECLARE_EVENT_FiveParams(UHCharacterCustomizationComponent, FOnPostUpdateGroom, UHCharacterCustomizationComponent*, FGroomProfile, TArray<FCDA_GroomProfile> AddedCDAGroomProfiles, TArray<UGroomComponent> AddedGroomComponents, TArray<FCDA_GroomProfile> SkippedCDAGroomProfiles);
+DECLARE_EVENT_FiveParams(UHCharacterCustomizationComponent, FOnPostUpdateGroom, UHCharacterCustomizationComponent*, FGroomProfile, TArray<FCDA_GroomProfile> AddedCDAGroomProfiles, TArray<UGroomComponent*> AddedGroomComponents, TArray<FCDA_GroomProfile> SkippedCDAGroomProfiles);
 #pragma endregion
 
 #pragma region UpdateApparel
@@ -262,7 +264,7 @@ public:
 	FOnSkippedCDAStaticMesh OnSkippedCDAStaticMesh;
 	FOnPostAddedCDAStaticMesh OnPostAddedCDAStaticMesh;
 	FOnSkippedCDAGroom OnSkippedCDAGroom;
-	FOnPostAddedCDAGroom OnPostCDAGroom;
+	FOnPostAddedCDAGroom OnPostAddedCDAGroom;
 		
 	FOnSkippedCDAApparelProfile OnSkippedCDAAparelProfile;
 	FOnPostAddedCDAApparelProfile OnPostAddedCDAApparelProfile;
@@ -272,6 +274,8 @@ public:
 	FOnPostAddedCDAHairstyleProfile OnAddedCDAHairstyleProfile;
 	FOnSkippedCDAAttachmentProfile OnSkippedCDAAttachmentProfile;
 	FOnPostAddedCDAAttachmentProfile OnPostAddedCDAAttachmentProfile;
+	FOnSkippedCDAGroomProfile OnSkippedCDAGroomProfile;
+	FOnPostAddedCDAGroomProfile OnPostAddedCDAGroomProfile;
 #pragma endregion
 
 #pragma region LoadAssets
