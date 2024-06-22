@@ -7,7 +7,7 @@
 #include "CharacterCustomizationDataAsset.generated.h"
 
 enum class EAnatomy : uint8;
-enum class ECCDACollection;
+enum class ECCDACollection : uint8;
 struct FMaterialVariants;
 
 class UGroomAsset;

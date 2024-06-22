@@ -47,28 +47,28 @@ enum class ECharacterCustomizationInitializationBehavior : uint8
 };
 
 UENUM(BlueprintType)
-enum class ECCDACollection
+enum class ECCDACollection : uint8
 {
 	Smith,
 	Gardener,
 };
 
 UENUM(BlueprintType)
-enum class EGender
+enum class EGender : uint8
 {
 	Female,
 	Male,
 };
 
 UENUM(BlueprintType)
-enum class EGeneration
+enum class EGeneration : uint8
 {
 	Adult,
 	Child,
 };
 
 UENUM(BlueprintType)
-enum class ERace
+enum class ERace : uint8
 {
 	Human,
 	MetaHuman,
@@ -78,7 +78,7 @@ enum class ERace
 };
 
 UENUM(BlueprintType)
-enum class EApparelType
+enum class EApparelType : uint8
 {
 	Hat,
 	UpperBody,
@@ -88,7 +88,7 @@ enum class EApparelType
 };
 
 UENUM(BlueprintType)
-enum class ECharacterCustomizationProfileType
+enum class ECharacterCustomizationProfileType : uint8
 {
 	SavedProfile,
 	PresetProfile,
