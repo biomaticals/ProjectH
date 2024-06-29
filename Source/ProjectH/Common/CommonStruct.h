@@ -37,7 +37,7 @@ public:
 		: Value(0.f)
 	{
 
-	};
+	}
 
 	FHNamedFloat(FName InName, float Value)
 		: Name(NAME_None)
@@ -78,7 +78,8 @@ public:
 	{
 		return FLinearColor(H, S, V * Intensity, A);
 	}
-
+	
+public:
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
 	float H;
 
@@ -100,6 +101,22 @@ struct FNamedHDRColor
 {
 	GENERATED_USTRUCT_BODY()
 
+public:
+	FNamedHDRColor()
+	: Name(NAME_None)
+	, Value(FHDRColor())
+	{
+
+	}
+
+	FNamedHDRColor(FName InName, FHDRColor InValue)
+	: Name(InName)
+	, Value(InValue)
+	{
+
+	}
+
+public:
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
 	FName Name;
 
@@ -120,6 +137,12 @@ struct FCDA_GroomProfile
 	GENERATED_USTRUCT_BODY()
 
 public:
+	FCDA_GroomProfile()
+	: DataAsset(nullptr)
+	{
+
+	}
+
 	FORCEINLINE bool operator==(const FCDA_GroomProfile& Other) const
 	{
 		return DataAsset == Other.DataAsset;
@@ -136,6 +159,12 @@ struct FCDA_HairstyleProfile
 	GENERATED_USTRUCT_BODY()
 
 public:
+	FCDA_HairstyleProfile()
+	: DataAsset(nullptr)
+	{
+
+	}
+
 	FORCEINLINE bool operator==(const FCDA_HairstyleProfile& Other) const
 	{
 		return DataAsset == Other.DataAsset && ScalarParameters.Num() == Other.ScalarParameters.Num()&& HDRVectorParameters.Num() && Other.HDRVectorParameters.Num();
@@ -156,7 +185,13 @@ USTRUCT(BlueprintType)
 struct FMaterialVariants
 {
 	GENERATED_USTRUCT_BODY()
+public:
+	FMaterialVariants()
+	{
 
+	}
+	
+public:
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
 	FText DisplayName;
 
@@ -172,9 +207,10 @@ struct FCustomizationProfileMetaData
 {
 	GENERATED_USTRUCT_BODY()
 	FCustomizationProfileMetaData()
+	: Anatomy(EAnatomy::None)
 	{
 
-	};
+	}
 
 public:
 	FString ToString() const
@@ -323,7 +359,8 @@ struct FCDA_ApparelProfile
 {
 	GENERATED_USTRUCT_BODY()
 	FCDA_ApparelProfile()
-		: MaterialVariantIndex(0)
+		: DataAsset(nullptr)
+		, MaterialVariantIndex(0)
 	{
 
 	}
@@ -363,7 +400,9 @@ USTRUCT(BlueprintType)
 struct FCDA_EquipmentProfile
 {
 	GENERATED_USTRUCT_BODY()
-	FCDA_EquipmentProfile()		
+	FCDA_EquipmentProfile()
+	: DataAsset(nullptr)
+	, MaterialVariantIndex(0)
 	{
 
 	}
@@ -411,6 +450,7 @@ struct FCDA_AttachmentProfile
 {
 	GENERATED_USTRUCT_BODY()
 	FCDA_AttachmentProfile()
+	: DataAsset(nullptr)
 	{
 
 	};
@@ -542,7 +582,14 @@ USTRUCT(BlueprintType)
 struct FAnatomyHeadProfile
 {
 	GENERATED_USTRUCT_BODY()
+public:
+	FAnatomyHeadProfile()
+	: Mesh(nullptr)
+	{
 
+	};
+
+public:
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
 	USkeletalMesh* Mesh;
 
@@ -605,6 +652,7 @@ struct FAnatomyBaseBodyProfile
 	GENERATED_USTRUCT_BODY()
 
 	FAnatomyBaseBodyProfile()
+	: Mesh(nullptr)
 	{
 
 	};
@@ -637,8 +685,8 @@ struct FHSaveGameObjectData
 	GENERATED_USTRUCT_BODY()
 
 	FHSaveGameObjectData()
+	: bProcessed(false)
 	{
-		bProcessed = false;
 	}
 
 	const bool operator== (const FHSaveGameObjectData& Other) const
