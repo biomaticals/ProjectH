@@ -45,11 +45,14 @@
 SourceArt/**/*.png
 SourceArt/**/*.tga
 
-# Binaries Files / Don't ignore dll files
+# Binaries Files / Don't Ignore files
 !Binaries/*/*.target
 !Binaries/*/*.modules
 !Binaries/*/*.dll
 !Binaries/*/*.pdb
+
+# Binaries Files / Ignore Files
+Binaries/Win64/ProjectH-Win64-Test.*
 
 # Builds
 Build/*
