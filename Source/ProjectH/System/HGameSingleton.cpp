@@ -43,7 +43,7 @@ bool UHGameSingleton::CreateManagers()
 
 	if (DataTableManager == NULL)
 	{
-		DataTableManager = NewObject<UDataTableManager>(this, UDataTableManager::StaticClass());
+		DataTableManager = NewObject<UDataTableManager>(this, DataTableManagerClass);
 	}
 
 	ManagersCreated = true;
@@ -56,7 +56,6 @@ void UHGameSingleton::DestroyManagers()
 	{
 		DataTableManager = NULL;
 	}
-
 }
 
 UDataTableManager* UHGameSingleton::GetDataTableManager(const UObject* WorldContextObject)

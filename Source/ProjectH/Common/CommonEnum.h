@@ -9,7 +9,7 @@
 UENUM(BlueprintType)
 enum class EAnatomy : uint8
 {
-	None, 
+	Default, 
 
 	HumanFemaleAdult,
 	HumanFemaleChild,
@@ -39,7 +39,6 @@ ENUM_RANGE_BY_COUNT(EAnatomy, (uint8)EAnatomy::OrcMaleChild + 1);
 UENUM(BlueprintType)
 enum class ECharacterCustomizationInitializationBehavior : uint8
 {
-	None,
 	UseCurrentProfile,
 	UseProfileToLoad,
 	OpenCharacterEditorWithCurrentProfile,

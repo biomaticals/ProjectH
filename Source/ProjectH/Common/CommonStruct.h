@@ -207,7 +207,7 @@ struct FCustomizationProfileMetaData
 {
 	GENERATED_USTRUCT_BODY()
 	FCustomizationProfileMetaData()
-	: Anatomy(EAnatomy::None)
+	: Anatomy(EAnatomy::Default)
 	{
 
 	}
@@ -220,7 +220,7 @@ public:
 
 	bool IsValid() const
 	{
-		return Name != "" && Anatomy != EAnatomy::None;
+		return Name != "";
 	}
 
 public:

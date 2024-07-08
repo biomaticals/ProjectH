@@ -14,7 +14,7 @@ class USaveGameManager;
 /**
  * 
  */
-UCLASS()
+UCLASS(Blueprintable)
 class PROJECTH_API UHGameSingleton : public UObject
 {
 	GENERATED_BODY()
@@ -31,6 +31,10 @@ protected:
 public:
 	UFUNCTION(BlueprintCallable, BlueprintPure, meta = (WorldContext = "WorldContextObject"))
 	static UDataTableManager* GetDataTableManager(const UObject* WorldContextObject);
+
+protected:
+	UPROPERTY(BlueprintReadWrite, EditDefaultsOnly)
+	TSubclassOf<UDataTableManager> DataTableManagerClass;
 
 public:
 	UPROPERTY(Transient)
