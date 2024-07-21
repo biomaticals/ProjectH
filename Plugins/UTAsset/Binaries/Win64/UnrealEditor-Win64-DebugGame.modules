@@ -1,0 +1,8 @@
+{
+	"BuildId": "80761d2f-0323-4974-bd88-d75b2e0a5aa7",
+	"Modules": 
+	{
+		"UTAsset": "UnrealEditor-UTAsset-Win64-DebugGame.dll",
+		"UTAssetEditor": "UnrealEditor-UTAssetEditor-Win64-DebugGame.dll"
+	}
+}
