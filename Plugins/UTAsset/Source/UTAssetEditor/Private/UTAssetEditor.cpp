@@ -1,12 +1,17 @@
 // Copyright Epic Games, Inc. All Rights Reserved.
 
 #include "UTAssetEditor.h"
+#include "AssetToolsModule.h"
+#include "EnumKeyBasedDataTableFactory.h"
 
 #define LOCTEXT_NAMESPACE "FUTAssetEditorModule"
 
 void FUTAssetEditorModule::StartupModule()
 {
 	// This code will execute after your module is loaded into memory; the exact timing is specified in the .uplugin file per-module
+
+	IAssetTools& AssetTools = FModuleManager::LoadModuleChecked<FAssetToolsModule>("AssetTools").Get();
+	AssetTools.RegisterAssetTypeActions(MakeShareable(new FAssetTypeActions_EnumKeyBasedDataTable()));
 }
 
 void FUTAssetEditorModule::ShutdownModule()
