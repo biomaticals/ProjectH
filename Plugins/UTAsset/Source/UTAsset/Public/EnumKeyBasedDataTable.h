@@ -10,7 +10,7 @@
  * 
  */
 UCLASS()
-class UTASSET_API UEnumKeyBasedDataTable : public UObject
+class UTASSET_API UEnumKeyBasedDataTable : public UDataTable
 {
 	GENERATED_BODY()
 	

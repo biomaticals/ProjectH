@@ -3,7 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Factories/Factory.h"
+#include "Factories/DataTableFactory.h"
 #include "AssetTypeActions_Base.h"
 #include "EnumKeyBasedDataTableFactory.generated.h"
 
@@ -21,7 +21,7 @@ public:
  * 
  */
 UCLASS(hideCategories = Object)
-class UTASSETEDITOR_API UEnumKeyBasedDataTableFactory : public UFactory
+class UTASSETEDITOR_API UEnumKeyBasedDataTableFactory : public UDataTableFactory
 {
 	GENERATED_UCLASS_BODY()
 

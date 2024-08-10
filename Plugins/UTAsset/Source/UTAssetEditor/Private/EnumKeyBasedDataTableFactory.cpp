@@ -27,5 +27,3 @@ bool UEnumKeyBasedDataTableFactory::ShouldShowInNewMenu() const
 {
 	return true;
 }
-
-
