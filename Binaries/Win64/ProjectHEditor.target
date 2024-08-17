@@ -18,7 +18,7 @@
 		"IsLicenseeVersion": 0,
 		"IsPromotedBuild": 0,
 		"BranchName": "UE5",
-		"BuildId": "80761d2f-0323-4974-bd88-d75b2e0a5aa7"
+		"BuildId": "036c6dc5-37e5-497f-b8f7-2e7717bfb2a6"
 	},
 	"BuildProducts": [
 		{
@@ -31,6 +31,26 @@
 		},
 		{
 			"Path": "$(ProjectDir)/Binaries/Win64/UnrealEditor.modules",
+			"Type": "RequiredResource"
+		},
+		{
+			"Path": "$(ProjectDir)/Plugins/UTAsset/Binaries/Win64/UnrealEditor-UTAsset.dll",
+			"Type": "DynamicLibrary"
+		},
+		{
+			"Path": "$(ProjectDir)/Plugins/UTAsset/Binaries/Win64/UnrealEditor-UTAsset.pdb",
+			"Type": "SymbolFile"
+		},
+		{
+			"Path": "$(ProjectDir)/Plugins/UTAsset/Binaries/Win64/UnrealEditor-UTAssetEditor.dll",
+			"Type": "DynamicLibrary"
+		},
+		{
+			"Path": "$(ProjectDir)/Plugins/UTAsset/Binaries/Win64/UnrealEditor-UTAssetEditor.pdb",
+			"Type": "SymbolFile"
+		},
+		{
+			"Path": "$(ProjectDir)/Plugins/UTAsset/Binaries/Win64/UnrealEditor.modules",
 			"Type": "RequiredResource"
 		},
 		{
@@ -3982,6 +4002,26 @@
 			"Type": "RequiredResource"
 		},
 		{
+			"Path": "$(EngineDir)/Plugins/Animation/PoseSearch/Binaries/Win64/UnrealEditor-PoseSearch.dll",
+			"Type": "DynamicLibrary"
+		},
+		{
+			"Path": "$(EngineDir)/Plugins/Animation/PoseSearch/Binaries/Win64/UnrealEditor-PoseSearch.pdb",
+			"Type": "SymbolFile"
+		},
+		{
+			"Path": "$(EngineDir)/Plugins/Animation/PoseSearch/Binaries/Win64/UnrealEditor-PoseSearchEditor.dll",
+			"Type": "DynamicLibrary"
+		},
+		{
+			"Path": "$(EngineDir)/Plugins/Animation/PoseSearch/Binaries/Win64/UnrealEditor-PoseSearchEditor.pdb",
+			"Type": "SymbolFile"
+		},
+		{
+			"Path": "$(EngineDir)/Plugins/Animation/PoseSearch/Binaries/Win64/UnrealEditor.modules",
+			"Type": "RequiredResource"
+		},
+		{
 			"Path": "$(EngineDir)/Plugins/Bridge/Binaries/Win64/UnrealEditor-Bridge.dll",
 			"Type": "DynamicLibrary"
 		},
@@ -6911,6 +6951,10 @@
 		}
 	],
 	"RuntimeDependencies": [
+		{
+			"Path": "$(ProjectDir)/Plugins/UTAsset/UTAsset.uplugin",
+			"Type": "UFS"
+		},
 		{
 			"Path": "$(ProjectDir)/Plugins/vc-ue-extensions/VisualStudioTools.uplugin",
 			"Type": "UFS"
@@ -31424,6 +31468,10 @@
 			"Type": "UFS"
 		},
 		{
+			"Path": "$(EngineDir)/Plugins/Animation/PoseSearch/PoseSearch.uplugin",
+			"Type": "UFS"
+		},
+		{
 			"Path": "$(EngineDir)/Plugins/Bridge/Bridge.uplugin",
 			"Type": "UFS"
 		},
@@ -32197,6 +32245,7 @@
 		"PluginBrowser",
 		"PluginUtils",
 		"PortableObjectFileDataSource",
+		"PoseSearch",
 		"ProceduralMeshComponent",
 		"PropertyAccessEditor",
 		"PropertyAccessNode",
@@ -32225,6 +32274,7 @@
 		"TraceDataFilters",
 		"TraceUtilities",
 		"UObjectPlugin",
+		"UTAsset",
 		"UVEditor",
 		"UdpMessaging",
 		"VariantManager",

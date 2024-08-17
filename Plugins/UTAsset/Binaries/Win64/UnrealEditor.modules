@@ -1,0 +1,8 @@
+{
+	"BuildId": "036c6dc5-37e5-497f-b8f7-2e7717bfb2a6",
+	"Modules": 
+	{
+		"UTAsset": "UnrealEditor-UTAsset.dll",
+		"UTAssetEditor": "UnrealEditor-UTAssetEditor.dll"
+	}
+}
