@@ -38,7 +38,7 @@ bool UDataTableManager::UpdateAvailableAnatomyProfiles()
 		FAnatomyProfile* Data = AnatomyProfilesDataTable->FindRow<FAnatomyProfile>(FName(AnatomyString), 
 		*FString::Printf(TEXT("[AnatomyProfilesDataTable] doesn't have Row \"%s\""), *AnatomyString), true);
 	
-		if(Data == NULL || Data->IsValid())
+		if(Data == NULL || Data->IsValid() == false)
 			Success = false;
 		else
 			AvailableAnatomyProfiles.Add(MakeTuple(Anatomy, *Data));
@@ -47,8 +47,9 @@ bool UDataTableManager::UpdateAvailableAnatomyProfiles()
 	if(AvailableAnatomyProfiles.IsEmpty())
 		Success = false;
 
-	NeedUpdatAnatomyProfiles = !Success;
-
+	if(Success == false)
+		SetNeedUpdateAnatomyProfiles();
+	
 	SetNeedUpdatePresetCustomizationProfiles();
 
 	ensureMsgf(Success, TEXT("UDataTableManager::UpdateAvailableAnatomyProfiles() failed."));
@@ -104,7 +105,8 @@ bool UDataTableManager::UpdatePresetCustomizationProfiles()
 	if (PresetCustomizationProfiles.IsEmpty())
 		Success = false;
 
-	NeedUpdatePresetCustomizationProfiles = !Success;
+	if(Success == false)
+		SetNeedUpdatePresetCustomizationProfiles();
 
 	ensureMsgf(Success, TEXT("UDataTableManager::UpdatePresetCustomizationProfiles() failed."));
 

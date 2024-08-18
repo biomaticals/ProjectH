@@ -34,26 +34,6 @@
 			"Type": "RequiredResource"
 		},
 		{
-			"Path": "$(ProjectDir)/Plugins/UTAsset/Binaries/Win64/UnrealEditor-UTAsset-Win64-DebugGame.dll",
-			"Type": "DynamicLibrary"
-		},
-		{
-			"Path": "$(ProjectDir)/Plugins/UTAsset/Binaries/Win64/UnrealEditor-UTAsset-Win64-DebugGame.pdb",
-			"Type": "SymbolFile"
-		},
-		{
-			"Path": "$(ProjectDir)/Plugins/UTAsset/Binaries/Win64/UnrealEditor-UTAssetEditor-Win64-DebugGame.dll",
-			"Type": "DynamicLibrary"
-		},
-		{
-			"Path": "$(ProjectDir)/Plugins/UTAsset/Binaries/Win64/UnrealEditor-UTAssetEditor-Win64-DebugGame.pdb",
-			"Type": "SymbolFile"
-		},
-		{
-			"Path": "$(ProjectDir)/Plugins/UTAsset/Binaries/Win64/UnrealEditor-Win64-DebugGame.modules",
-			"Type": "RequiredResource"
-		},
-		{
 			"Path": "$(ProjectDir)/Plugins/vc-ue-extensions/Binaries/Win64/UnrealEditor-VisualStudioTools-Win64-DebugGame.dll",
 			"Type": "DynamicLibrary"
 		},
@@ -6951,10 +6931,6 @@
 		}
 	],
 	"RuntimeDependencies": [
-		{
-			"Path": "$(ProjectDir)/Plugins/UTAsset/UTAsset.uplugin",
-			"Type": "UFS"
-		},
 		{
 			"Path": "$(ProjectDir)/Plugins/vc-ue-extensions/VisualStudioTools.uplugin",
 			"Type": "UFS"
@@ -32274,7 +32250,6 @@
 		"TraceDataFilters",
 		"TraceUtilities",
 		"UObjectPlugin",
-		"UTAsset",
 		"UVEditor",
 		"UdpMessaging",
 		"VariantManager",
