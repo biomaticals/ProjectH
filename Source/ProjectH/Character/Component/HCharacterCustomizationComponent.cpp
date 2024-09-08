@@ -233,7 +233,6 @@ void UHCharacterCustomizationComponent::InitializeComponent_Internal()
 
 	DATATABLE_MANAGER()->UpdateAvailableAnatomyProfiles();
 	DATATABLE_MANAGER()->UpdatePresetCustomizationProfiles();
-
 }
 
 void UHCharacterCustomizationComponent::InitializeCustomizationProfile_Replicable()
