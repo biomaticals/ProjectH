@@ -1,7 +1,7 @@
 // Copyright 2024. Unique Turtle. All rights reserved.
 
 
-#include "System/SaveGame/HSaveGameSubSystem.h"
+#include "System/SaveGame/HSaveGameSubsystem.h"
 #include "GameFramework/GameStateBase.h"
 #include "EngineUtils.h"
 #include "ProjectH.h"
@@ -11,18 +11,18 @@
 #include "GameFramework/AsyncActionHandleSaveGame.h"
 #include "Serialization/ObjectAndNameAsStringProxyArchive.h"
  
-void UHSaveGameSubSystem::Initialize(FSubsystemCollectionBase& Collection)
+void UHSaveGameSubsystem::Initialize(FSubsystemCollectionBase& Collection)
 {
 	Super::Initialize(Collection);
 
 	OnSaveCompleted.Unbind();
 	OnLoadCompleted.Unbind();
 
-	OnSaveCompleted.BindUObject(this, &UHSaveGameSubSystem::OnSaved);
-	OnLoadCompleted.BindUObject(this, &UHSaveGameSubSystem::OnLoaded);
+	OnSaveCompleted.BindUObject(this, &UHSaveGameSubsystem::OnSaved);
+	OnLoadCompleted.BindUObject(this, &UHSaveGameSubsystem::OnLoaded);
 }
 
-void UHSaveGameSubSystem::Deinitialize()
+void UHSaveGameSubsystem::Deinitialize()
 {
 	Super::Deinitialize();
 
@@ -37,7 +37,7 @@ void UHSaveGameSubSystem::Deinitialize()
 	}
 }
 
-void UHSaveGameSubSystem::OnSaved(const FString& SlotName, const int32 UserIndex, bool Success)
+void UHSaveGameSubsystem::OnSaved(const FString& SlotName, const int32 UserIndex, bool Success)
 {
 	if(Success)
 	{
@@ -50,7 +50,7 @@ void UHSaveGameSubSystem::OnSaved(const FString& SlotName, const int32 UserIndex
 
 }
 
-void UHSaveGameSubSystem::OnLoaded(const FString& SlotName, const int32 UserIndex, USaveGame* SaveGame)
+void UHSaveGameSubsystem::OnLoaded(const FString& SlotName, const int32 UserIndex, USaveGame* SaveGame)
 {
 	UT_LOG(HSaveGameLog, Log, TEXT("%d 유저의 %s 슬롯으로 세이브게임을 불러왔습니다."), UserIndex, *SlotName);
 
@@ -116,7 +116,7 @@ void UHSaveGameSubSystem::OnLoaded(const FString& SlotName, const int32 UserInde
 	}
 }
 
-bool UHSaveGameSubSystem::HSaveGametoSlot(UObject* WorldContextObject, const FString& SlotName, const int32 UserIndex)
+bool UHSaveGameSubsystem::HSaveGametoSlot(UObject* WorldContextObject, const FString& SlotName, const int32 UserIndex)
 {
 	if (GetWorld() == NULL)
 	{
@@ -174,7 +174,7 @@ bool UHSaveGameSubSystem::HSaveGametoSlot(UObject* WorldContextObject, const FSt
 	return true;
 }
 
-bool UHSaveGameSubSystem::HLoadGameFromSlot(const FString& SlotName, const int32 UserIndex)
+bool UHSaveGameSubsystem::HLoadGameFromSlot(const FString& SlotName, const int32 UserIndex)
 {
 	if (UGameplayStatics::DoesSaveGameExist(SlotName, UserIndex) == false)
 	{

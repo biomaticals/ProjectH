@@ -5,13 +5,13 @@
 #include "CoreMinimal.h"
 #include "Subsystems/GameInstanceSubsystem.h"
 #include "Kismet/GameplayStatics.h"
-#include "HSaveGameSubSystem.generated.h"
+#include "HSaveGameSubsystem.generated.h"
 
 /**
  *  
  */
 UCLASS()
-class PROJECTH_API UHSaveGameSubSystem : public UGameInstanceSubsystem
+class PROJECTH_API UHSaveGameSubsystem : public UGameInstanceSubsystem
 {
 	GENERATED_BODY()
 
@@ -24,7 +24,7 @@ public:
 	void OnLoaded(const FString& SlotName, const int32 UserIndex, USaveGame* SaveGame);
 
 public:
-	UFUNCTION(BlueprintCallable, meta = (WorldContext = "WorldContextObject"))
+	UFUNCTION(BlueprintCallable, meta = (WorldContext = "WorldContextObject", AdvancedDisplay = "bScreenshot, Size"))
 	bool HSaveGametoSlot(UObject* WorldContextObject, const FString& SlotName, const int32 UserIndex);
 	
 	UFUNCTION(BlueprintCallable, meta = (WorldContext = "WorldContextObject"))
