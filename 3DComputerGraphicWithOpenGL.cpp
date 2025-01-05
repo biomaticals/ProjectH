@@ -3,31 +3,18 @@
 
 #include "iostream"
 #include "GL/glut.h"
+#include "MyStaticLibrary.cpp"
 
 void MyDisplay()
 {
     glClear(GL_COLOR_BUFFER_BIT);
     glColor3f(1.0, 1.0, 1.0);
-    glBegin(GL_POLYGON);
-    glVertex3f(-0.5, -0.5, 0.0);
-    glVertex3f(0.5, -0.5, 0.0);
-    glVertex3f(0.5, 0.5, 0.0);
-    glVertex3f(-0.5, 0.5, 0.0);
-    glEnd();
-    glFlush();
-}
-
-void MyDisplay2()
-{
-    glClear(GL_COLOR_BUFFER_BIT);
-    glViewport(0, 0, 150, 150);
-    glColor3f(1.0, 1.0, 1.0);
-    glBegin(GL_POLYGON);
-    glVertex3f(-0.5, -0.5, 0.0);
-    glVertex3f(0.5, -0.5, 0.0);
-    glVertex3f(0.5, 0.5, 0.0);
-    glVertex3f(-0.5, 0.5, 0.0);
-    glEnd();
+    glutSolidCube(.1f);
+    glutSolidSphere(2.f, 5, 3);
+    glutWireTorus(1.f, 3.f, 5, 3);
+    glutSolidCone(5.f, 10.f, 5, 3);
+    glutWireIcosahedron();
+    glutSolidTeapot(5);
     glFlush();
 }
 
@@ -38,7 +25,7 @@ int main(int argc, char** argv)
 
     glutInit(&argc, argv);
     glutInitDisplayMode(GLUT_RGB);
-    glutInitWindowSize(300, 300);
+    glutInitWindowSize(2560, 1440);
     glutInitWindowPosition(0, 0);
     glutCreateWindow("OpenGL Drawing Example");
     glClearColor(0.0, 0.0, 0.0, 1.0);
@@ -47,15 +34,9 @@ int main(int argc, char** argv)
     glOrtho(-1.0, 1.0, -1.0, 1.0, -1.0, 1.0);
     glutDisplayFunc(MyDisplay);
 
-    glutInitDisplayMode(GLUT_RGB);
-    glutInitWindowSize(600, 600);
-    glutInitWindowPosition(0, 0);
-    glutCreateWindow("OpenGL Drawing Example2");
-    glClearColor(0.0, 0.0, 0.0, 1.0);
-    glMatrixMode(GL_PROJECTION);
-    glLoadIdentity();
-    glOrtho(-1.0, 1.0, -1.0, 1.0, -1.0, 1.0);
-    glutDisplayFunc(MyDisplay2);
+    MyStaticLibrary a;
+    a.TestPrint();
+
     glutMainLoop();
     return 0;
 }
