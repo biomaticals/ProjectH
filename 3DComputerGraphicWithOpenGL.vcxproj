@@ -71,20 +71,20 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>C:\OpenGL\freeglut\include;C:\OpenGL\glew-2.1.0\include;$(IncludePath)</IncludePath>
-    <LibraryPath>C:\OpenGL\freeglut\lib\x64;C:\OpenGL\glew-2.1.0\lib\Release\x64;$(LibraryPath)</LibraryPath>
+    <IncludePath>E:\Work\MyStaticLibrary;C:\OpenGL\freeglut\include;C:\OpenGL\glew-2.1.0\include;$(IncludePath)</IncludePath>
+    <LibraryPath>E:\Work\MyStaticLibrary\Debug;C:\OpenGL\freeglut\lib;C:\OpenGL\glew-2.1.0\lib\Release\Win32;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <IncludePath>C:\OpenGL\freeglut\include;C:\OpenGL\glew-2.1.0\include;$(IncludePath)</IncludePath>
-    <LibraryPath>C:\OpenGL\freeglut\lib\x64;C:\OpenGL\glew-2.1.0\lib\Release\x64;$(LibraryPath)</LibraryPath>
+    <IncludePath>E:\Work\MyStaticLibrary;C:\OpenGL\freeglut\include;C:\OpenGL\glew-2.1.0\include;$(IncludePath)</IncludePath>
+    <LibraryPath>E:\Work\MyStaticLibrary\Release;C:\OpenGL\freeglut\lib\x64;C:\OpenGL\glew-2.1.0\lib\Release\x64;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IncludePath>E:\Work\MyStaticLibrary\include;C:\OpenGL\freeglut\include;C:\OpenGL\glew-2.1.0\include;$(IncludePath)</IncludePath>
-    <LibraryPath>E:\Work\MyStaticLibrary\x64;C:\OpenGL\freeglut\lib\x64;C:\OpenGL\glew-2.1.0\lib\Release\x64;$(LibraryPath)</LibraryPath>
+    <IncludePath>E:\Work\MyStaticLibrary;C:\OpenGL\freeglut\include;C:\OpenGL\glew-2.1.0\include;$(IncludePath)</IncludePath>
+    <LibraryPath>E:\Work\MyStaticLibrary\x64\Debug;C:\OpenGL\freeglut\lib\x64;C:\OpenGL\glew-2.1.0\lib\Release\x64;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <IncludePath>C:\OpenGL\freeglut\include;C:\OpenGL\glew-2.1.0\include;$(IncludePath)</IncludePath>
-    <LibraryPath>C:\OpenGL\freeglut\lib\x64;C:\OpenGL\glew-2.1.0\lib\Release\x64;$(LibraryPath)</LibraryPath>
+    <IncludePath>E:\Work\3DComputerGraphicWithOpenGL;C:\OpenGL\glew-2.1.0\include;$(IncludePath)</IncludePath>
+    <LibraryPath>E:\Work\MyStaticLibrary\x64\Release;C:\OpenGL\freeglut\lib\x64;C:\OpenGL\glew-2.1.0\lib\Release\x64;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
