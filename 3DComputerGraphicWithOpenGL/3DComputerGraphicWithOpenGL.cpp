@@ -3,7 +3,6 @@
 
 #include "iostream"
 #include "GL/glut.h"
-#include "MyStaticLibrary.cpp"
 
 void MyDisplay()
 {
@@ -33,9 +32,6 @@ int main(int argc, char** argv)
     glLoadIdentity();
     glOrtho(-1.0, 1.0, -1.0, 1.0, -1.0, 1.0);
     glutDisplayFunc(MyDisplay);
-
-    MyStaticLibrary a;
-    a.TestPrint();
 
     glutMainLoop();
     return 0;
