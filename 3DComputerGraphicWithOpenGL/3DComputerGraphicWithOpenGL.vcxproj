@@ -59,31 +59,35 @@
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="Property\CommonPropertySheet.props" />
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="Property\CommonPropertySheet.props" />
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="Property\CommonPropertySheet.props" />
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="Property\CommonPropertySheet.props" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>;E:\Work\3DComputerGraphicWithOpenGL\StaticLinkedLibrary;E:\Work\3DComputerGraphicWithOpenGL\StaticLinkedLibrary\StaticLinkedLibrary</IncludePath>
+    <IncludePath>;$(StaticLinkedLibrary)</IncludePath>
     <LibraryPath>C:\OpenGL\freeglut\lib;C:\OpenGL\glew-2.1.0\lib\Release\Win32;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <IncludePath>$(IncludePath);E:\Work\3DComputerGraphicWithOpenGL\StaticLinkedLibrary;E:\Work\3DComputerGraphicWithOpenGL\StaticLinkedLibrary\StaticLinkedLibrary</IncludePath>
+    <IncludePath>$(IncludePath);$(StaticLinkedLibrary)</IncludePath>
     <LibraryPath>C:\OpenGL\freeglut\lib\x64;C:\OpenGL\glew-2.1.0\lib\Release\x64;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IncludePath>$(IncludePath);E:\Work\3DComputerGraphicWithOpenGL\StaticLinkedLibrary;E:\Work\3DComputerGraphicWithOpenGL\StaticLinkedLibrary\StaticLinkedLibrary</IncludePath>
+    <IncludePath>$(IncludePath);$(StaticLinkedLibrary)</IncludePath>
     <LibraryPath>C:\OpenGL\freeglut\lib\x64;C:\OpenGL\glew-2.1.0\lib\Release\x64;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <IncludePath>;E:\Work\3DComputerGraphicWithOpenGL\StaticLinkedLibrary;E:\Work\3DComputerGraphicWithOpenGL\StaticLinkedLibrary\StaticLinkedLibrary</IncludePath>
+    <IncludePath>;$(StaticLinkedLibrary)</IncludePath>
     <LibraryPath>C:\OpenGL\freeglut\lib\x64;C:\OpenGL\glew-2.1.0\lib\Release\x64;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">

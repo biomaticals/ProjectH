@@ -3,7 +3,7 @@
 
 #include "iostream"
 #include "GL/glut.h"
-
+#include <stdio.h>
 #include "StaticLinkedLibrary.h"
 #include <StaticLinkedLibrary.cpp>
 
