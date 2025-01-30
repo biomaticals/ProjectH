@@ -4,6 +4,9 @@
 #include "iostream"
 #include "GL/glut.h"
 
+#include "StaticLinkedLibrary.h"
+#include <StaticLinkedLibrary.cpp>
+
 void MyDisplay()
 {
     glClear(GL_COLOR_BUFFER_BIT);
@@ -19,8 +22,9 @@ void MyDisplay()
 
 int main(int argc, char** argv)
 {
-    // 책의 내용대로 glViewport를 명시적으로 사용하지 않은 상태로 윈도우를 조절하면 종횡비를 유지하려고 하기 때문에 왜곡이 발생하고,
-    // glViewport를 명시적으로 사용하면 물체에 왜곡이 일어나지 않고 그대로 유지됨을 확인할 수 있습니다.
+    double Result = StaticLinkedLibrary::Arithmetic::Add(3.f, 5.f);
+    std::printf("%f", Result);
+
 
     glutInit(&argc, argv);
     glutInitDisplayMode(GLUT_RGB);
@@ -32,7 +36,6 @@ int main(int argc, char** argv)
     glLoadIdentity();
     glOrtho(-1.0, 1.0, -1.0, 1.0, -1.0, 1.0);
     glutDisplayFunc(MyDisplay);
-
     glutMainLoop();
     return 0;
 }
