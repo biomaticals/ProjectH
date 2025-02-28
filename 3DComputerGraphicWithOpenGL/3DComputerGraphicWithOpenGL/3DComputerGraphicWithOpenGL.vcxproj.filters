@@ -15,7 +15,7 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="3DComputerGraphicWithOpenGL.cpp">
+    <ClCompile Include="Source\3DComputerGraphicWithOpenGL.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>
