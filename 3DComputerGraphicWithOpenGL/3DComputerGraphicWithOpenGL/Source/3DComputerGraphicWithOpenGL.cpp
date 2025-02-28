@@ -5,6 +5,9 @@
 #include "GL/glut.h"
 #include <stdio.h>
 
+// StaticLibrary
+#include "StaticMathLibrary/Source/StaticMathLibrary.h"
+
 void MyDisplay()
 {
     glClear(GL_COLOR_BUFFER_BIT);

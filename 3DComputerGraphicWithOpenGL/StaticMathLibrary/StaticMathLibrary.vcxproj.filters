@@ -13,18 +13,15 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
-    <Filter Include="프로퍼티">
-      <UniqueIdentifier>{3e48a317-eae7-4305-b217-182d1691f028}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Source\3DComputerGraphicWithOpenGL.cpp">
+    <ClCompile Include="Source\StaticMathLibrary.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Property\PropertySheet.props">
-      <Filter>프로퍼티</Filter>
-    </None>
+    <ClInclude Include="Source\StaticMathLibrary.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
