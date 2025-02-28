@@ -4,8 +4,6 @@
 #include "iostream"
 #include "GL/glut.h"
 #include <stdio.h>
-#include "StaticLinkedLibrary.h"
-#include <StaticLinkedLibrary.cpp>
 
 void MyDisplay()
 {
@@ -22,10 +20,6 @@ void MyDisplay()
 
 int main(int argc, char** argv)
 {
-    double Result = StaticLinkedLibrary::Arithmetic::Add(3.f, 5.f);
-    std::printf("%f", Result);
-
-
     glutInit(&argc, argv);
     glutInitDisplayMode(GLUT_RGB);
     glutInitWindowSize(2560, 1440);
