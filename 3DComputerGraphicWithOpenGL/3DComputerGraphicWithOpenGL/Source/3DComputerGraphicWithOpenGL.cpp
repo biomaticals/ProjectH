@@ -6,7 +6,7 @@
 #include <stdio.h>
 
 // StaticLibrary
-#include "StaticMathLibrary/Source/StaticMathLibrary.h"
+#include "StaticMathLibrary.h"
 
 void MyDisplay()
 {
@@ -23,6 +23,9 @@ void MyDisplay()
 
 int main(int argc, char** argv)
 {
+    double Result = StaticMathLibrary::Arithmetic::Divide(1.f, 3.f);
+    printf("%f", Result);
+ 
     glutInit(&argc, argv);
     glutInitDisplayMode(GLUT_RGB);
     glutInitWindowSize(2560, 1440);

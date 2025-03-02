@@ -76,15 +76,31 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LibraryPath>C:\OpenGL\glew-2.1.0\lib\Release\x64;C:\OpenGL\freeglut\lib\x64;$(LibraryPath)</LibraryPath>
+    <ExecutablePath>$(ExecutablePath)</ExecutablePath>
+    <IncludePath>$(StaticMathLibrary);$(IncludePath)</IncludePath>
+    <ExternalIncludePath>$(ExternalIncludePath)</ExternalIncludePath>
+    <ReferencePath>$(ReferencePath)</ReferencePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LibraryPath>C:\OpenGL\glew-2.1.0\lib\Release\x64;C:\OpenGL\freeglut\lib\x64;$(LibraryPath)</LibraryPath>
+    <ExecutablePath>$(ExecutablePath)</ExecutablePath>
+    <IncludePath>$(StaticMathLibrary);$(IncludePath)</IncludePath>
+    <ExternalIncludePath>$(ExternalIncludePath)</ExternalIncludePath>
+    <ReferencePath>$(ReferencePath)</ReferencePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LibraryPath>C:\OpenGL\glew-2.1.0\lib\Release\x64;C:\OpenGL\freeglut\lib\x64;$(LibraryPath)</LibraryPath>
+    <ExecutablePath>$(ExecutablePath)</ExecutablePath>
+    <IncludePath>$(StaticMathLibrary);$(IncludePath)</IncludePath>
+    <ExternalIncludePath>$(ExternalIncludePath)</ExternalIncludePath>
+    <ReferencePath>$(ReferencePath)</ReferencePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LibraryPath>C:\OpenGL\glew-2.1.0\lib\Release\x64;C:\OpenGL\freeglut\lib\x64;$(LibraryPath)</LibraryPath>
+    <ExecutablePath>$(ExecutablePath)</ExecutablePath>
+    <IncludePath>$(StaticMathLibrary);$(IncludePath)</IncludePath>
+    <ExternalIncludePath>$(ExternalIncludePath)</ExternalIncludePath>
+    <ReferencePath>$(ReferencePath)</ReferencePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -92,7 +108,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(StaticMathLibrary);E:\Work\3DComputerGraphicWithOpenGL\3DComputerGraphicWithOpenGL\StaticMathLibrary;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -107,7 +123,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(StaticMathLibrary);E:\Work\3DComputerGraphicWithOpenGL\3DComputerGraphicWithOpenGL\StaticMathLibrary;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -122,7 +138,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(StaticMathLibrary);E:\Work\3DComputerGraphicWithOpenGL\3DComputerGraphicWithOpenGL\StaticMathLibrary;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -137,7 +153,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(StaticMathLibrary);E:\Work\3DComputerGraphicWithOpenGL\3DComputerGraphicWithOpenGL\StaticMathLibrary;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -150,12 +166,12 @@
     <ClCompile Include="Source\3DComputerGraphicWithOpenGL.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Property\PropertySheet.props" />
+  </ItemGroup>
+  <ItemGroup>
     <ProjectReference Include="..\StaticMathLibrary\StaticMathLibrary.vcxproj">
       <Project>{a42e5d06-25c2-4548-8803-c1dd23c76b6d}</Project>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Property\PropertySheet.props" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
