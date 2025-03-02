@@ -8,6 +8,9 @@
 // StaticLibrary
 #include "StaticMathLibrary.h"
 
+// DynamicLibrary
+#include "MathLibrary.h"
+
 void MyDisplay()
 {
     glClear(GL_COLOR_BUFFER_BIT);
@@ -25,6 +28,17 @@ int main(int argc, char** argv)
 {
     double Result = StaticMathLibrary::Arithmetic::Divide(1.f, 3.f);
     printf("%f", Result);
+
+    fibonacci_init(1, 1);
+    // Write out the sequence values until overflow.
+    do {
+        std::cout << fibonacci_index() << ": "
+            << fibonacci_current() << std::endl;
+    } while (fibonacci_next());
+    // Report count of values written before overflow.
+    std::cout << fibonacci_index() + 1 <<
+        " Fibonacci sequence values fit in an " <<
+        "unsigned 64-bit integer." << std::endl;
  
     glutInit(&argc, argv);
     glutInitDisplayMode(GLUT_RGB);

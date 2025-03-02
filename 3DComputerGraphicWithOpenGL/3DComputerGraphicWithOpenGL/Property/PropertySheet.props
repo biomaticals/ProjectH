@@ -3,12 +3,17 @@
   <ImportGroup Label="PropertySheets" />
   <PropertyGroup Label="UserMacros">
     <StaticMathLibrary>E:\Work\3DComputerGraphicWithOpenGL\3DComputerGraphicWithOpenGL\StaticMathLibrary\Source</StaticMathLibrary>
+    <DynamicMathLibrary>E:\Work\3DComputerGraphicWithOpenGL\DynamicLinkedLibrary_ImplicitLink\DynamicLinkedLibrary_ImplicitLink</DynamicMathLibrary>
   </PropertyGroup>
   <PropertyGroup />
   <ItemDefinitionGroup />
   <ItemGroup>
     <BuildMacro Include="StaticMathLibrary">
       <Value>$(StaticMathLibrary)</Value>
+      <EnvironmentVariable>true</EnvironmentVariable>
+    </BuildMacro>
+    <BuildMacro Include="DynamicMathLibrary">
+      <Value>$(DynamicMathLibrary)</Value>
       <EnvironmentVariable>true</EnvironmentVariable>
     </BuildMacro>
   </ItemGroup>
