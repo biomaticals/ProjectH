@@ -10,6 +10,7 @@
 
 // DynamicLibrary
 #include "MathLibrary.h"
+#include "DynamicMathLibrary.h"
 
 void MyDisplay()
 {
