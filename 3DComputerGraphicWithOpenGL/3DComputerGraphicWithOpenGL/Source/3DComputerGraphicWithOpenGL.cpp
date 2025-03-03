@@ -28,16 +28,20 @@ void MyDisplay()
 int main(int argc, char** argv)
 {
     double Result = StaticMathLibrary::Arithmetic::Divide(1.f, 3.f);
-    printf("%f", Result);
+    printf("Divide(1.f, 3.f) = %f (from StaticMathLibrary)", Result);
 
-    fibonacci_init(1, 1);
+    MathLibrary::fibonacci_init(1,1);
+    int Result2 = MathLibrary::fibonacci_index();
+    printf("MathLibrary's fibonacci index is %d", Result2);
+
+    DynamicMathLibrary::fibonacci_init(1, 1);
     // Write out the sequence values until overflow.
     do {
-        std::cout << fibonacci_index() << ": "
-            << fibonacci_current() << std::endl;
-    } while (fibonacci_next());
+        std::cout << DynamicMathLibrary::fibonacci_index() << ": "
+            << DynamicMathLibrary::fibonacci_current() << std::endl;
+    } while (DynamicMathLibrary::fibonacci_next());
     // Report count of values written before overflow.
-    std::cout << fibonacci_index() + 1 <<
+    std::cout << DynamicMathLibrary::fibonacci_index() + 1 <<
         " Fibonacci sequence values fit in an " <<
         "unsigned 64-bit integer." << std::endl;
  
