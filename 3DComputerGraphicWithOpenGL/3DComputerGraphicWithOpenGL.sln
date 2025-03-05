@@ -5,8 +5,6 @@ VisualStudioVersion = 17.12.35707.178
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "3DComputerGraphicWithOpenGL", "3DComputerGraphicWithOpenGL\3DComputerGraphicWithOpenGL.vcxproj", "{E654F052-4A18-49F9-8B98-9FC91FF7A90B}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "StaticMathLibrary", "StaticMathLibrary\StaticMathLibrary.vcxproj", "{A42E5D06-25C2-4548-8803-C1DD23C76B6D}"
-EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "DynamicMathLibrary", "DynamicMathLibrary\DynamicMathLibrary.vcxproj", "{0892D5A5-38B5-465E-ADEE-18EF324036E0}"
 EndProject
 Global
@@ -25,14 +23,6 @@ Global
 		{E654F052-4A18-49F9-8B98-9FC91FF7A90B}.Release|x64.Build.0 = Release|x64
 		{E654F052-4A18-49F9-8B98-9FC91FF7A90B}.Release|x86.ActiveCfg = Release|Win32
 		{E654F052-4A18-49F9-8B98-9FC91FF7A90B}.Release|x86.Build.0 = Release|Win32
-		{A42E5D06-25C2-4548-8803-C1DD23C76B6D}.Debug|x64.ActiveCfg = Debug|x64
-		{A42E5D06-25C2-4548-8803-C1DD23C76B6D}.Debug|x64.Build.0 = Debug|x64
-		{A42E5D06-25C2-4548-8803-C1DD23C76B6D}.Debug|x86.ActiveCfg = Debug|Win32
-		{A42E5D06-25C2-4548-8803-C1DD23C76B6D}.Debug|x86.Build.0 = Debug|Win32
-		{A42E5D06-25C2-4548-8803-C1DD23C76B6D}.Release|x64.ActiveCfg = Release|x64
-		{A42E5D06-25C2-4548-8803-C1DD23C76B6D}.Release|x64.Build.0 = Release|x64
-		{A42E5D06-25C2-4548-8803-C1DD23C76B6D}.Release|x86.ActiveCfg = Release|Win32
-		{A42E5D06-25C2-4548-8803-C1DD23C76B6D}.Release|x86.Build.0 = Release|Win32
 		{0892D5A5-38B5-465E-ADEE-18EF324036E0}.Debug|x64.ActiveCfg = Debug|x64
 		{0892D5A5-38B5-465E-ADEE-18EF324036E0}.Debug|x64.Build.0 = Debug|x64
 		{0892D5A5-38B5-465E-ADEE-18EF324036E0}.Debug|x86.ActiveCfg = Debug|Win32

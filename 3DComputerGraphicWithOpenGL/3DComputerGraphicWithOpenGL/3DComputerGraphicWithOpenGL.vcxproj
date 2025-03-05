@@ -188,11 +188,6 @@
   <ItemGroup>
     <None Include="Property\PropertySheet.props" />
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\StaticMathLibrary\StaticMathLibrary.vcxproj">
-      <Project>{a42e5d06-25c2-4548-8803-c1dd23c76b6d}</Project>
-    </ProjectReference>
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

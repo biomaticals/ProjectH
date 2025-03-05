@@ -5,9 +5,6 @@
 #include "GL/glut.h"
 #include <stdio.h>
 
-// StaticLibrary
-#include "StaticMathLibrary.h"
-
 // DynamicLibrary
 #include "MathLibrary.h"
 #include "DynamicMathLibrary.h"
@@ -27,9 +24,6 @@ void MyDisplay()
 
 int main(int argc, char** argv)
 {
-    double Result = StaticMathLibrary::Arithmetic::Divide(1.f, 3.f);
-    printf("Divide(1.f, 3.f) = %f (from StaticMathLibrary)", Result);
-
     MathLibrary::fibonacci_init(1,1);
     int Result2 = MathLibrary::fibonacci_index();
     printf("MathLibrary's fibonacci index is %d", Result2);
