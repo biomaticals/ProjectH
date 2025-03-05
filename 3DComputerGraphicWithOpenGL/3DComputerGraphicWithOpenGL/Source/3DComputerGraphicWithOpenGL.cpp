@@ -5,10 +5,6 @@
 #include "GL/glut.h"
 #include <stdio.h>
 
-// DynamicLibrary
-#include "MathLibrary.h"
-#include "DynamicMathLibrary.h"
-
 void MyDisplay()
 {
     glClear(GL_COLOR_BUFFER_BIT);
@@ -24,21 +20,6 @@ void MyDisplay()
 
 int main(int argc, char** argv)
 {
-    MathLibrary::fibonacci_init(1,1);
-    int Result2 = MathLibrary::fibonacci_index();
-    printf("MathLibrary's fibonacci index is %d", Result2);
-
-    DynamicMathLibrary::fibonacci_init(1, 1);
-    // Write out the sequence values until overflow.
-    do {
-        std::cout << DynamicMathLibrary::fibonacci_index() << ": "
-            << DynamicMathLibrary::fibonacci_current() << std::endl;
-    } while (DynamicMathLibrary::fibonacci_next());
-    // Report count of values written before overflow.
-    std::cout << DynamicMathLibrary::fibonacci_index() + 1 <<
-        " Fibonacci sequence values fit in an " <<
-        "unsigned 64-bit integer." << std::endl;
- 
     glutInit(&argc, argv);
     glutInitDisplayMode(GLUT_RGB);
     glutInitWindowSize(2560, 1440);
