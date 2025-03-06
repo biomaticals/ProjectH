@@ -5,6 +5,9 @@
 #include "GL/glut.h"
 #include <stdio.h>
 
+// Static Linked Library
+#include "OutsideStaticMath.h"
+
 void MyDisplay()
 {
     glClear(GL_COLOR_BUFFER_BIT);
@@ -20,6 +23,9 @@ void MyDisplay()
 
 int main(int argc, char** argv)
 {
+    double A = OutsideStaticMath::Arithmetic::Add(1.f, 2.f);
+
+
     glutInit(&argc, argv);
     glutInitDisplayMode(GLUT_RGB);
     glutInitWindowSize(2560, 1440);
