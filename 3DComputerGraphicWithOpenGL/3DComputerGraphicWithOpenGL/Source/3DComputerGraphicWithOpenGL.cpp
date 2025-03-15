@@ -7,6 +7,7 @@
 
 // Static Linked Library
 #include "OutsideStaticMath.h"
+#include "../../InsideStaticMathLibrary/Source/InsideStaticMath.h"
 
 void MyDisplay()
 {
@@ -24,7 +25,9 @@ void MyDisplay()
 int main(int argc, char** argv)
 {
     double A = OutsideStaticMath::Arithmetic::Add(1.f, 2.f);
+    double B = InsideStaticMath::Arithmetic::Divide(5.f, 2.f);
 
+    std::printf("1.f + 2.f = %f\n5.f / 2.f = %f", A, B);
 
     glutInit(&argc, argv);
     glutInitDisplayMode(GLUT_RGB);
