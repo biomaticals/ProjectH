@@ -3,12 +3,12 @@
   "WorkspaceRootPath": "E:\\Work\\3DComputerGraphicWithOpenGL\\OutsideStaticMathLibrary\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{CF3C8BBE-8B96-41C3-8461-C616213EF07A}|OutsideStaticMathLibrary\\OutsideStaticMathLibrary.vcxproj|E:\\Work\\3DComputerGraphicWithOpenGL\\OutsideStaticMathLibrary\\OutsideStaticMathLibrary\\Source\\OutsideStaticMath.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
-      "RelativeMoniker": "D:0:0:{CF3C8BBE-8B96-41C3-8461-C616213EF07A}|OutsideStaticMathLibrary\\OutsideStaticMathLibrary.vcxproj|solutionrelative:OutsideStaticMathLibrary\\Source\\OutsideStaticMath.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+      "AbsoluteMoniker": "D:0:0:{CF3C8BBE-8B96-41C3-8461-C616213EF07A}|OutsideStaticMathLibrary\\OutsideStaticMathLibrary.vcxproj|E:\\Work\\3DComputerGraphicWithOpenGL\\OutsideStaticMathLibrary\\OutsideStaticMathLibrary\\Source\\OutsideStaticMath.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{CF3C8BBE-8B96-41C3-8461-C616213EF07A}|OutsideStaticMathLibrary\\OutsideStaticMathLibrary.vcxproj|solutionrelative:OutsideStaticMathLibrary\\Source\\OutsideStaticMath.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{CF3C8BBE-8B96-41C3-8461-C616213EF07A}|OutsideStaticMathLibrary\\OutsideStaticMathLibrary.vcxproj|E:\\Work\\3DComputerGraphicWithOpenGL\\OutsideStaticMathLibrary\\OutsideStaticMathLibrary\\Source\\OutsideStaticMathLibrary.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
-      "RelativeMoniker": "D:0:0:{CF3C8BBE-8B96-41C3-8461-C616213EF07A}|OutsideStaticMathLibrary\\OutsideStaticMathLibrary.vcxproj|solutionrelative:OutsideStaticMathLibrary\\Source\\OutsideStaticMathLibrary.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+      "AbsoluteMoniker": "D:0:0:{CF3C8BBE-8B96-41C3-8461-C616213EF07A}|OutsideStaticMathLibrary\\OutsideStaticMathLibrary.vcxproj|E:\\Work\\3DComputerGraphicWithOpenGL\\OutsideStaticMathLibrary\\OutsideStaticMathLibrary\\Source\\OutsideStaticMath.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{CF3C8BBE-8B96-41C3-8461-C616213EF07A}|OutsideStaticMathLibrary\\OutsideStaticMathLibrary.vcxproj|solutionrelative:OutsideStaticMathLibrary\\Source\\OutsideStaticMath.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     }
   ],
   "DocumentGroupContainers": [
@@ -18,7 +18,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 2,
+          "SelectedChildIndex": 1,
           "Children": [
             {
               "$type": "Bookmark",
@@ -26,26 +26,26 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "OutsideStaticMathLibrary.cpp",
-              "DocumentMoniker": "E:\\Work\\3DComputerGraphicWithOpenGL\\OutsideStaticMathLibrary\\OutsideStaticMathLibrary\\Source\\OutsideStaticMathLibrary.cpp",
-              "RelativeDocumentMoniker": "OutsideStaticMathLibrary\\Source\\OutsideStaticMathLibrary.cpp",
-              "ToolTip": "E:\\Work\\3DComputerGraphicWithOpenGL\\OutsideStaticMathLibrary\\OutsideStaticMathLibrary\\Source\\OutsideStaticMathLibrary.cpp",
-              "RelativeToolTip": "OutsideStaticMathLibrary\\Source\\OutsideStaticMathLibrary.cpp",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAABoAAAABAAAAAAAAAA==",
+              "DocumentIndex": 0,
+              "Title": "OutsideStaticMath.cpp",
+              "DocumentMoniker": "E:\\Work\\3DComputerGraphicWithOpenGL\\OutsideStaticMathLibrary\\OutsideStaticMathLibrary\\Source\\OutsideStaticMath.cpp",
+              "RelativeDocumentMoniker": "OutsideStaticMathLibrary\\Source\\OutsideStaticMath.cpp",
+              "ToolTip": "E:\\Work\\3DComputerGraphicWithOpenGL\\OutsideStaticMathLibrary\\OutsideStaticMathLibrary\\Source\\OutsideStaticMath.cpp",
+              "RelativeToolTip": "OutsideStaticMathLibrary\\Source\\OutsideStaticMath.cpp",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABYAAAAdAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
               "WhenOpened": "2025-03-05T15:21:01.744Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 1,
               "Title": "OutsideStaticMath.h",
               "DocumentMoniker": "E:\\Work\\3DComputerGraphicWithOpenGL\\OutsideStaticMathLibrary\\OutsideStaticMathLibrary\\Source\\OutsideStaticMath.h",
               "RelativeDocumentMoniker": "OutsideStaticMathLibrary\\Source\\OutsideStaticMath.h",
               "ToolTip": "E:\\Work\\3DComputerGraphicWithOpenGL\\OutsideStaticMathLibrary\\OutsideStaticMathLibrary\\Source\\OutsideStaticMath.h",
               "RelativeToolTip": "OutsideStaticMathLibrary\\Source\\OutsideStaticMath.h",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAABIAAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA0AAAARAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
               "WhenOpened": "2025-03-05T15:17:38.048Z",
               "EditorCaption": ""

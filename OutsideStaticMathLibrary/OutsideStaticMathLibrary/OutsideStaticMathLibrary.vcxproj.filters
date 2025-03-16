@@ -20,7 +20,7 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Source\OutsideStaticMathLibrary.cpp">
+    <ClCompile Include="Source\OutsideStaticMath.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>
