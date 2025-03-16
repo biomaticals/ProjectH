@@ -9,6 +9,10 @@
 #include "OutsideStaticMath.h"
 #include "../../InsideStaticMathLibrary/Source/InsideStaticMath.h"
 
+// Dynamic Linked Library
+#include "OutsideDynamicMath.h"
+
+
 void MyDisplay()
 {
     glClear(GL_COLOR_BUFFER_BIT);
@@ -24,10 +28,17 @@ void MyDisplay()
 
 int main(int argc, char** argv)
 {
-    double A = OutsideStaticMath::Arithmetic::Add(1.f, 2.f);
-    double B = InsideStaticMath::Arithmetic::Divide(5.f, 2.f);
+    const double a = 2.f;
+    const double b = 5.f;
 
-    std::printf("1.f + 2.f = %f\n5.f / 2.f = %f", A, B);
+    double Result1 = OutsideStaticMath::Arithmetic::Add(a, b);
+    std::printf("OutsideStaticMath : %f + %f = %f\n", a, b, Result1);
+
+    double Result2 = InsideStaticMath::Arithmetic::Subtract(a, b);
+    std::printf("InsideStaticMath : %f - %f = %f\n", a, b, Result2);
+
+    double Result3 = OutsideDynamicMath::Multiply(a, b);
+    std::printf("OutsideDynamicMath : %f * %f = %f\n", a, b, Result3);
 
     glutInit(&argc, argv);
     glutInitDisplayMode(GLUT_RGB);

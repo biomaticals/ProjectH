@@ -82,9 +82,9 @@
     <ReferencePath>$(ReferencePath)</ReferencePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <LibraryPath>..\..\OutsideStaticMathLibrary\Release;C:\OpenGL\glew-2.1.0\lib\Release\Win32;C:\OpenGL\freeglut\lib;$(LibraryPath)</LibraryPath>
+    <LibraryPath>..\..\OutsideDynamicMathLibrary\Release;..\..\OutsideStaticMathLibrary\Release;C:\OpenGL\glew-2.1.0\lib\Release\Win32;C:\OpenGL\freeglut\lib;$(LibraryPath)</LibraryPath>
     <ExecutablePath>$(ExecutablePath)</ExecutablePath>
-    <IncludePath>..\..\OutsideStaticMathLibrary\OutsideStaticMathLibrary\Source;$(IncludePath)</IncludePath>
+    <IncludePath>..\..\OutsideDynamicMathLibrary\OutsideDynamicMathLibrary\Source;..\..\OutsideStaticMathLibrary\OutsideStaticMathLibrary\Source;$(IncludePath)</IncludePath>
     <ExternalIncludePath>$(ExternalIncludePath)</ExternalIncludePath>
     <ReferencePath>$(ReferencePath)</ReferencePath>
   </PropertyGroup>
@@ -117,8 +117,7 @@
       <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
     <PostBuildEvent>
-      <Command>
-      </Command>
+      <Command>xcopy /y /d "..\..\OutsideDynamicMathLibrary\$(IntDir)OutsideDynamicMathLibrary.dll" "$(OutDir)"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -136,12 +135,11 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>OutsideStaticMathLibrary.lib;InsideStaticMathLibrary.lib</AdditionalDependencies>
+      <AdditionalDependencies>OutsideDynamicMathLibrary.lib;OutsideStaticMathLibrary.lib</AdditionalDependencies>
       <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
     <PostBuildEvent>
-      <Command>
-      </Command>
+      <Command>xcopy /y /d "..\..\OutsideDynamicMathLibrary\$(IntDir)OutsideDynamicMathLibrary.dll" "$(OutDir)"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -159,8 +157,7 @@
       <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
     <PostBuildEvent>
-      <Command>
-      </Command>
+      <Command>xcopy /y /d "..\..\OutsideDynamicMathLibrary\$(IntDir)OutsideDynamicMathLibrary.dll" "$(OutDir)"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -182,8 +179,7 @@
       <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
     <PostBuildEvent>
-      <Command>
-      </Command>
+      <Command>xcopy /y /d "..\..\OutsideDynamicMathLibrary\$(IntDir)OutsideDynamicMathLibrary.dll" "$(OutDir)"</Command>
     </PostBuildEvent>
     <ProjectReference>
       <LinkLibraryDependencies>true</LinkLibraryDependencies>
@@ -194,6 +190,11 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Property\PropertySheet.props" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\InsideStaticMathLibrary\InsideStaticMathLibrary.vcxproj">
+      <Project>{d2c15627-977a-4945-88e7-ea4f47b250ab}</Project>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
