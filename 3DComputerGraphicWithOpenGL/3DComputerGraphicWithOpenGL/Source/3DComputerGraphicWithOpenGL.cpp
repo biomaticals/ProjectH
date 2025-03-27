@@ -7,11 +7,10 @@
 
 // Static Linked Library
 #include "OutsideStaticMath.h"
-#include "../../InsideStaticMathLibrary/Source/InsideStaticMath.h"
+#include "InsideStaticMath.h"
 
 // Dynamic Linked Library
 #include "OutsideDynamicMath.h"
-
 
 void MyDisplay()
 {

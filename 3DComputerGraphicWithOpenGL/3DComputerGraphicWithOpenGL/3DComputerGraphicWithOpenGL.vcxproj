@@ -75,32 +75,32 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <LibraryPath>..\..\OutsideStaticMathLibrary\Debug;C:\OpenGL\glew-2.1.0\lib\Release\Win32;C:\OpenGL\freeglut\lib;$(LibraryPath)</LibraryPath>
+    <LibraryPath>..\..\OutsideStaticMathLibrary\Debug;..\..\OutsideDynamicMathLibrary\Debug;C:\OpenGL\glew-2.1.0\lib\Release\Win32;C:\OpenGL\freeglut\lib;$(LibraryPath)</LibraryPath>
     <ExecutablePath>$(ExecutablePath)</ExecutablePath>
-    <IncludePath>..\..\OutsideStaticMathLibrary\OutsideStaticMathLibrary\Source;$(IncludePath)</IncludePath>
+    <IncludePath>..\..\OutsideStaticMathLibrary\OutsideStaticMathLibrary\Source;..\..\OutsideDynamicMathLibrary\OutsideDynamicMathLibrary\Source;..\InsideStaticMathLibrary\Source;$(IncludePath)</IncludePath>
     <ExternalIncludePath>$(ExternalIncludePath)</ExternalIncludePath>
     <ReferencePath>$(ReferencePath)</ReferencePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <LibraryPath>..\..\OutsideDynamicMathLibrary\Release;..\..\OutsideStaticMathLibrary\Release;C:\OpenGL\glew-2.1.0\lib\Release\Win32;C:\OpenGL\freeglut\lib;$(LibraryPath)</LibraryPath>
+    <LibraryPath>..\..\OutsideStaticMathLibrary\Release;..\..\OutsideDynamicMathLibrary\Release;C:\OpenGL\glew-2.1.0\lib\Release\Win32;C:\OpenGL\freeglut\lib;$(LibraryPath)</LibraryPath>
     <ExecutablePath>$(ExecutablePath)</ExecutablePath>
-    <IncludePath>..\..\OutsideDynamicMathLibrary\OutsideDynamicMathLibrary\Source;..\..\OutsideStaticMathLibrary\OutsideStaticMathLibrary\Source;$(IncludePath)</IncludePath>
+    <IncludePath>..\..\OutsideDynamicMathLibrary\OutsideDynamicMathLibrary\Source;..\..\OutsideStaticMathLibrary\OutsideStaticMathLibrary\Source;..\InsideStaticMathLibrary\Source;$(IncludePath)</IncludePath>
     <ExternalIncludePath>$(ExternalIncludePath)</ExternalIncludePath>
     <ReferencePath>$(ReferencePath)</ReferencePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <LibraryPath>..\..\OutsideStaticMathLibrary\x64\Debug;C:\OpenGL\glew-2.1.0\lib\Release\x64;C:\OpenGL\freeglut\lib\x64;$(LibraryPath)</LibraryPath>
+    <LibraryPath>..\..\OutsideStaticMathLibrary\x64\Debug;..\..\OutsideDynamicMathLibrary\x64\Debug;C:\OpenGL\glew-2.1.0\lib\Release\x64;C:\OpenGL\freeglut\lib\x64;$(LibraryPath)</LibraryPath>
     <ExecutablePath>$(ExecutablePath)</ExecutablePath>
-    <IncludePath>..\..\OutsideStaticMathLibrary\OutsideStaticMathLibrary\Source;$(IncludePath)</IncludePath>
+    <IncludePath>..\..\OutsideStaticMathLibrary\OutsideStaticMathLibrary\Source;..\..\OutsideDynamicMathLibrary\OutsideDynamicMathLibrary\Source;..\InsideStaticMathLibrary\Source;$(IncludePath)</IncludePath>
     <ExternalIncludePath>$(ExternalIncludePath)</ExternalIncludePath>
     <ReferencePath>$(ReferencePath)</ReferencePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <LibraryPath>..\..\OutsideStaticMathLibrary\x64\Release;C:\OpenGL\glew-2.1.0\lib\Release\x64;C:\OpenGL\freeglut\lib\x64;$(LibraryPath)</LibraryPath>
+    <LibraryPath>..\..\OutsideStaticMathLibrary\x64\Release;..\..\OutsideDynamicMathLibrary\x64\Release;C:\OpenGL\glew-2.1.0\lib\Release\x64;C:\OpenGL\freeglut\lib\x64;$(LibraryPath)</LibraryPath>
     <ExecutablePath>$(ExecutablePath)</ExecutablePath>
     <ExternalIncludePath>$(ExternalIncludePath)</ExternalIncludePath>
     <ReferencePath>$(ReferencePath)</ReferencePath>
-    <IncludePath>..\..\OutsideStaticMathLibrary\OutsideStaticMathLibrary\Source;$(IncludePath)</IncludePath>
+    <IncludePath>..\..\OutsideStaticMathLibrary\OutsideStaticMathLibrary\Source;..\..\OutsideDynamicMathLibrary\OutsideDynamicMathLibrary\Source;..\InsideStaticMathLibrary\Source;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -113,7 +113,7 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>OutsideStaticMathLibrary.lib</AdditionalDependencies>
+      <AdditionalDependencies>OutsideStaticMathLibrary.lib;OutsideDynamicMathLibrary.lib</AdditionalDependencies>
       <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
     <PostBuildEvent>
@@ -153,7 +153,7 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>OutsideStaticMathLibrary.lib</AdditionalDependencies>
+      <AdditionalDependencies>OutsideStaticMathLibrary.lib;OutsideDynamicMathLibrary.lib</AdditionalDependencies>
       <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
     <PostBuildEvent>
@@ -175,7 +175,7 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>OutsideStaticMathLibrary.lib</AdditionalDependencies>
+      <AdditionalDependencies>OutsideStaticMathLibrary.lib;OutsideDynamicMathLibrary.lib</AdditionalDependencies>
       <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
     <PostBuildEvent>
