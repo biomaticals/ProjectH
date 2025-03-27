@@ -15,7 +15,7 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Source\InsideStaticMathLibrary.cpp">
+    <ClCompile Include="Source\InsideStaticMath.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>

@@ -148,7 +148,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Source\InsideStaticMathLibrary.cpp" />
+    <ClCompile Include="Source\InsideStaticMath.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\InsideStaticMath.h" />
