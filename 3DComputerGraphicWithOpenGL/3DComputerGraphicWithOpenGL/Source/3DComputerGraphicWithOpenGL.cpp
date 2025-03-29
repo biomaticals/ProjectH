@@ -15,44 +15,21 @@
 
 void MyDisplay()
 {
-    glClear(GL_COLOR_BUFFER_BIT);
-    glColor3f(1.0, 1.0, 1.0);
-    glutSolidCube(.1f);
-    glutSolidSphere(2.f, 5, 3);
-    glutWireTorus(1.f, 3.f, 5, 3);
-    glutSolidCone(5.f, 10.f, 5, 3);
-    glutWireIcosahedron();
-    glutSolidTeapot(5);
-    glFlush();
+	glClear(GL_COLOR_BUFFER_BIT);
+	glBegin(GL_POLYGON);
+		glVertex3f(-0.5, -0.5, 0.0);
+		glVertex3f(0.5, -0.5, 0.0);
+		glVertex3f(0.5, 0.5, 0.0);
+		glVertex3f(-0.5, 0.5, 0.0);
+	glEnd();
+	glFlush();
 }
 
 int main(int argc, char** argv)
 {
-    const double a = 2.f;
-    const double b = 5.f;
-
-    double Result1 = OutsideStaticMath::Arithmetic::Add(a, b);
-    std::printf("OutsideStaticMath : %f + %f = %f\n", a, b, Result1);
-
-    double Result2 = InsideStaticMath::Arithmetic::Subtract(a, b);
-    std::printf("InsideStaticMath : %f - %f = %f\n", a, b, Result2);
-
-    double Result3 = OutsideDynamicMath::Multiply(a, b);
-    std::printf("OutsideDynamicMath : %f * %f = %f\n", a, b, Result3);
-
-    double Result4 = OutsideDynamicMath::Divide(a, b);
-    std::printf("InsideDynamicMath : %f * %f = %f\n", a, b, Result4);
-
-    glutInit(&argc, argv);
-    glutInitDisplayMode(GLUT_RGB);
-    glutInitWindowSize(2560, 1440);
-    glutInitWindowPosition(0, 0);
-    glutCreateWindow("OpenGL Drawing Example");
-    glClearColor(0.0, 0.0, 0.0, 1.0);
-    glMatrixMode(GL_PROJECTION);
-    glLoadIdentity();
-    glOrtho(-1.0, 1.0, -1.0, 1.0, -1.0, 1.0);
-    glutDisplayFunc(MyDisplay);
-    glutMainLoop();
-    return 0;
+	glutInit(&argc, argv);
+	glutCreateWindow("[코드 5-2] 흑색 바탕에 백색 사각형 그리기 1");
+	glutDisplayFunc(MyDisplay);
+	glutMainLoop();
+	return 0;
 }
