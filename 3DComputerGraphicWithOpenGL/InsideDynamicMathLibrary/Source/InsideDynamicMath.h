@@ -3,21 +3,19 @@
 
 #pragma once
 
+#ifdef INSIDEDYNAMICMATHLIBRARY_EXPORTS
+#define INSIDEDYNAMICMATHLIBRARY_API __declspec(dllexport)
+#else
+#define INSIDEDYNAMICMATHLIBRARY_API __declspec(dllimport)
+#endif
+
 namespace InsideDynamicMath
 {
-    class Arithmetic
-    {
-    public:
-        // Returns a + b
-        static double Add(double a, double b);
+	extern "C" INSIDEDYNAMICMATHLIBRARY_API double Add(double a, double b);
 
-        // Returns a - b
-        static double Subtract(double a, double b);
+	extern "C" INSIDEDYNAMICMATHLIBRARY_API double Subtract(double a, double b);
 
-        // Returns a * b
-        static double Multiply(double a, double b);
+	extern "C" INSIDEDYNAMICMATHLIBRARY_API double Multiply(double a, double b);
 
-        // Returns a / b
-        static double Divide(double a, double b);
-    };
+	extern "C" INSIDEDYNAMICMATHLIBRARY_API double Divide(double a, double b);
 }

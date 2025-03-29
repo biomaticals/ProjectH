@@ -10,6 +10,7 @@
 #include "InsideStaticMath.h"
 
 // Dynamic Linked Library
+#include "InsideDynamicMath.h"
 #include "OutsideDynamicMath.h"
 
 void MyDisplay()
@@ -38,6 +39,9 @@ int main(int argc, char** argv)
 
     double Result3 = OutsideDynamicMath::Multiply(a, b);
     std::printf("OutsideDynamicMath : %f * %f = %f\n", a, b, Result3);
+
+    double Result4 = OutsideDynamicMath::Divide(a, b);
+    std::printf("InsideDynamicMath : %f * %f = %f\n", a, b, Result4);
 
     glutInit(&argc, argv);
     glutInitDisplayMode(GLUT_RGB);
