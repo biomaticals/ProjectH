@@ -16,6 +16,8 @@
 void MyDisplay()
 {
 	glClear(GL_COLOR_BUFFER_BIT);
+	glViewport(400, 0, 400, 450);
+	glColor3f(1.0, 1.0, 1.0);
 	glBegin(GL_POLYGON);
 		glVertex3f(-0.5, -0.5, 0.0);
 		glVertex3f(0.5, -0.5, 0.0);
@@ -28,7 +30,14 @@ void MyDisplay()
 int main(int argc, char** argv)
 {
 	glutInit(&argc, argv);
-	glutCreateWindow("[ÄÚµå 5-2] Èæ»ö ¹ÙÅÁ¿¡ ¹é»ö »ç°¢Çü ±×¸®±â 1");
+	glutInitDisplayMode(GLUT_RGB);
+	glutInitWindowSize(800, 450);
+	glutInitWindowPosition(10, 50);
+	glutCreateWindow("[ì½”ë“œ 5-4] ê²€ì€ìƒ‰ ë°”íƒ•ì— í° ì‚¬ê°í˜• 2");
+	glClearColor(0.0, 0.0, 0.0, 1.0);
+	glMatrixMode(GL_PROJECTION_MATRIX);
+	glLoadIdentity();
+	glOrtho(-1.0, 1.0, -1.0, 1.0, -1.0, 1.0);
 	glutDisplayFunc(MyDisplay);
 	glutMainLoop();
 	return 0;
