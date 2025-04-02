@@ -16,8 +16,7 @@
 void MyDisplay()
 {
 	glClear(GL_COLOR_BUFFER_BIT);
-	glViewport(400, 0, 400, 450);
-	glColor3f(1.0, 1.0, 1.0);
+	glColor3f(0.5, 0.5, 0.5);
 	glBegin(GL_POLYGON);
 		glVertex3f(-0.5, -0.5, 0.0);
 		glVertex3f(0.5, -0.5, 0.0);
@@ -27,18 +26,26 @@ void MyDisplay()
 	glFlush();
 }
 
+void MyReshape(int NewWidth, int NewHeight)
+{
+	glViewport(0, 0, NewWidth, NewHeight);
+	GLfloat WidthFactor = (GLfloat)NewWidth / (GLfloat)300;
+	GLfloat HeightFactor = (GLfloat)NewHeight / (GLfloat)300;
+	glMatrixMode(GL_PROJECTION);
+	glLoadIdentity();
+	glOrtho(-1.0 * WidthFactor, 1.0 * WidthFactor, -1.0 * HeightFactor, 1.0*HeightFactor, -1.0 ,1.0);
+}
+
 int main(int argc, char** argv)
 {
 	glutInit(&argc, argv);
 	glutInitDisplayMode(GLUT_RGB);
-	glutInitWindowSize(800, 450);
-	glutInitWindowPosition(10, 50);
-	glutCreateWindow("[코드 5-4] 검은색 바탕에 흰 사각형 2");
-	glClearColor(0.0, 0.0, 0.0, 1.0);
-	glMatrixMode(GL_PROJECTION_MATRIX);
-	glLoadIdentity();
-	glOrtho(-1.0, 1.0, -1.0, 1.0, -1.0, 1.0);
+	glutInitWindowSize(300, 300);
+	glutInitWindowPosition(0, 50);
+	glutCreateWindow("[코드 5-5] 리셰이프 콜백");
+	glClearColor(1.0, 1.0, 1.0, 1.0);
 	glutDisplayFunc(MyDisplay);
+	glutReshapeFunc(MyReshape);
 	glutMainLoop();
 	return 0;
 }
