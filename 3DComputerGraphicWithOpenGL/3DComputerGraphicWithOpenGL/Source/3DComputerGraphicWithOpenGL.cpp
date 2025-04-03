@@ -26,6 +26,16 @@ void MyDisplay()
 	glFlush();
 }
 
+void MyKeyboard(unsigned char KeyPressed, int X, int Y)
+{
+	switch (KeyPressed)
+	{
+		case 'Q' : exit(0); break;
+		case 'q' : exit(0); break;
+		case 27 : exit(0); break;
+	}
+}
+
 void MyReshape(int NewWidth, int NewHeight)
 {
 	glViewport(0, 0, NewWidth, NewHeight);
@@ -42,10 +52,14 @@ int main(int argc, char** argv)
 	glutInitDisplayMode(GLUT_RGB);
 	glutInitWindowSize(300, 300);
 	glutInitWindowPosition(0, 50);
-	glutCreateWindow("[코드 5-5] 리셰이프 콜백");
+	glutCreateWindow("[코드 5-6] 키보드 콜백");
 	glClearColor(1.0, 1.0, 1.0, 1.0);
+	glMatrixMode(GL_PROJECTION);
+	glLoadIdentity();
+	glOrtho(-1.0, 1.0, -1.0, 1.0, -1.0, 1.0);
 	glutDisplayFunc(MyDisplay);
 	glutReshapeFunc(MyReshape);
+	glutKeyboardFunc(MyKeyboard);
 	glutMainLoop();
 	return 0;
 }
