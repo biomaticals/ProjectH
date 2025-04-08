@@ -72,6 +72,8 @@ int main(int argc, char** argv)
 	glutInitWindowSize(300, 300);
 	glutInitWindowPosition(0, 50);
 	glutCreateWindow("[코드5-7] 마우스 콜백");
+	const char* version = (const char*)glGetString(GL_VERSION);
+	std::cout << "OpenGL Version: " << version << std::endl;
 	glClearColor(1.0, 1.0, 1.0, 1.0);
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
