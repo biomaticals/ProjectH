@@ -93,9 +93,9 @@
     <IntDir>$(SolutionDir)Intermediate\$(platform)\$(Configuration)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <LibraryPath>$(OutsideStaticMathLibrarySolutionDir)Binaries\$(Platform)\$(Configuration);$(OutsideDynamicMathLibrarySolutionDir)Binaries\$(Platform)\$(Configuration);C:\OpenGL\glew-2.1.0\lib\Release\x64;C:\OpenGL\freeglut\lib\x64;$(LibraryPath)</LibraryPath>
+    <LibraryPath>$(OutsideStaticMathLibrarySolutionDir)Binaries\$(Platform)\$(Configuration);$(OutsideDynamicMathLibrarySolutionDir)Binaries\$(Platform)\$(Configuration);C:\OpenGL\glew-2.1.0\lib\Release\x64;C:\OpenGL\freeglut\lib\x64;..\ThirdParty\ImGui;..\ThirdParty\glfw(2025April8thLatest);$(LibraryPath)</LibraryPath>
     <ExecutablePath>$(ExecutablePath)</ExecutablePath>
-    <IncludePath>$(InsideStaticMathLibrarySolutionDir)Source;$(OutsideStaticMathLibrarySolutionDir)OutsideStaticMathLibrary\Source;$(InsideDynamicMathLibrarySolutionDir)Source;$(OutsideDynamicMathLibrarySolutionDir)OutsideDynamicMathLibrary\Source;$(IncludePath)</IncludePath>
+    <IncludePath>$(InsideStaticMathLibrarySolutionDir)Source;$(OutsideStaticMathLibrarySolutionDir)OutsideStaticMathLibrary\Source;$(InsideDynamicMathLibrarySolutionDir)Source;$(OutsideDynamicMathLibrarySolutionDir)OutsideDynamicMathLibrary\Source;..\ThirdParty\glfw(2025April8thLatest);$(IncludePath)</IncludePath>
     <ExternalIncludePath>$(ExternalIncludePath)</ExternalIncludePath>
     <ReferencePath>$(ReferencePath)</ReferencePath>
     <OutDir>$(SolutionDir)Binaries\$(Platform)\$(Configuration)\</OutDir>
