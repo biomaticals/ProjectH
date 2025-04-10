@@ -1,4 +1,4 @@
-// Copyright 2025. Team Unique Turtle ; https://github.com/biomaticals. All rights reserved.
+ï»¿// Copyright 2025. Team Unique Turtle ; https://github.com/biomaticals. All rights reserved.
 // All contents cannot be copied, distributed, revised.
 #include <stdio.h>
 #include "iostream"
@@ -16,27 +16,19 @@ void render(GLFWwindow* window);
  
 int main()
 {
-    // glfw ÃÊ±âÈ­
+    // í•œê¸€
     glfwInit();
  
-    // window ¸¸µé±â (width, height, title, monitor, share)
     GLFWwindow* window = glfwCreateWindow(640, 480, "Inyong", 0, 0);
     
-    // context´Â ±×¸®±â À§ÇÑ ³»¿ëÀ» ´ã°í ÀÖÀ½
-    // window°¡ µÎ°³ÀÌ¸é context°¡ µÎ°³ÀÏ¼öµµ ÀÖÀ½
-    // ±×·¯¸é ¾î¶² context·Î ±×¸±Áö Á¤ÇØÁà¾ß ÇÔ
+
     glfwMakeContextCurrent(window);
- 
-    // »ç¿ëÀÚ°¡ window Ã¢À» ´İÀ» ¶§±îÁö
-    while (!glfwWindowShouldClose(window)) {
-        // window ±×·ÁÁÖ±â
+
+    while (!glfwWindowShouldClose(window))
+    {
         render(window);
- 
-        // ¸¶¿ì½º ¿òÁ÷ÀÌ´Â °Í. ÀÌ·±°Íµé µé°í¿Í¼­ ÇÊ¿äÇÑ windowÇÑÅ× º¸³»ÁÖ±â
         glfwPollEvents();
     }
- 
-    // window°¡ ´İÇûÀ» °æ¿ì ³¡³»ÀÚ
     glfwDestroyWindow(window);
     glfwTerminate();
 }

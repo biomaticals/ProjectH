@@ -6,6 +6,8 @@
     <InsideDynamicMathLibrarySolutionDir>..\InsideDynamicMathLibrary\</InsideDynamicMathLibrarySolutionDir>
     <OutsideStaticMathLibrarySolutionDir>..\..\OutsideStaticMathLibrary\</OutsideStaticMathLibrarySolutionDir>
     <OutsideDynamicMathLibrarySolutionDir>..\..\OutsideDynamicMathLibrary\</OutsideDynamicMathLibrarySolutionDir>
+    <GLFW_Include>..\Include\GLFW</GLFW_Include>
+    <GLFW_LIBRARY>..\Library\GLFW</GLFW_LIBRARY>
   </PropertyGroup>
   <PropertyGroup />
   <ItemDefinitionGroup />
@@ -24,6 +26,14 @@
     </BuildMacro>
     <BuildMacro Include="OutsideDynamicMathLibrarySolutionDir">
       <Value>$(OutsideDynamicMathLibrarySolutionDir)</Value>
+      <EnvironmentVariable>true</EnvironmentVariable>
+    </BuildMacro>
+    <BuildMacro Include="GLFW_Include">
+      <Value>$(GLFW_Include)</Value>
+      <EnvironmentVariable>true</EnvironmentVariable>
+    </BuildMacro>
+    <BuildMacro Include="GLFW_LIBRARY">
+      <Value>$(GLFW_LIBRARY)</Value>
       <EnvironmentVariable>true</EnvironmentVariable>
     </BuildMacro>
   </ItemGroup>
