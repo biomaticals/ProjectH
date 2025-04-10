@@ -75,9 +75,9 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <LibraryPath>$(OutsideStaticMathLibrarySolutionDir)Binaries\$(Platform)\$(Configuration);$(OutsideDynamicMathLibrarySolutionDir)Binaries\$(Platform)\$(Configuration);C:\OpenGL\glew-2.1.0\lib\Release\Win32;C:\OpenGL\freeglut\lib;$(LibraryPath)</LibraryPath>
+    <LibraryPath>$(OutsideStaticMathLibrarySolutionDir)Binaries\$(Platform)\$(Configuration);$(OutsideDynamicMathLibrarySolutionDir)Binaries\$(Platform)\$(Configuration);C:\OpenGL\glew-2.1.0\lib\Release\Win32;C:\OpenGL\freeglut\lib;C:\OpenGL\glfw\glfw-3.4.bin.WIN32\lib-vc2022;$(LibraryPath)</LibraryPath>
     <ExecutablePath>$(ExecutablePath)</ExecutablePath>
-    <IncludePath>$(InsideStaticMathLibrarySolutionDir)Source;$(OutsideStaticMathLibrarySolutionDir)OutsideStaticMathLibrary\Source;$(InsideDynamicMathLibrarySolutionDir)Source;$(OutsideDynamicMathLibrarySolutionDir)OutsideDynamicMathLibrary\Source;$(IncludePath)</IncludePath>
+    <IncludePath>$(InsideStaticMathLibrarySolutionDir)Source;$(OutsideStaticMathLibrarySolutionDir)OutsideStaticMathLibrary\Source;$(InsideDynamicMathLibrarySolutionDir)Source;$(OutsideDynamicMathLibrarySolutionDir)OutsideDynamicMathLibrary\Source;..\Include;$(IncludePath)</IncludePath>
     <ExternalIncludePath>$(ExternalIncludePath)</ExternalIncludePath>
     <ReferencePath>$(ReferencePath)</ReferencePath>
     <OutDir>$(SolutionDir)Binaries\$(Platform)\$(Configuration)\</OutDir>
@@ -116,14 +116,16 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\Include\GLFW;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PrecompiledHeaderFile />
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>OutsideStaticMathLibrary.lib;OutsideDynamicMathLibrary.lib</AdditionalDependencies>
-      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>OutsideStaticMathLibrary.lib;OutsideDynamicMathLibrary.lib;glfw3.lib;opengl32.lib;Shell32.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>..\glfw\Binaries\Win32;..\Library;..\Include\lib-vc2022;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <IgnoreAllDefaultLibraries>false</IgnoreAllDefaultLibraries>
+      <IgnoreSpecificDefaultLibraries>MSVCRT</IgnoreSpecificDefaultLibraries>
     </Link>
     <PostBuildEvent>
       <Command>
