@@ -2,9 +2,7 @@
 // All contents cannot be copied, distributed, revised.
 #include <stdio.h>
 #include "iostream"
-#include "GL/glut.h"
-
-
+#include <GLFW/glfw3.h>
 
 // Static Linked Library
 #include "OutsideStaticMath.h"
@@ -13,8 +11,6 @@
 // Dynamic Linked Library
 #include "InsideDynamicMath.h"
 #include "OutsideDynamicMath.h"
-
-#include <GLFW/glfw3.h>
  
 void render(GLFWwindow* window);
  
