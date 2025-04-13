@@ -102,11 +102,11 @@
     <IntDir>$(SolutionDir)Intermediate\$(platform)\$(Configuration)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <LibraryPath>$(OutsideStaticMathLibrarySolutionDir)Binaries\$(Platform)\$(Configuration);$(OutsideDynamicMathLibrarySolutionDir)Binaries\$(Platform)\$(Configuration);..\Library\$(Platform)\GLFW</LibraryPath>
-    <ExecutablePath>$(ExecutablePath)</ExecutablePath>
+    <LibraryPath>$(OutsideStaticMathLibrarySolutionDir)Binaries\$(Platform)\$(Configuration);$(OutsideDynamicMathLibrarySolutionDir)Binaries\$(Platform)\$(Configuration);..\Library\$(Platform)\GLFW;C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Auxiliary\VS\UnitTest\lib;$(LibraryPath)</LibraryPath>
+    <ExecutablePath>$(VC_ExecutablePath_x64);$(CommonExecutablePath)</ExecutablePath>
     <ExternalIncludePath>$(ExternalIncludePath)</ExternalIncludePath>
     <ReferencePath>$(ReferencePath)</ReferencePath>
-    <IncludePath>$(InsideStaticMathLibrarySolutionDir)Source;$(OutsideStaticMathLibrarySolutionDir)OutsideStaticMathLibrary\Source;$(InsideDynamicMathLibrarySolutionDir)Source;$(OutsideDynamicMathLibrarySolutionDir)OutsideDynamicMathLibrary\Source;..\Include</IncludePath>
+    <IncludePath>$(InsideStaticMathLibrarySolutionDir)Source;$(OutsideStaticMathLibrarySolutionDir)OutsideStaticMathLibrary\Source;$(InsideDynamicMathLibrarySolutionDir)Source;$(OutsideDynamicMathLibrarySolutionDir)OutsideDynamicMathLibrary\Source;$(IncludePath)</IncludePath>
     <OutDir>$(SolutionDir)Binaries\$(Platform)\$(Configuration)\</OutDir>
     <IntDir>$(SolutionDir)Intermediate\$(platform)\$(Configuration)\</IntDir>
   </PropertyGroup>
@@ -189,13 +189,14 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
-      <WarningLevel>Level3</WarningLevel>
+      <WarningLevel>Level4</WarningLevel>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <SDLCheck>true</SDLCheck>
+      <SDLCheck>
+      </SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..;..\..\backends;..\libs\glfw\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PrecompiledHeaderFile />
     </ClCompile>
     <Link>
@@ -203,9 +204,10 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>OutsideStaticMathLibrary.lib;OutsideDynamicMathLibrary.lib;glfw3.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <IgnoreSpecificDefaultLibraries>MSVCRT</IgnoreSpecificDefaultLibraries>
+      <AdditionalDependencies>OutsideStaticMathLibrary.lib;OutsideDynamicMathLibrary.lib;opengl32.lib;glfw3.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>..\libs\glfw\lib-vc2010-64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <IgnoreSpecificDefaultLibraries>
+      </IgnoreSpecificDefaultLibraries>
     </Link>
     <PostBuildEvent>
       <Command>
@@ -216,16 +218,14 @@
     </ProjectReference>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\backends\imgui_impl_glfw.cpp" />
+    <ClCompile Include="..\..\backends\imgui_impl_opengl3.cpp" />
+    <ClCompile Include="..\..\imgui.cpp" />
+    <ClCompile Include="..\..\imgui_demo.cpp" />
+    <ClCompile Include="..\..\imgui_draw.cpp" />
+    <ClCompile Include="..\..\imgui_tables.cpp" />
+    <ClCompile Include="..\..\imgui_widgets.cpp" />
     <ClCompile Include="Source\3DComputerGraphicWithOpenGL.cpp" />
-    <ClCompile Include="Source\imgui.cpp" />
-    <ClCompile Include="Source\imgui_demo.cpp" />
-    <ClCompile Include="Source\imgui_draw.cpp" />
-    <ClCompile Include="Source\imgui_impl_dx11.cpp" />
-    <ClCompile Include="Source\imgui_impl_dx12.cpp" />
-    <ClCompile Include="Source\imgui_impl_glfw.cpp" />
-    <ClCompile Include="Source\imgui_impl_opengl3.cpp" />
-    <ClCompile Include="Source\imgui_tables.cpp" />
-    <ClCompile Include="Source\imgui_widgets.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\InsideStaticMathLibrary\InsideStaticMathLibrary.vcxproj">
@@ -233,17 +233,18 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Source\imconfig.h" />
-    <ClInclude Include="Source\imgui.h" />
-    <ClInclude Include="Source\imgui_impl_dx11.h" />
-    <ClInclude Include="Source\imgui_impl_dx12.h" />
-    <ClInclude Include="Source\imgui_impl_glfw.h" />
-    <ClInclude Include="Source\imgui_impl_opengl3.h" />
-    <ClInclude Include="Source\imgui_impl_opengl3_loader.h" />
-    <ClInclude Include="Source\imgui_internal.h" />
-    <ClInclude Include="Source\imstb_rectpack.h" />
-    <ClInclude Include="Source\imstb_textedit.h" />
-    <ClInclude Include="Source\imstb_truetype.h" />
+    <ClInclude Include="..\..\backends\imgui_impl_glfw.h" />
+    <ClInclude Include="..\..\backends\imgui_impl_opengl3.h" />
+    <ClInclude Include="..\..\backends\imgui_impl_opengl3_loader.h" />
+    <ClInclude Include="..\..\imconfig.h" />
+    <ClInclude Include="..\..\imgui.h" />
+    <ClInclude Include="..\..\imgui_internal.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\misc\debuggers\imgui.natstepfilter" />
+  </ItemGroup>
+  <ItemGroup>
+    <Natvis Include="..\..\misc\debuggers\imgui.natvis" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

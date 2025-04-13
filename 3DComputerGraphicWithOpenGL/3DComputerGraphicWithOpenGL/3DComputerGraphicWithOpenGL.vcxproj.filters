@@ -5,83 +5,68 @@
       <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
       <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
     </Filter>
-    <Filter Include="헤더 파일">
-      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
-      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
-    </Filter>
     <Filter Include="리소스 파일">
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
-    <Filter Include="프로퍼티">
-      <UniqueIdentifier>{45e7b58a-49b8-4d49-ac23-b204d558491f}</UniqueIdentifier>
+    <Filter Include="imgui">
+      <UniqueIdentifier>{3c59d4de-fb31-4465-9794-3e6b1def6e47}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\3DComputerGraphicWithOpenGL.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="Source\imgui.cpp">
+    <ClCompile Include="..\..\imgui.cpp">
+      <Filter>imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\imgui_demo.cpp">
+      <Filter>imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\imgui_draw.cpp">
+      <Filter>imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\imgui_tables.cpp">
+      <Filter>imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\imgui_widgets.cpp">
+      <Filter>imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\backends\imgui_impl_glfw.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="Source\imgui_demo.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\imgui_draw.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\imgui_impl_dx11.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\imgui_impl_dx12.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\imgui_impl_glfw.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\imgui_impl_opengl3.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\imgui_tables.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\imgui_widgets.cpp">
+    <ClCompile Include="..\..\backends\imgui_impl_opengl3.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Source\imconfig.h">
-      <Filter>헤더 파일</Filter>
+    <ClInclude Include="..\..\imconfig.h">
+      <Filter>imgui</Filter>
     </ClInclude>
-    <ClInclude Include="Source\imgui.h">
-      <Filter>헤더 파일</Filter>
+    <ClInclude Include="..\..\imgui.h">
+      <Filter>imgui</Filter>
     </ClInclude>
-    <ClInclude Include="Source\imgui_impl_dx11.h">
-      <Filter>헤더 파일</Filter>
+    <ClInclude Include="..\..\imgui_internal.h">
+      <Filter>imgui</Filter>
     </ClInclude>
-    <ClInclude Include="Source\imgui_impl_dx12.h">
-      <Filter>헤더 파일</Filter>
+    <ClInclude Include="..\..\backends\imgui_impl_glfw.h">
+      <Filter>소스 파일</Filter>
     </ClInclude>
-    <ClInclude Include="Source\imgui_impl_glfw.h">
-      <Filter>헤더 파일</Filter>
+    <ClInclude Include="..\..\backends\imgui_impl_opengl3.h">
+      <Filter>소스 파일</Filter>
     </ClInclude>
-    <ClInclude Include="Source\imgui_impl_opengl3.h">
-      <Filter>헤더 파일</Filter>
+    <ClInclude Include="..\..\backends\imgui_impl_opengl3_loader.h">
+      <Filter>소스 파일</Filter>
     </ClInclude>
-    <ClInclude Include="Source\imgui_impl_opengl3_loader.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\imgui_internal.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\imstb_textedit.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\imstb_rectpack.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\imstb_truetype.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\misc\debuggers\imgui.natstepfilter">
+      <Filter>imgui</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Natvis Include="..\..\misc\debuggers\imgui.natvis">
+      <Filter>imgui</Filter>
+    </Natvis>
   </ItemGroup>
 </Project>
