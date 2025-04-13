@@ -75,38 +75,40 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <LibraryPath>$(OutsideStaticMathLibrarySolutionDir)Binaries\$(Platform)\$(Configuration);$(OutsideDynamicMathLibrarySolutionDir)Binaries\$(Platform)\$(Configuration);..\Library\$(Platform)\GLFW;$(LibraryPath)</LibraryPath>
-    <ExecutablePath>$(ExecutablePath)</ExecutablePath>
-    <IncludePath>$(InsideStaticMathLibrarySolutionDir)Source;$(OutsideStaticMathLibrarySolutionDir)OutsideStaticMathLibrary\Source;$(InsideDynamicMathLibrarySolutionDir)Source;$(OutsideDynamicMathLibrarySolutionDir)OutsideDynamicMathLibrary\Source;..\Include\ImGui;..\Include\GLFW;$(IncludePath)</IncludePath>
+    <LibraryPath>$(OutsideStaticMathLibrarySolutionDir)Binaries\$(Platform)\$(Configuration);$(OutsideDynamicMathLibrarySolutionDir)Binaries\$(Platform)\$(Configuration);..\Library\win32\GLFW;$(LibraryPath)</LibraryPath>
+    <ExecutablePath>$(VC_ExecutablePath_x64);$(CommonExecutablePath)</ExecutablePath>
+    <IncludePath>$(InsideStaticMathLibrarySolutionDir)Source;$(OutsideStaticMathLibrarySolutionDir)OutsideStaticMathLibrary\Source;$(InsideDynamicMathLibrarySolutionDir)Source;$(OutsideDynamicMathLibrarySolutionDir)OutsideDynamicMathLibrary\Source;..\Include;..\Include\GLFW;..\Include\ImGui;%(AdditionalIncludeDirectories);$(IncludePath)</IncludePath>
     <ExternalIncludePath>$(ExternalIncludePath)</ExternalIncludePath>
     <ReferencePath>$(ReferencePath)</ReferencePath>
     <OutDir>$(SolutionDir)Binaries\$(Platform)\$(Configuration)\</OutDir>
     <IntDir>$(SolutionDir)Intermediate\$(platform)\$(Configuration)\</IntDir>
+    <LinkIncremental />
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <LibraryPath>$(OutsideStaticMathLibrarySolutionDir)Binaries\$(Platform)\$(Configuration);$(OutsideDynamicMathLibrarySolutionDir)Binaries\$(Platform)\$(Configuration);..\Library\$(Platform)\GLFW</LibraryPath>
-    <ExecutablePath>$(ExecutablePath)</ExecutablePath>
-    <IncludePath>$(InsideStaticMathLibrarySolutionDir)Source;$(OutsideStaticMathLibrarySolutionDir)OutsideStaticMathLibrary\Source;$(InsideDynamicMathLibrarySolutionDir)Source;$(OutsideDynamicMathLibrarySolutionDir)OutsideDynamicMathLibrary\Source;..\Include</IncludePath>
+    <LibraryPath>$(OutsideStaticMathLibrarySolutionDir)Binaries\$(Platform)\$(Configuration);$(OutsideDynamicMathLibrarySolutionDir)Binaries\$(Platform)\$(Configuration);..\Library\win32\GLFW;$(LibraryPath)</LibraryPath>
+    <ExecutablePath>$(VC_ExecutablePath_x64);$(CommonExecutablePath)</ExecutablePath>
+    <IncludePath>$(InsideStaticMathLibrarySolutionDir)Source;$(OutsideStaticMathLibrarySolutionDir)OutsideStaticMathLibrary\Source;$(InsideDynamicMathLibrarySolutionDir)Source;$(OutsideDynamicMathLibrarySolutionDir)OutsideDynamicMathLibrary\Source;..\Include;..\Include\GLFW;..\Include\ImGui;%(AdditionalIncludeDirectories);$(IncludePath)</IncludePath>
     <ExternalIncludePath>$(ExternalIncludePath)</ExternalIncludePath>
     <ReferencePath>$(ReferencePath)</ReferencePath>
     <OutDir>$(SolutionDir)Binaries\$(Platform)\$(Configuration)\</OutDir>
     <IntDir>$(SolutionDir)Intermediate\$(platform)\$(Configuration)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <LibraryPath>$(OutsideStaticMathLibrarySolutionDir)Binaries\$(Platform)\$(Configuration);$(OutsideDynamicMathLibrarySolutionDir)Binaries\$(Platform)\$(Configuration);..\Library\$(Platform)\GLFW</LibraryPath>
-    <ExecutablePath>$(ExecutablePath)</ExecutablePath>
-    <IncludePath>$(InsideStaticMathLibrarySolutionDir)Source;$(OutsideStaticMathLibrarySolutionDir)OutsideStaticMathLibrary\Source;$(InsideDynamicMathLibrarySolutionDir)Source;$(OutsideDynamicMathLibrarySolutionDir)OutsideDynamicMathLibrary\Source;..\Include</IncludePath>
+    <LibraryPath>$(OutsideStaticMathLibrarySolutionDir)Binaries\$(Platform)\$(Configuration);$(OutsideDynamicMathLibrarySolutionDir)Binaries\$(Platform)\$(Configuration);..\Library\$(Platform)\GLFW;$(LibraryPath)</LibraryPath>
+    <ExecutablePath>$(VC_ExecutablePath_x64);$(CommonExecutablePath)</ExecutablePath>
+    <IncludePath>$(InsideStaticMathLibrarySolutionDir)Source;$(OutsideStaticMathLibrarySolutionDir)OutsideStaticMathLibrary\Source;$(InsideDynamicMathLibrarySolutionDir)Source;$(OutsideDynamicMathLibrarySolutionDir)OutsideDynamicMathLibrary\Source;..\Include;..\Include\GLFW;..\Include\ImGui;%(AdditionalIncludeDirectories);$(IncludePath)</IncludePath>
     <ExternalIncludePath>$(ExternalIncludePath)</ExternalIncludePath>
     <ReferencePath>$(ReferencePath)</ReferencePath>
     <OutDir>$(SolutionDir)Binaries\$(Platform)\$(Configuration)\</OutDir>
     <IntDir>$(SolutionDir)Intermediate\$(platform)\$(Configuration)\</IntDir>
+    <LinkIncremental />
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <LibraryPath>$(OutsideStaticMathLibrarySolutionDir)Binaries\$(Platform)\$(Configuration);$(OutsideDynamicMathLibrarySolutionDir)Binaries\$(Platform)\$(Configuration);$(LibraryPath)</LibraryPath>
+    <LibraryPath>$(OutsideStaticMathLibrarySolutionDir)Binaries\$(Platform)\$(Configuration);$(OutsideDynamicMathLibrarySolutionDir)Binaries\$(Platform)\$(Configuration);..\Library\$(Platform)\GLFW;$(LibraryPath)</LibraryPath>
     <ExecutablePath>$(VC_ExecutablePath_x64);$(CommonExecutablePath)</ExecutablePath>
     <ExternalIncludePath>$(ExternalIncludePath)</ExternalIncludePath>
     <ReferencePath>$(ReferencePath)</ReferencePath>
-    <IncludePath>$(InsideStaticMathLibrarySolutionDir)Source;$(OutsideStaticMathLibrarySolutionDir)OutsideStaticMathLibrary\Source;$(InsideDynamicMathLibrarySolutionDir)Source;$(OutsideDynamicMathLibrarySolutionDir)OutsideDynamicMathLibrary\Source;$(IncludePath)</IncludePath>
+    <IncludePath>$(InsideStaticMathLibrarySolutionDir)Source;$(OutsideStaticMathLibrarySolutionDir)OutsideStaticMathLibrary\Source;$(InsideDynamicMathLibrarySolutionDir)Source;$(OutsideDynamicMathLibrarySolutionDir)OutsideDynamicMathLibrary\Source;..\Include;..\Include\GLFW;..\Include\ImGui;%(AdditionalIncludeDirectories);$(IncludePath)</IncludePath>
     <OutDir>$(SolutionDir)Binaries\$(Platform)\$(Configuration)\</OutDir>
     <IntDir>$(SolutionDir)Intermediate\$(platform)\$(Configuration)\</IntDir>
   </PropertyGroup>
@@ -116,17 +118,18 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>..\Include\ImGui;..\Include\GLFW;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PrecompiledHeaderFile />
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>OutsideStaticMathLibrary.lib;OutsideDynamicMathLibrary.lib;glfw3.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>OutsideStaticMathLibrary.lib;OutsideDynamicMathLibrary.lib;opengl32.lib;glfw3.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <IgnoreAllDefaultLibraries>
       </IgnoreAllDefaultLibraries>
-      <IgnoreSpecificDefaultLibraries>MSVCRT</IgnoreSpecificDefaultLibraries>
+      <IgnoreSpecificDefaultLibraries>
+      </IgnoreSpecificDefaultLibraries>
     </Link>
     <PostBuildEvent>
       <Command>
@@ -149,9 +152,10 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>OutsideStaticMathLibrary.lib;OutsideDynamicMathLibrary.lib;glfw3.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>OutsideStaticMathLibrary.lib;OutsideDynamicMathLibrary.lib;opengl32.lib;glfw3.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <IgnoreSpecificDefaultLibraries>MSVCRT</IgnoreSpecificDefaultLibraries>
+      <IgnoreSpecificDefaultLibraries>
+      </IgnoreSpecificDefaultLibraries>
     </Link>
     <PostBuildEvent>
       <Command>
@@ -170,9 +174,10 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>OutsideStaticMathLibrary.lib;OutsideDynamicMathLibrary.lib;glfw3.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>OutsideStaticMathLibrary.lib;OutsideDynamicMathLibrary.lib;opengl32.lib;glfw3.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <IgnoreSpecificDefaultLibraries>MSVCRT</IgnoreSpecificDefaultLibraries>
+      <IgnoreSpecificDefaultLibraries>
+      </IgnoreSpecificDefaultLibraries>
     </Link>
     <PostBuildEvent>
       <Command>
@@ -196,7 +201,7 @@
       </SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>..\Include;..\Include\GLFW;..\Include\ImGui;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PrecompiledHeaderFile />
     </ClCompile>
     <Link>
@@ -205,7 +210,7 @@
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalDependencies>OutsideStaticMathLibrary.lib;OutsideDynamicMathLibrary.lib;opengl32.lib;glfw3.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>..\Library\$(Platform)\GLFW;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <IgnoreSpecificDefaultLibraries>
       </IgnoreSpecificDefaultLibraries>
     </Link>
