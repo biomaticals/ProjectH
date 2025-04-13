@@ -7,9 +7,9 @@
 // - Documentation        https://dearimgui.com/docs (same as your local docs/ folder).
 // - Introduction, links and more at the top of imgui.cpp
 
-#include "imgui.h"
-#include "3DComputerGraphicWithOpenGL/Include/GLFW/imgui_impl_glfw.h"
-#include "3DComputerGraphicWithOpenGL/Include/GLFW/imgui_impl_opengl3.h"
+#include "ImGui/imgui.h"
+#include "ImGui/Backends/imgui_impl_glfw.h"
+#include "ImGui/Backends/imgui_impl_opengl3.h"
 #include <stdio.h>
 #define GL_SILENCE_DEPRECATION
 #if defined(IMGUI_IMPL_OPENGL_ES2)
