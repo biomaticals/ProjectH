@@ -12,6 +12,12 @@
     <Filter Include="imgui">
       <UniqueIdentifier>{3c59d4de-fb31-4465-9794-3e6b1def6e47}</UniqueIdentifier>
     </Filter>
+    <Filter Include="헤더 파일">
+      <UniqueIdentifier>{4f5598d5-7f35-4262-bef7-cecf14eb9900}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="imgui\Backends">
+      <UniqueIdentifier>{bc0187c9-f7c4-4ded-a747-d26135ac50f9}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\3DComputerGraphicWithOpenGL.cpp">
@@ -33,10 +39,10 @@
       <Filter>imgui</Filter>
     </ClCompile>
     <ClCompile Include="..\Include\ImGui\Backends\imgui_impl_glfw.cpp">
-      <Filter>소스 파일</Filter>
+      <Filter>imgui\Backends</Filter>
     </ClCompile>
     <ClCompile Include="..\Include\ImGui\Backends\imgui_impl_opengl3.cpp">
-      <Filter>소스 파일</Filter>
+      <Filter>imgui\Backends</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -50,13 +56,13 @@
       <Filter>imgui</Filter>
     </ClInclude>
     <ClInclude Include="..\Include\ImGui\Backends\imgui_impl_glfw.h">
-      <Filter>소스 파일</Filter>
+      <Filter>imgui\Backends</Filter>
     </ClInclude>
     <ClInclude Include="..\Include\ImGui\Backends\imgui_impl_opengl3.h">
-      <Filter>소스 파일</Filter>
+      <Filter>imgui\Backends</Filter>
     </ClInclude>
     <ClInclude Include="..\Include\ImGui\Backends\imgui_impl_opengl3_loader.h">
-      <Filter>소스 파일</Filter>
+      <Filter>imgui\Backends</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
