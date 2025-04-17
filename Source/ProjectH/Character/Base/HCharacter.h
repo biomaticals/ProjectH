@@ -34,6 +34,8 @@ public:
 public:
 	virtual const FString GetHSaveGameObjectID_Implementation() const override;
 	virtual const FTransform GetHSaveGameObjectTransform_Implementation() const override;
+	virtual void OnObjectSaving_Implementation() override;
+	virtual void OnObjectLoading_Implementation() override;
 /** ~ IHSavveGameObjectInterface */
 
 public:

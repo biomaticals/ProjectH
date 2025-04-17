@@ -22,7 +22,7 @@ bool UDataTableManager::UpdateAvailableAnatomyProfiles()
 	if(NeedUpdatAnatomyProfiles == false)
 		return true;
 
-	if (AnatomyProfilesDataTable == NULL || AnatomyProfilesDataTable->IsValidLowLevel() == false)
+	if (AnatomyProfilesDataTable == nullptr || AnatomyProfilesDataTable->IsValidLowLevel() == false)
 	{
 		UT_LOG(HLog, Error, TEXT("[AnatomyProfilesDataTable] is invalid."));
 		return false;
@@ -38,7 +38,7 @@ bool UDataTableManager::UpdateAvailableAnatomyProfiles()
 		FAnatomyProfile* Data = AnatomyProfilesDataTable->FindRow<FAnatomyProfile>(FName(AnatomyString), 
 		*FString::Printf(TEXT("[AnatomyProfilesDataTable] doesn't have Row \"%s\""), *AnatomyString), true);
 	
-		if(Data != NULL && Data->IsValid())
+		if(Data != nullptr && Data->IsValid())
 		{
 			AvailableAnatomyProfiles.Add(MakeTuple(Anatomy, *Data));
 		}
@@ -70,7 +70,7 @@ bool UDataTableManager::UpdatePresetCustomizationProfiles()
 	if (NeedUpdatePresetCustomizationProfiles == false)
 		return true;
 
-	if (PresetCustomizationProfilesDataTable == NULL || PresetCustomizationProfilesDataTable->IsValidLowLevel() == false)
+	if (PresetCustomizationProfilesDataTable == nullptr || PresetCustomizationProfilesDataTable->IsValidLowLevel() == false)
 	{
 		UT_LOG(HLog, Error, TEXT("[PresetCustomizationProfilesDataTable] is invalid."));
 		return false;

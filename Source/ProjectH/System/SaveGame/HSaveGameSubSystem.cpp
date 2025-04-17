@@ -53,7 +53,7 @@ void UHSaveGameSubsystem::OnSaved(const FString& SlotName, const int32 UserIndex
 void UHSaveGameSubsystem::OnLoaded(const FString& SlotName, const int32 UserIndex, USaveGame* SaveGame)
 {
 	UT_LOG(HSaveGameLog, Log, TEXT("%d 유저의 %s 슬롯으로 세이브게임을 불러왔습니다."), UserIndex, *SlotName);
-
+	
 	UHSaveGame* HSaveGame = Cast<UHSaveGame>(SaveGame);
 	if (HSaveGame == NULL)
 	{

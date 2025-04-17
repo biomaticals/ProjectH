@@ -60,6 +60,16 @@ const FTransform AHCharacter::GetHSaveGameObjectTransform_Implementation() const
 {
 	return GetTransform();
 }
+
+void AHCharacter::OnObjectSaving_Implementation()
+{
+
+}
+
+void AHCharacter::OnObjectLoading_Implementation()
+{
+
+}
 /** ~ IHSavveGameObjectInterface */
 
 USkeletalMeshComponent* AHCharacter::GetHeadMeshComponent()

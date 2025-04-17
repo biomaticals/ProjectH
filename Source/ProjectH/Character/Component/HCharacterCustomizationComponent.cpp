@@ -262,8 +262,6 @@ void UHCharacterCustomizationComponent::InitializeCustomizationProfile_Multicast
 
 void UHCharacterCustomizationComponent::InitializeCustomizationProfile_Internal()
 {
-	//UT_LOG(HCharacterCustomizationLog, Log, TEXT("Initialize Customization Profile Behavior : %s"), *EnumToString((int32)InitializationBehavior, TEXT("/Script/ProjectH.ECharacterCustomizationInitializationBehavior")));
-
 	switch (InitializationBehavior)
 	{
 	case ECharacterCustomizationInitializationBehavior::UseCurrentProfile:
@@ -512,7 +510,7 @@ bool UHCharacterCustomizationComponent::CleanCDAs(TArray<UPrimitiveComponent*> P
 
 void UHCharacterCustomizationComponent::CreateMIDFromMaterialVariant(UPrimitiveComponent* PrimitiveComponent, TArray<FMaterialVariants> MaterialVariants, int MaterialVariantIndex, TArray<UMaterialInstanceDynamic*> GlobalMIDs, TArray<FHNamedFloat> ScalarParameters, TArray<FNamedHDRColor> HDRVectorParameters)
 {
-	if(PrimitiveComponent == NULL)
+	if(PrimitiveComponent == nullptr)
 		return;
 
 	if (MaterialVariantIndex >= 0)
@@ -553,7 +551,7 @@ void UHCharacterCustomizationComponent::CreateMIDFromMaterialVariant(UPrimitiveC
 
 void UHCharacterCustomizationComponent::CreateMIDFromSlotAndMaterial(UMeshComponent* MeshComponent, FName MaterialSlotName, UMaterialInterface* SourceMaterial, TArray<UMaterialInstanceDynamic*>& MIDs)
 {
-	if (MeshComponent == NULL)
+	if (MeshComponent == nullptr)
 		return;
 
 	if (MeshComponent->IsMaterialSlotNameValid(MaterialSlotName) == false)
@@ -609,7 +607,7 @@ bool UHCharacterCustomizationComponent::CheckMulticastIndividualChanges() const
 #pragma region ApplyCustomizationProfile
 void UHCharacterCustomizationComponent::ApplyCustomizationProfile_Replicable(FCustomizationProfile InCustomizationProfile)
 {
-	if(GetWorld() == NULL)
+	if(GetWorld() == nullptr)
 		return;
 
 	if (CHECK_REPLIACTE_COMPONENT())
@@ -665,9 +663,9 @@ void UHCharacterCustomizationComponent::ApplyCustomizationProfile_Client_Impleme
 
 void UHCharacterCustomizationComponent::ApplyCustomizationProfile_Internal(FCustomizationProfile InCustomizationProfile)
 {
-	if(GetWorld() == NULL)
+	if(GetWorld() == nullptr)
 		return;
-	if(CachedOwner == NULL)
+	if(CachedOwner == nullptr)
 		return;
 
 	if (InCustomizationProfile.MetaData.IsValid() == false)
@@ -750,7 +748,7 @@ void UHCharacterCustomizationComponent::ClearApparelSpecificSettings(UHCharacter
 #pragma region AnimInstanceAlpha
 void UHCharacterCustomizationComponent::SetBasebodyAnimInstanceAlpha_Replicable(FName Name, float Value)
 {
-	if(CachedOwner == NULL)
+	if(CachedOwner == nullptr)
 		return;
 
 	if (CheckReplicateIndividualChagnes())
@@ -792,7 +790,7 @@ void UHCharacterCustomizationComponent::SetBasebodyAnimInstanceAlpha(FName Name,
 #pragma region ApplyParameter
 void UHCharacterCustomizationComponent::SetSkinScalarParameter_Replicable(FName Name, float Value)
 {
-	if (CachedOwner == NULL)
+	if (CachedOwner == nullptr)
 		return;
 
 	if (CheckReplicateIndividualChagnes())
@@ -843,7 +841,7 @@ void UHCharacterCustomizationComponent::SetSkinScalarParameter(FName Name, float
 
 void UHCharacterCustomizationComponent::SetSkinHDRVectorParameter_Replicable(FName Name, FHDRColor HDRColor)
 {
-	if (CachedOwner == NULL)
+	if (CachedOwner == nullptr)
 		return;
 
 	if (CheckReplicateIndividualChagnes())
@@ -896,7 +894,7 @@ void UHCharacterCustomizationComponent::SetSkinHDRVectorParameter(FName Name, FH
 
 void UHCharacterCustomizationComponent::SetEyesScalarParameter_Replicable(FName Name, float Value)
 {
-	if (CachedOwner == NULL)
+	if (CachedOwner == nullptr)
 		return;
 
 	if (CheckReplicateIndividualChagnes())
@@ -945,7 +943,7 @@ void UHCharacterCustomizationComponent::SetEyesScalarParameter(FName Name, float
 
 void UHCharacterCustomizationComponent::SetEyesHDRVectorParameter_Replicable(FName Name, FHDRColor HDRColor)
 {
-	if (CachedOwner == NULL)
+	if (CachedOwner == nullptr)
 		return;
 
 	if (CheckReplicateIndividualChagnes())
@@ -995,18 +993,18 @@ void UHCharacterCustomizationComponent::SetEyesHDRVectorParameter(FName Name, FH
 #pragma region UpdateComponent
 void UHCharacterCustomizationComponent::UpdateBasebody()
 {
-	if(CachedOwner == NULL)
+	if(CachedOwner == nullptr)
 		return;
 
-	if(DATATABLE_MANAGER() == NULL)
+	if(DATATABLE_MANAGER() == nullptr)
 		return;
 
 	USkeletalMeshComponent* BodyComponent = CachedOwner->GetMesh();
-	if(BodyComponent == NULL)
+	if(BodyComponent == nullptr)
 		return;
 	
 	USkeletalMeshComponent* HeadComponent =CachedOwner->GetHeadMeshComponent();
-	if(HeadComponent == NULL)
+	if(HeadComponent == nullptr)
 		return;
 
 	if (OnPreUpdateBasebody.IsBound())
@@ -1062,11 +1060,11 @@ void UHCharacterCustomizationComponent::UpdateBasebody()
 
 void UHCharacterCustomizationComponent::UpdateBodyComponent()
 {
-	if(CachedOwner == NULL)
+	if(CachedOwner == nullptr)
 		return;
 
 	USkeletalMeshComponent* BodyComponent = CachedOwner->GetMesh();
-	if (BodyComponent == NULL)
+	if (BodyComponent == nullptr)
 		return;
 
 	BodyComponent->SetSkinnedAssetAndUpdate(CurrentAnatomyProfile.Body.Mesh);
@@ -1079,11 +1077,11 @@ void UHCharacterCustomizationComponent::UpdateBodyComponent()
 
 void UHCharacterCustomizationComponent::UpdateHeadComponent()
 {
-	if(CachedOwner == NULL)
+	if(CachedOwner == nullptr)
 		return;
 
 	USkeletalMeshComponent* HeadComponent = CachedOwner->GetHeadMeshComponent();
-	if (HeadComponent == NULL)
+	if (HeadComponent == nullptr)
 		return;
 
 	if (CurrentAnatomyProfile.Heads.IsValidIndex(CustomizationProfile.Basebody.Head.Index))
@@ -1103,11 +1101,11 @@ void UHCharacterCustomizationComponent::UpdateHeadComponent()
 
 void UHCharacterCustomizationComponent::UpdateBasebodyMorphTargets()
 {
-	if(CachedOwner == NULL)
+	if(CachedOwner == nullptr)
 		return;
 
 	USkeletalMeshComponent* BodyComponent = CachedOwner->GetMesh();
-	if(BodyComponent == NULL)
+	if(BodyComponent == nullptr)
 		return;
 
 	for (const auto Elem : CurrentCustomizationProfile.Basebody.MorphTargets)
@@ -1123,16 +1121,16 @@ void UHCharacterCustomizationComponent::UpdateBasebodyMorphTargets()
 
 void UHCharacterCustomizationComponent::UpdateBasebodyAnimInstanceAlphas()
 {
-	if (CachedOwner == NULL)
+	if (CachedOwner == nullptr)
 		return;
 
 	USkeletalMeshComponent* BodyComponent = CachedOwner->GetMesh();
-	if(BodyComponent == NULL)
+	if(BodyComponent == nullptr)
 		return;
 
 	
 	UAnimInstance* AnimInstance = BodyComponent->GetAnimInstance();
-	if(AnimInstance == NULL)
+	if(AnimInstance == nullptr)
 		return;
 
 	for (const auto& Elem : CurrentCustomizationProfile.Basebody.AnimInstanceAlphas)
@@ -1147,15 +1145,15 @@ void UHCharacterCustomizationComponent::UpdateBasebodyAnimInstanceAlphas()
 
 void UHCharacterCustomizationComponent::UpdateSkinMaterials()
 {
-	if(CachedOwner == NULL)
+	if(CachedOwner == nullptr)
 		return;
 
 	USkeletalMeshComponent* BodyComponent = CachedOwner->GetMesh();
-	if(BodyComponent == NULL)
+	if(BodyComponent == nullptr)
 		return;
 
 	USkeletalMeshComponent* HeadComponent = CachedOwner->GetHeadMeshComponent();
-	if(HeadComponent == NULL)
+	if(HeadComponent == nullptr)
 		return;
 
 	/** Step 1. Create MID */
@@ -1220,7 +1218,7 @@ void UHCharacterCustomizationComponent::UpdateSkinMaterials()
 
 void UHCharacterCustomizationComponent::UpdateSkinTextureSets()
 {
-	if(DATATABLE_MANAGER() == NULL)
+	if(DATATABLE_MANAGER() == nullptr)
 		return;
 
 	const UDataTable* DefaultSkinTextureDataTable = DATATABLE_MANAGER()->GetDefaultSkinTexturesDataTable();
@@ -1289,11 +1287,11 @@ void UHCharacterCustomizationComponent::UpdateSkinTextureSets()
 
 void UHCharacterCustomizationComponent::UpdateEyesMaterials()
 {
-	if (CachedOwner == NULL)
+	if (CachedOwner == nullptr)
 		return;
 
 	USkeletalMeshComponent* HeadComponent = CachedOwner->GetHeadMeshComponent();
-	if (HeadComponent == NULL)
+	if (HeadComponent == nullptr)
 		return;
 
 	EyesMIDs.Empty();
@@ -1320,11 +1318,11 @@ void UHCharacterCustomizationComponent::UpdateEyesMaterials()
 
 void UHCharacterCustomizationComponent::UpdateLODSyncComponent()
 {
-	if(CachedOwner == NULL)
+	if(CachedOwner == nullptr)
 		return;
 
 	ULODSyncComponent* LODSyncComponent = CachedOwner->GetLODSyncComponent();
-	if(LODSyncComponent == NULL)
+	if(LODSyncComponent == nullptr)
 		return;
 
 	LODSyncComponent->ComponentsToSync.Empty();
@@ -1376,11 +1374,11 @@ void UHCharacterCustomizationComponent::UpdateLODSyncComponent()
 
 void UHCharacterCustomizationComponent::UpdateMorphTargetsOnAllMeshes()
 {
-	if(CachedOwner == NULL)
+	if(CachedOwner == nullptr)
 		return;
 
 	USkeletalMeshComponent* BodyMeshComponent = CachedOwner->GetMesh();
-	if(BodyMeshComponent == NULL)
+	if(BodyMeshComponent == nullptr)
 		return;
 
 	TArray<USkeletalMeshComponent*> SkeletalMeshComponents;
@@ -1429,11 +1427,11 @@ void UHCharacterCustomizationComponent::UpdateMorphTargetsOnAllMeshes()
 
 void UHCharacterCustomizationComponent::UpdateSkeletalMerging()
 {
-	if(CachedOwner == NULL)
+	if(CachedOwner == nullptr)
 		return;
 
 	USkeletalMeshComponent* BodyMeshComponent = CachedOwner->GetMesh();
-	if(BodyMeshComponent == NULL)
+	if(BodyMeshComponent == nullptr)
 		return;
 
 	if (bUseSkeletalMerging == false)
@@ -1473,11 +1471,11 @@ void UHCharacterCustomizationComponent::UpdateSkeletalMerging()
 #pragma region UpdateApparel
 void UHCharacterCustomizationComponent::UpdateApparel()
 {
-	if(CachedOwner == NULL)
+	if(CachedOwner == nullptr)
 		return;
 
 	USkeletalMeshComponent* BodyComponent = CachedOwner->GetMesh();
-	if(BodyComponent == NULL)
+	if(BodyComponent == nullptr)
 		return;
 
 	TArray<USkeletalMeshComponent*> ApparelMeshComponents = CachedOwner->GetApparelMeshComponents();
@@ -1584,7 +1582,7 @@ void UHCharacterCustomizationComponent::UpdateAdvancedCDAOptions()
 #pragma region UpdateEquipment
 void UHCharacterCustomizationComponent::UpdateEquipment()
 {
-	if(CachedOwner == NULL)
+	if(CachedOwner == nullptr)
 		return;
 	const FEquipmentProfile EquipmentProfile = CurrentCustomizationProfile.Equipment;
 	
@@ -1643,7 +1641,7 @@ void UHCharacterCustomizationComponent::UpdateEquipment()
 #pragma region UpdateHairstyle
 void UHCharacterCustomizationComponent::UpdateHairstyle()
 {
-	if(CachedOwner == NULL)
+	if(CachedOwner == nullptr)
 		return;
 
 	const FHairstyleProfile HairstyleProfile = CurrentCustomizationProfile.Hairstyle;
@@ -1704,7 +1702,7 @@ void UHCharacterCustomizationComponent::UpdateHairstyle()
 #pragma region
 void UHCharacterCustomizationComponent::UpdateAttachment()
 {
-	if (CachedOwner == NULL)
+	if (CachedOwner == nullptr)
 		return;
 
 	const FAttachmentProfile AttachmentProfile = CurrentCustomizationProfile.Attachment;
@@ -1763,7 +1761,7 @@ void UHCharacterCustomizationComponent::UpdateAttachment()
 
 void UHCharacterCustomizationComponent::UpdateGroom()
 {
-	if(CachedOwner == NULL)
+	if(CachedOwner == nullptr)
 		return;
 
 	const FGroomProfile GroomProfile = CurrentCustomizationProfile.Groom;

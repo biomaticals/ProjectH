@@ -96,9 +96,9 @@ DECLARE_EVENT_ThreeParams(UHCharacterCustomizationComponent, FOnSetEyesHDRVector
 /**
  * HCharacterCustomizationComponent
  * 
- * 캐릭터의 몸, 의상, 장비, 커스터마이징등 SkeletalMeshComponent들을 관리한다.
+ * 罹먮┃?곗쓽 紐? ?섏긽, ?λ퉬, 而ㅼ뒪?곕쭏?댁쭠??SkeletalMeshComponent?ㅼ쓣 愿由ы븳??
  * 
- * HCharacter와 연결
+ * HCharacter? ?곌껐
  * 
  * CDA ; CustomizationDataAsset
  */

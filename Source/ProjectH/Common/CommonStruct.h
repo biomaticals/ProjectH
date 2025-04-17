@@ -704,7 +704,7 @@ struct FHSaveGameObjectData
 		return ID.IsEmpty() == false && ObjectClass != nullptr;
 	}
 
-protected:
+public:
 	UPROPERTY(VisibleAnywhere)
 	FString ID;
 
@@ -736,7 +736,7 @@ struct FHSaveGameData
 
 	};
 
-protected:
+public:
 	UPROPERTY(VisibleAnywhere)
 	TArray<FHSaveGameObjectData> ObjectData;
 

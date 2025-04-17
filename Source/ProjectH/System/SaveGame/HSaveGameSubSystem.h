@@ -24,7 +24,7 @@ public:
 	void OnLoaded(const FString& SlotName, const int32 UserIndex, USaveGame* SaveGame);
 
 public:
-	UFUNCTION(BlueprintCallable, meta = (WorldContext = "WorldContextObject", AdvancedDisplay = "bScreenshot, Size"))
+	UFUNCTION(BlueprintCallable, meta = (WorldContext = "WorldContextObject"))
 	bool HSaveGametoSlot(UObject* WorldContextObject, const FString& SlotName, const int32 UserIndex);
 	
 	UFUNCTION(BlueprintCallable, meta = (WorldContext = "WorldContextObject"))
