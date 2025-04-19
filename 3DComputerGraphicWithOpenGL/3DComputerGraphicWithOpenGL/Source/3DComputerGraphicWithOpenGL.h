@@ -4,6 +4,7 @@
 #pragma once
 
 #include "ImGui/imgui.h"
+#include "ImGui//imgui_internal.h"
 #include "ImGui/Backends/imgui_impl_glfw.h"
 #include "ImGui/Backends/imgui_impl_opengl3.h"
 #include <stdio.h>
@@ -20,6 +21,11 @@
 #include "Common.h"
 
 #include "Windows/IntroductionWindow.h"
+
+
+const static ImGuiWindow* MainWindow = nullptr;
+const static ImGuiWindow* SubWindow = nullptr;
+const static ImGuiWindow* Selector = nullptr;
 
 int main(int, char**);
 

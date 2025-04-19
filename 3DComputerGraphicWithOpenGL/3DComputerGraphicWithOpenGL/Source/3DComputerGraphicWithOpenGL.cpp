@@ -4,6 +4,7 @@
 #pragma once
 
 #include "3DComputerGraphicWithOpenGL.h"
+#include "imgui_internal.h"
 
 int main(int, char**)
 {
@@ -60,7 +61,52 @@ int main(int, char**)
         if (show_demo_window)
             ImGui::ShowDemoWindow(&show_demo_window);
 
-        // 1. Main Menu
+		static bool no_titlebar = false;
+		static bool no_scrollbar = false;
+		static bool no_menu = false;
+		static bool no_move = false;
+		static bool no_resize = true;
+		static bool no_collapse = true;
+		static bool no_close = false;
+		static bool no_nav = false;
+		static bool no_background = false;
+		static bool no_bring_to_front = false;
+		static bool unsaved_document = false;
+
+		ImGuiWindowFlags CoreWindowFlags = 0;
+		if (no_titlebar)        CoreWindowFlags |= ImGuiWindowFlags_NoTitleBar;
+		if (no_scrollbar)       CoreWindowFlags |= ImGuiWindowFlags_NoScrollbar;
+		if (!no_menu)           CoreWindowFlags |= ImGuiWindowFlags_MenuBar;
+		if (no_move)            CoreWindowFlags |= ImGuiWindowFlags_NoMove;
+		if (no_resize)          CoreWindowFlags |= ImGuiWindowFlags_NoResize;
+		if (no_collapse)        CoreWindowFlags |= ImGuiWindowFlags_NoCollapse;
+		if (no_nav)             CoreWindowFlags |= ImGuiWindowFlags_NoNav;
+		if (no_background)      CoreWindowFlags |= ImGuiWindowFlags_NoBackground;
+		if (no_bring_to_front)  CoreWindowFlags |= ImGuiWindowFlags_NoBringToFrontOnFocus;
+		if (unsaved_document)   CoreWindowFlags |= ImGuiWindowFlags_UnsavedDocument;
+
+        // 1. Windows
+
+		const ImGuiViewport* MainViewport = ImGui::GetMainViewport();
+		ImGui::SetNextWindowPos(ImVec2(MainViewport->WorkPos.x, MainViewport->WorkPos.y), ImGuiCond_Always);
+        ImGui::SetNextWindowSize(ImVec2(3.f * MainViewport->Size.x / 4.f, MainViewport->Size.y / 2.f), ImGuiCond_Always);
+		ImGui::Begin("Main Window", &ShowMainWindow, CoreWindowFlags);
+        MainWindow = ImGui::GetCurrentWindow();
+		ImGui::End();
+
+        ImGui::SetNextWindowPos(ImVec2(MainViewport->WorkPos.x, MainViewport->Size.y / 2.f), ImGuiCond_Always);
+        ImGui::SetNextWindowSize(ImVec2(3.f * MainViewport->Size.x / 4.f, MainViewport->Size.y / 2.f), ImGuiCond_Always);
+        ImGui::Begin("Sub Window", &ShowSubWindow, CoreWindowFlags);
+        SubWindow = ImGui::GetCurrentWindow();
+        ImGui::End();
+
+        ImGui::SetNextWindowPos(ImVec2(3.f * MainViewport->Size.x / 4.f, MainViewport->WorkPos.y), ImGuiCond_Always);
+        ImGui::SetNextWindowSize(ImVec2(MainViewport->Size.x / 4.f, MainViewport->Size.y), ImGuiCond_Always);
+        ImGui::Begin("Selector", &ShowSelector, CoreWindowFlags);
+        Selector = ImGui::GetCurrentWindow();
+        ImGui::End();
+
+        // 2. Main Menu
         static FWindowData WindowData;
         if(WindowData.ShowIntroduction) 
         {
@@ -68,47 +114,6 @@ int main(int, char**)
         }
 
         ShowMainMenuBar(&WindowData);
-
-		static bool no_titlebar = false;
-		static bool no_scrollbar = false;
-		static bool no_menu = false;
-		static bool no_move = false;
-		static bool no_resize = false;
-		static bool no_collapse = false;
-		static bool no_close = false;
-		static bool no_nav = false;
-		static bool no_background = false;
-		static bool no_bring_to_front = false;
-		static bool unsaved_document = false;
-
-		ImGuiWindowFlags window_flags = 0;
-		if (no_titlebar)        window_flags |= ImGuiWindowFlags_NoTitleBar;
-		if (no_scrollbar)       window_flags |= ImGuiWindowFlags_NoScrollbar;
-		if (!no_menu)           window_flags |= ImGuiWindowFlags_MenuBar;
-		if (no_move)            window_flags |= ImGuiWindowFlags_NoMove;
-		if (no_resize)          window_flags |= ImGuiWindowFlags_NoResize;
-		if (no_collapse)        window_flags |= ImGuiWindowFlags_NoCollapse;
-		if (no_nav)             window_flags |= ImGuiWindowFlags_NoNav;
-		if (no_background)      window_flags |= ImGuiWindowFlags_NoBackground;
-		if (no_bring_to_front)  window_flags |= ImGuiWindowFlags_NoBringToFrontOnFocus;
-		if (unsaved_document)   window_flags |= ImGuiWindowFlags_UnsavedDocument;
-
-        // 2. Windows
-		const ImGuiViewport* MainViewport = ImGui::GetMainViewport();
-		ImGui::SetNextWindowPos(ImVec2(MainViewport->WorkPos.x, MainViewport->WorkPos.y), ImGuiCond_Always);
-        ImGui::SetNextWindowSize(ImVec2(3.f * MainViewport->Size.x / 4.f, MainViewport->Size.y / 2.f), ImGuiCond_Always);
-		ImGui::Begin("Main Window", &ShowMainWindow, window_flags);
-		ImGui::End();
-
-        ImGui::SetNextWindowPos(ImVec2(MainViewport->WorkPos.x, MainViewport->Size.y / 2.f), ImGuiCond_Always);
-        ImGui::SetNextWindowSize(ImVec2(3.f * MainViewport->Size.x / 4.f, MainViewport->Size.y / 2.f), ImGuiCond_Always);
-        ImGui::Begin("Sub Window", &ShowSubWindow, window_flags);
-        ImGui::End();
-
-        ImGui::SetNextWindowPos(ImVec2(3.f * MainViewport->Size.x / 4.f, MainViewport->WorkPos.y), ImGuiCond_Always);
-        ImGui::SetNextWindowSize(ImVec2(MainViewport->Size.x / 4.f, MainViewport->Size.y), ImGuiCond_Always);
-        ImGui::Begin("Selector", &ShowSelector, window_flags);
-        ImGui::End();
 
         ImGui::Render();
         int display_w, display_h;

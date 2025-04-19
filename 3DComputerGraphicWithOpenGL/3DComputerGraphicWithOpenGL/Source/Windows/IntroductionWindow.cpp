@@ -4,17 +4,46 @@
 #pragma once
 
 #include "IntroductionWindow.h"
+#include "3DComputerGraphicWithOpenGL.h"
 
 const char* FIntroductionWindow::WindowName = "Introduction";
 
 void FIntroductionWindow::Draw(bool* bOpen)
 {
 	const ImGuiViewport* MainViewport = ImGui::GetMainViewport();
-	
-	ImGui::SetNextWindowPos(ImVec2(MainViewport->WorkSize.x / 2.f - 300.f, MainViewport->WorkSize.y / 2.f - 200.f ));
-	ImGui::SetNextWindowSize(ImVec2(600.f, 400.f));
-	if (!ImGui::Begin(WindowName, bOpen))
+
+	ImGuiWindowFlags WindowFlags{};
+	WindowFlags |= ImGuiWindowFlags_NoResize;
+
+	ImGui::SetNextWindowPos(ImVec2(MainViewport->WorkSize.x / 2.f - 400.f, MainViewport->WorkSize.y / 2.f - 250.f ), ImGuiCond_Appearing);
+	ImGui::SetNextWindowSize(ImVec2(800, 500.f), ImGuiCond_Appearing);
+	if (ImGui::Begin(WindowName, bOpen, WindowFlags))
 	{
+		ImGui::SeparatorText("3D CG With OpenGl by biomatic");
+		ImGui::Text("This project was initiated to learn and practice the OpenGL API.");
+		ImGui::Text("The content is adapted from a book \"3D Computer Graphics with OpenGL.\"");
+		ImGui::Text("Through this program, you can view and run the code examples from each part and chapter.");
+		ImGui::Text("From \"Selector window\", choose part, chapter and title to proceed.");
+		ImGui::Text("And then, \"Main window\" shows the codes, \"Sub window\" outputs the results.");
+		ImGui::NewLine();
+		ImGui::Text("To learn more about the book, please follow this link.");
+		ImGui::TextLinkOpenURL("https://www.hanbit.co.kr/store/books/look.php?p_code=B1779572378");
+		ImGui::NewLine();
+		ImGui::Text("To access the open source for this program, please follow this link.");
+		ImGui::TextLinkOpenURL("https://github.com/biomaticals/3DComputerGraphicWithOpenGL");
+		ImGui::NewLine();
+		ImGui::SeparatorText("biomatic");
+		ImGui::Text("biomatic is a game client programmer from Korea with 4 years of experience.");
+		ImGui::NewLine();
+
+		ImGui::Text("To visit his technical blog, please follow this link.");
+		ImGui::Text("Unfortunately, the technical blog does not support English.");
+		ImGui::NewLine();
+		ImGui::TextLinkOpenURL("https://biomaticals.notion.site/GUI-1daed2b75184805fa19cfd4eb4be638f?pvs=4");
+		ImGui::NewLine();
+		ImGui::Text("To contact him, please use the phone number or email address below.");
+		ImGui::Text("Phone Number : +82 10 3902 8624 (Republic of Korea)");
+		ImGui::Text("E-mail : biomaticals@naver.com");
 		ImGui::End();
 		return;
 	}

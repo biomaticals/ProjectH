@@ -2,5 +2,5 @@
 
 struct FWindowData
 {
-    bool ShowIntroduction = false;
+    bool ShowIntroduction = true;
 };
