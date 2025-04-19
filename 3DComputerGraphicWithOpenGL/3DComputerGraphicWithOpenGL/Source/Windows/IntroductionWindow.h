@@ -3,16 +3,14 @@
 
 #pragma once
 
-#include "ImGui/imgui.h"
-
-struct FIntroductionWindow
+struct FIntroductionWindowData
 {
-	FIntroductionWindow()
+	FIntroductionWindowData()
 	{
 
 	}
 
-	~FIntroductionWindow()
+	~FIntroductionWindowData()
 	{
 
 	}
@@ -21,4 +19,10 @@ struct FIntroductionWindow
 
 public:
 	void Draw(bool* bOpen);
+};
+
+static void ShowIntroduction(bool* bOpen)
+{
+    FIntroductionWindowData IntroductionWindow{};
+    IntroductionWindow.Draw(bOpen);
 };

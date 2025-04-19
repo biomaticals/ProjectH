@@ -6,14 +6,15 @@
 #include "IntroductionWindow.h"
 #include "3DComputerGraphicWithOpenGL.h"
 
-const char* FIntroductionWindow::WindowName = "Introduction";
+const char* FIntroductionWindowData::WindowName = "Introduction";
 
-void FIntroductionWindow::Draw(bool* bOpen)
+void FIntroductionWindowData::Draw(bool* bOpen)
 {
 	const ImGuiViewport* MainViewport = ImGui::GetMainViewport();
 
 	ImGuiWindowFlags WindowFlags{};
 	WindowFlags |= ImGuiWindowFlags_NoResize;
+	WindowFlags |= ImGuiWindowFlags_UnsavedDocument;
 
 	ImGui::SetNextWindowPos(ImVec2(MainViewport->WorkSize.x / 2.f - 400.f, MainViewport->WorkSize.y / 2.f - 250.f ), ImGuiCond_Appearing);
 	ImGui::SetNextWindowSize(ImVec2(800, 500.f), ImGuiCond_Appearing);

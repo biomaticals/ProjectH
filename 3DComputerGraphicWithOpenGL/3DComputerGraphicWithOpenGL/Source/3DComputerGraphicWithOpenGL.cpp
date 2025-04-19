@@ -23,7 +23,7 @@ int main(int, char**)
     glfwSwapInterval(1);
 
     IMGUI_CHECKVERSION();
-    ImGuiContext* Context = ImGui::CreateContext();
+    ImGui::CreateContext();
     ImGuiIO& io = ImGui::GetIO(); (void)io;
     io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
     io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;
@@ -35,17 +35,15 @@ int main(int, char**)
 
     // demo
     bool show_demo_window = true;
-    bool show_another_window = false;
 
     bool ShowMainWindow = true;
     bool ShowSubWindow = true;
-    bool ShowSelector = true;
+    bool ShowSelectorWindow = true;
 
     ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
 
     while (!glfwWindowShouldClose(window))
     {
-
         glfwPollEvents();
         if (glfwGetWindowAttrib(window, GLFW_ICONIFIED) != 0)
         {
@@ -57,17 +55,13 @@ int main(int, char**)
         ImGui_ImplGlfw_NewFrame();
         ImGui::NewFrame();
 
-        // remain this for R&D
-        if (show_demo_window)
-            ImGui::ShowDemoWindow(&show_demo_window);
-
 		static bool no_titlebar = false;
 		static bool no_scrollbar = false;
 		static bool no_menu = false;
-		static bool no_move = false;
+		static bool no_move = true;
 		static bool no_resize = true;
 		static bool no_collapse = true;
-		static bool no_close = false;
+		static bool no_close = true;
 		static bool no_nav = false;
 		static bool no_background = false;
 		static bool no_bring_to_front = false;
@@ -86,24 +80,25 @@ int main(int, char**)
 		if (unsaved_document)   CoreWindowFlags |= ImGuiWindowFlags_UnsavedDocument;
 
         // 1. Windows
-
 		const ImGuiViewport* MainViewport = ImGui::GetMainViewport();
 		ImGui::SetNextWindowPos(ImVec2(MainViewport->WorkPos.x, MainViewport->WorkPos.y), ImGuiCond_Always);
         ImGui::SetNextWindowSize(ImVec2(3.f * MainViewport->Size.x / 4.f, MainViewport->Size.y / 2.f), ImGuiCond_Always);
-		ImGui::Begin("Main Window", &ShowMainWindow, CoreWindowFlags);
+		ImGui::Begin("MainWindow", &ShowMainWindow, CoreWindowFlags);
         MainWindow = ImGui::GetCurrentWindow();
 		ImGui::End();
 
         ImGui::SetNextWindowPos(ImVec2(MainViewport->WorkPos.x, MainViewport->Size.y / 2.f), ImGuiCond_Always);
         ImGui::SetNextWindowSize(ImVec2(3.f * MainViewport->Size.x / 4.f, MainViewport->Size.y / 2.f), ImGuiCond_Always);
-        ImGui::Begin("Sub Window", &ShowSubWindow, CoreWindowFlags);
+        ImGui::Begin("SubWindow", &ShowSubWindow, CoreWindowFlags);
+        
         SubWindow = ImGui::GetCurrentWindow();
         ImGui::End();
 
         ImGui::SetNextWindowPos(ImVec2(3.f * MainViewport->Size.x / 4.f, MainViewport->WorkPos.y), ImGuiCond_Always);
         ImGui::SetNextWindowSize(ImVec2(MainViewport->Size.x / 4.f, MainViewport->Size.y), ImGuiCond_Always);
-        ImGui::Begin("Selector", &ShowSelector, CoreWindowFlags);
-        Selector = ImGui::GetCurrentWindow();
+        ImGui::Begin("SelectorWindow", &ShowSelectorWindow, CoreWindowFlags);
+        SelectorWindow = ImGui::GetCurrentWindow();
+        DrawSelectorWindow();
         ImGui::End();
 
         // 2. Main Menu
@@ -114,6 +109,10 @@ int main(int, char**)
         }
 
         ShowMainMenuBar(&WindowData);
+
+        // remain this for R&D
+        if (show_demo_window)
+            ImGui::ShowDemoWindow(&show_demo_window);
 
         ImGui::Render();
         int display_w, display_h;
@@ -148,10 +147,4 @@ static void ShowMainMenuBar(FWindowData* MainMenuBarData)
         ImGui::MenuItem("Introduction", nullptr, &MainMenuBarData->ShowIntroduction);
         ImGui::EndMainMenuBar();
     }
-}
-
-static void ShowIntroduction(bool* bOpen)
-{
-    FIntroductionWindow IntroductionWindow{};
-    IntroductionWindow.Draw(bOpen);
 }

@@ -53,6 +53,9 @@
     <ClCompile Include="Source\Windows\IntroductionWindow.cpp">
       <Filter>소스 파일\Windows</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Windows\SelectorWindow.cpp">
+      <Filter>소스 파일\Windows</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Include\ImGui\imconfig.h">
@@ -81,6 +84,9 @@
     </ClInclude>
     <ClInclude Include="Source\3DComputerGraphicWithOpenGL.h">
       <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Windows\SelectorWindow.h">
+      <Filter>헤더 파일\Windows</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
