@@ -30,7 +30,7 @@ int main(int, char**)
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);
 
-    GLFWwindow* window = glfwCreateWindow(1280, 720, "Dear ImGui GLFW+OpenGL3 example", nullptr, nullptr);
+    GLFWwindow* window = glfwCreateWindow(1280, 720, "3D CG With OpenGL by biomatic", nullptr, nullptr);
     if (window == nullptr)
         return 1;
     glfwMakeContextCurrent(window);
@@ -47,8 +47,14 @@ int main(int, char**)
     ImGui_ImplGlfw_InitForOpenGL(window, true);
     ImGui_ImplOpenGL3_Init(glsl_version);
 
+    // demo
     bool show_demo_window = true;
     bool show_another_window = false;
+
+    bool ShowMainWindow = true;
+    bool ShowSubWindow = true;
+    bool ShowSelector = true;
+
     ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
 
     while (!glfwWindowShouldClose(window))
@@ -65,9 +71,24 @@ int main(int, char**)
         ImGui_ImplGlfw_NewFrame();
         ImGui::NewFrame();
 
-        // compress to function
-        ImGui::Begin("3D CG with OpenGL by biomatic");
-        ImGui::Text("This is my Test window");
+        // remain this for R&D
+        if (show_demo_window)
+            ImGui::ShowDemoWindow(&show_demo_window);
+
+		const ImGuiViewport* MainViewport = ImGui::GetMainViewport();
+		ImGui::SetNextWindowPos(ImVec2(MainViewport->WorkPos.x, MainViewport->WorkPos.y), ImGuiCond_Always);
+        ImGui::SetNextWindowSize(ImVec2(3.f * MainViewport->Size.x / 4.f, MainViewport->Size.y / 2.f), ImGuiCond_Always);
+		ImGui::Begin("Main Window", &ShowMainWindow);
+		ImGui::End();
+
+        ImGui::SetNextWindowPos(ImVec2(MainViewport->WorkPos.x, MainViewport->Size.y / 2.f), ImGuiCond_Always);
+        ImGui::SetNextWindowSize(ImVec2(3.f * MainViewport->Size.x / 4.f, MainViewport->Size.y / 2.f), ImGuiCond_Always);
+        ImGui::Begin("Sub Window", &ShowSubWindow);
+        ImGui::End();
+
+        ImGui::SetNextWindowPos(ImVec2(3.f * MainViewport->Size.x / 4.f, MainViewport->WorkPos.y), ImGuiCond_Always);
+        ImGui::SetNextWindowSize(ImVec2(MainViewport->Size.x / 4.f, MainViewport->Size.y), ImGuiCond_Always);
+        ImGui::Begin("Selector", &ShowSelector);
         ImGui::End();
 
         ImGui::Render();
