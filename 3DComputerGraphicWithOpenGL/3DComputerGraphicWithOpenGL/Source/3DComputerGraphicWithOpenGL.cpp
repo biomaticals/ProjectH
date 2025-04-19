@@ -1,24 +1,9 @@
 ﻿// Copyright 2025. Team Unique Turtle ; https://github.com/biomaticals. All rights reserved.
 // All contents cannot be copied, distributed, revised.
 
-#include "ImGui/imgui.h"
-#include "ImGui/Backends/imgui_impl_glfw.h"
-#include "ImGui/Backends/imgui_impl_opengl3.h"
-#include <stdio.h>
-#define GL_SILENCE_DEPRECATION
-#if defined(IMGUI_IMPL_OPENGL_ES2)
-#include <GLES2/gl2.h>
-#endif
+#pragma once
 
-#include <GLFW/glfw3.h>
-#if defined(_MSC_VER) && (_MSC_VER >= 1900) && !defined(IMGUI_DISABLE_WIN32_FUNCTIONS)
-#pragma comment(lib, "legacy_stdio_definitions")
-#endif
-
-static void glfw_error_callback(int error, const char* description)
-{
-    fprintf(stderr, "GLFW Error %d: %s\n", error, description);
-}
+#include "3DComputerGraphicWithOpenGL.h"
 
 int main(int, char**)
 {
@@ -37,7 +22,7 @@ int main(int, char**)
     glfwSwapInterval(1);
 
     IMGUI_CHECKVERSION();
-    ImGui::CreateContext();
+    ImGuiContext* Context = ImGui::CreateContext();
     ImGuiIO& io = ImGui::GetIO(); (void)io;
     io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
     io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;
@@ -75,20 +60,54 @@ int main(int, char**)
         if (show_demo_window)
             ImGui::ShowDemoWindow(&show_demo_window);
 
+        // 1. Main Menu
+        static FWindowData WindowData;
+        if(WindowData.ShowIntroduction) 
+        {
+            ShowIntroduction(&WindowData.ShowIntroduction);
+        }
+
+        ShowMainMenuBar(&WindowData);
+
+		static bool no_titlebar = false;
+		static bool no_scrollbar = false;
+		static bool no_menu = false;
+		static bool no_move = false;
+		static bool no_resize = false;
+		static bool no_collapse = false;
+		static bool no_close = false;
+		static bool no_nav = false;
+		static bool no_background = false;
+		static bool no_bring_to_front = false;
+		static bool unsaved_document = false;
+
+		ImGuiWindowFlags window_flags = 0;
+		if (no_titlebar)        window_flags |= ImGuiWindowFlags_NoTitleBar;
+		if (no_scrollbar)       window_flags |= ImGuiWindowFlags_NoScrollbar;
+		if (!no_menu)           window_flags |= ImGuiWindowFlags_MenuBar;
+		if (no_move)            window_flags |= ImGuiWindowFlags_NoMove;
+		if (no_resize)          window_flags |= ImGuiWindowFlags_NoResize;
+		if (no_collapse)        window_flags |= ImGuiWindowFlags_NoCollapse;
+		if (no_nav)             window_flags |= ImGuiWindowFlags_NoNav;
+		if (no_background)      window_flags |= ImGuiWindowFlags_NoBackground;
+		if (no_bring_to_front)  window_flags |= ImGuiWindowFlags_NoBringToFrontOnFocus;
+		if (unsaved_document)   window_flags |= ImGuiWindowFlags_UnsavedDocument;
+
+        // 2. Windows
 		const ImGuiViewport* MainViewport = ImGui::GetMainViewport();
 		ImGui::SetNextWindowPos(ImVec2(MainViewport->WorkPos.x, MainViewport->WorkPos.y), ImGuiCond_Always);
         ImGui::SetNextWindowSize(ImVec2(3.f * MainViewport->Size.x / 4.f, MainViewport->Size.y / 2.f), ImGuiCond_Always);
-		ImGui::Begin("Main Window", &ShowMainWindow);
+		ImGui::Begin("Main Window", &ShowMainWindow, window_flags);
 		ImGui::End();
 
         ImGui::SetNextWindowPos(ImVec2(MainViewport->WorkPos.x, MainViewport->Size.y / 2.f), ImGuiCond_Always);
         ImGui::SetNextWindowSize(ImVec2(3.f * MainViewport->Size.x / 4.f, MainViewport->Size.y / 2.f), ImGuiCond_Always);
-        ImGui::Begin("Sub Window", &ShowSubWindow);
+        ImGui::Begin("Sub Window", &ShowSubWindow, window_flags);
         ImGui::End();
 
         ImGui::SetNextWindowPos(ImVec2(3.f * MainViewport->Size.x / 4.f, MainViewport->WorkPos.y), ImGuiCond_Always);
         ImGui::SetNextWindowSize(ImVec2(MainViewport->Size.x / 4.f, MainViewport->Size.y), ImGuiCond_Always);
-        ImGui::Begin("Selector", &ShowSelector);
+        ImGui::Begin("Selector", &ShowSelector, window_flags);
         ImGui::End();
 
         ImGui::Render();
@@ -110,4 +129,24 @@ int main(int, char**)
     glfwTerminate();
 
     return 0;
+}
+
+static void glfw_error_callback(int error, const char* description)
+{
+    fprintf(stderr, "GLFW Error %d: %s\n", error, description);
+}
+
+static void ShowMainMenuBar(FWindowData* MainMenuBarData)
+{
+    if (ImGui::BeginMainMenuBar())
+    {
+        ImGui::MenuItem("Introduction", nullptr, &MainMenuBarData->ShowIntroduction);
+        ImGui::EndMainMenuBar();
+    }
+}
+
+static void ShowIntroduction(bool* bOpen)
+{
+    FIntroductionWindow IntroductionWindow{};
+    IntroductionWindow.Draw(bOpen);
 }

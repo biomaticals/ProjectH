@@ -216,6 +216,7 @@
     <ClCompile Include="..\Include\ImGui\imgui_tables.cpp" />
     <ClCompile Include="..\Include\ImGui\imgui_widgets.cpp" />
     <ClCompile Include="Source\3DComputerGraphicWithOpenGL.cpp" />
+    <ClCompile Include="Source\Windows\IntroductionWindow.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\InsideStaticMathLibrary\InsideStaticMathLibrary.vcxproj">
@@ -229,6 +230,9 @@
     <ClInclude Include="..\Include\ImGui\imconfig.h" />
     <ClInclude Include="..\Include\ImGui\imgui.h" />
     <ClInclude Include="..\Include\ImGui\imgui_internal.h" />
+    <ClInclude Include="Source\3DComputerGraphicWithOpenGL.h" />
+    <ClInclude Include="Source\Common.h" />
+    <ClInclude Include="Source\Windows\IntroductionWindow.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\Include\ImGui\imgui.ini" />

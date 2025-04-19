@@ -18,6 +18,12 @@
     <Filter Include="imgui\Backends">
       <UniqueIdentifier>{bc0187c9-f7c4-4ded-a747-d26135ac50f9}</UniqueIdentifier>
     </Filter>
+    <Filter Include="헤더 파일\Windows">
+      <UniqueIdentifier>{3313f539-f3df-4458-90e6-75d1f243e4d1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\Windows">
+      <UniqueIdentifier>{bd3c1657-3947-4cb2-bab3-e8cdb6f1103e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\3DComputerGraphicWithOpenGL.cpp">
@@ -44,6 +50,9 @@
     <ClCompile Include="..\Include\ImGui\Backends\imgui_impl_opengl3.cpp">
       <Filter>imgui\Backends</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Windows\IntroductionWindow.cpp">
+      <Filter>소스 파일\Windows</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Include\ImGui\imconfig.h">
@@ -63,6 +72,15 @@
     </ClInclude>
     <ClInclude Include="..\Include\ImGui\Backends\imgui_impl_opengl3_loader.h">
       <Filter>imgui\Backends</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Common.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Windows\IntroductionWindow.h">
+      <Filter>헤더 파일\Windows</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\3DComputerGraphicWithOpenGL.h">
+      <Filter>헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
