@@ -36,17 +36,14 @@ void FSelectorWindowData::Draw(bool* bOpen)
 			ImGui::Indent();
 			if (ImGui::CollapsingHeader(FindContext(2, 5, 3, 0).c_str()))
 			{
+				ImGui::Indent();
 				ImGui::MenuItem(FindContext(2, 5, 3, 2).c_str(), nullptr);
-
-				
+				ImGui::Unindent();
 			}
-			
 			ImGui::Unindent();
 		}
-		
 		ImGui::Unindent();
 	}
-	
 
 	if (ImGui::CollapsingHeader("Part03 Graphic Pipeline"))
 	{
@@ -67,7 +64,7 @@ const std::string FSelectorWindowData::FindContext(unsigned int Part, unsigned i
 		{
 			if (auto Position = Line.find(Keyword); Position != std::string::npos)
 			{
-				Found = std::string(Line).substr(Position + Keyword.size() + 3 /*" : "*/);
+				Found = std::string(Line).substr(Position);
 				break;
 			}
 		}
@@ -80,7 +77,7 @@ const std::string FSelectorWindowData::FindContext(unsigned int Part, unsigned i
 		{
 			if (auto Position = Line.find(Keyword); Position != std::string::npos)
 			{
-				Found = std::string(Line).substr(Position + Keyword.size() + 3 /*" : "*/);
+				Found = std::string(Line).substr(Position);
 				break;
 			}
 		}
@@ -93,7 +90,7 @@ const std::string FSelectorWindowData::FindContext(unsigned int Part, unsigned i
 		{
 			if (auto Position = Line.find(Keyword); Position != std::string::npos)
 			{
-				Found = std::string(Line).substr(Position + Keyword.size() + 3 /*" : "*/);
+				Found = std::string(Line).substr(Position);
 				break;
 			}
 		}
@@ -106,7 +103,7 @@ const std::string FSelectorWindowData::FindContext(unsigned int Part, unsigned i
 		{
 			if (auto Position = Line.find(Keyword); Position != std::string::npos)
 			{
-				Found = std::string(Line).substr(Position + Keyword.size() + 3 /*" : "*/);
+				Found = std::string(Line).substr(Position);
 				break;
 			}
 		}

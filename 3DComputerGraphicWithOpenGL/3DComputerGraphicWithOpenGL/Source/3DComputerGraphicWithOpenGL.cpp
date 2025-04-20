@@ -82,13 +82,13 @@ int main(int, char**)
 		// 1. Windows
 		const ImGuiViewport* MainViewport = ImGui::GetMainViewport();
 		ImGui::SetNextWindowPos(ImVec2(MainViewport->WorkPos.x, MainViewport->WorkPos.y), ImGuiCond_Always);
-		ImGui::SetNextWindowSize(ImVec2(3.f * MainViewport->Size.x / 4.f, MainViewport->Size.y / 2.f), ImGuiCond_Always);
+		ImGui::SetNextWindowSize(ImVec2(6.f * MainViewport->Size.x / 10.f, MainViewport->Size.y / 2.f), ImGuiCond_Always);
 		ImGui::Begin("MainWindow", &ShowMainWindow, CoreWindowFlags);
 		MainWindow = ImGui::GetCurrentWindow();
 		ImGui::End();
 
 		ImGui::SetNextWindowPos(ImVec2(MainViewport->WorkPos.x, MainViewport->Size.y / 2.f), ImGuiCond_Always);
-		ImGui::SetNextWindowSize(ImVec2(3.f * MainViewport->Size.x / 4.f, MainViewport->Size.y / 2.f), ImGuiCond_Always);
+		ImGui::SetNextWindowSize(ImVec2(6.f * MainViewport->Size.x / 10.f, MainViewport->Size.y / 2.f), ImGuiCond_Always);
 		ImGui::Begin("SubWindow", &ShowSubWindow, CoreWindowFlags);
 		
 		SubWindow = ImGui::GetCurrentWindow();
@@ -96,8 +96,8 @@ int main(int, char**)
 
 		static FSelectorWindowData SelecWindowData;
 
-		ImGui::SetNextWindowPos(ImVec2(3.f * MainViewport->Size.x / 4.f, MainViewport->WorkPos.y), ImGuiCond_Always);
-		ImGui::SetNextWindowSize(ImVec2(MainViewport->Size.x / 4.f, MainViewport->Size.y), ImGuiCond_Always);
+		ImGui::SetNextWindowPos(ImVec2(6.f * MainViewport->Size.x / 10.f, MainViewport->WorkPos.y), ImGuiCond_Always);
+		ImGui::SetNextWindowSize(ImVec2(4.f * MainViewport->Size.x / 10.f, MainViewport->Size.y), ImGuiCond_Always);
 		ImGui::Begin("SelectorWindow", &ShowSelectorWindow, CoreWindowFlags);
 		SelectorWindow = ImGui::GetCurrentWindow();
 		SelecWindowData.Draw(&SelecWindowData.bDraw);

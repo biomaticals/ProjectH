@@ -22,7 +22,7 @@ void FIntroductionWindowData::Draw(bool* bOpen)
 	{
 		ImGui::SeparatorText("3D CG With OpenGl by biomatic");
 		ImGui::Text("This project was initiated to learn and practice the OpenGL API.");
-		ImGui::Text("The content is adapted from a book \"3D Computer Graphics with OpenGL.\"");
+		ImGui::Text("The content is adapted from a book \"3D Computer Graphics with OpenGL\".");
 		ImGui::Text("Through this program, you can view and run the code examples from each part and chapter.");
 		ImGui::Text("From \"Selector window\", choose part, chapter and title to proceed.");
 		ImGui::Text("And then, \"Main window\" shows the codes, \"Sub window\" outputs the results.");
