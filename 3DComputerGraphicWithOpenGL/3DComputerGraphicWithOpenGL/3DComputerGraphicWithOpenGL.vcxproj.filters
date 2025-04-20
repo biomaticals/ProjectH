@@ -88,6 +88,9 @@
     <ClInclude Include="Source\Windows\SelectorWindow.h">
       <Filter>헤더 파일\Windows</Filter>
     </ClInclude>
+    <ClInclude Include="Source\CoreMinimal.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\Include\ImGui\imgui.ini">
@@ -101,5 +104,10 @@
     <Natvis Include="..\Include\ImGui\imgui.natvis">
       <Filter>imgui</Filter>
     </Natvis>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="Resource\TableOfContents.txt">
+      <Filter>리소스 파일</Filter>
+    </Text>
   </ItemGroup>
 </Project>

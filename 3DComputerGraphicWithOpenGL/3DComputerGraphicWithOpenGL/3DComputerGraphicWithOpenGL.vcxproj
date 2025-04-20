@@ -104,6 +104,8 @@
       <AdditionalIncludeDirectories>Source;..\Include;..\Include\ImGui;..\Include\ImGui\Backends;%(AdditionalIncludeDirectories)$(InsideStaticMathLibrarySolutionDir)Source;$(OutsideStaticMathLibrarySolutionDir)OutsideStaticMathLibrary\Source;$(InsideDynamicMathLibrarySolutionDir)Source;$(OutsideDynamicMathLibrarySolutionDir)OutsideDynamicMathLibrary\Source</AdditionalIncludeDirectories>
       <PrecompiledHeaderFile />
       <AdditionalOptions>/utf-8 %(AdditionalOptions)</AdditionalOptions>
+      <LanguageStandard>stdcpp20</LanguageStandard>
+      <LanguageStandard_C>stdc17</LanguageStandard_C>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -131,6 +133,8 @@
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>Source;..\Include;..\Include\ImGui;..\Include\ImGui\Backends;%(AdditionalIncludeDirectories)$(InsideStaticMathLibrarySolutionDir)Source;$(OutsideStaticMathLibrarySolutionDir)OutsideStaticMathLibrary\Source;$(InsideDynamicMathLibrarySolutionDir)Source;$(OutsideDynamicMathLibrarySolutionDir)OutsideDynamicMathLibrary\Source</AdditionalIncludeDirectories>
       <PrecompiledHeaderFile />
+      <LanguageStandard>stdcpp20</LanguageStandard>
+      <LanguageStandard_C>stdc17</LanguageStandard_C>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -156,6 +160,8 @@
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>Source;..\Include;..\Include\ImGui;..\Include\ImGui\Backends;%(AdditionalIncludeDirectories)$(InsideStaticMathLibrarySolutionDir)Source;$(OutsideStaticMathLibrarySolutionDir)OutsideStaticMathLibrary\Source;$(InsideDynamicMathLibrarySolutionDir)Source;$(OutsideDynamicMathLibrarySolutionDir)OutsideDynamicMathLibrary\Source</AdditionalIncludeDirectories>
       <PrecompiledHeaderFile />
+      <LanguageStandard>stdcpp20</LanguageStandard>
+      <LanguageStandard_C>stdc17</LanguageStandard_C>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -188,6 +194,8 @@
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>Source;..\Include;..\Include\ImGui;..\Include\ImGui\Backends;%(AdditionalIncludeDirectories)$(InsideStaticMathLibrarySolutionDir)Source;$(OutsideStaticMathLibrarySolutionDir)OutsideStaticMathLibrary\Source;$(InsideDynamicMathLibrarySolutionDir)Source;$(OutsideDynamicMathLibrarySolutionDir)OutsideDynamicMathLibrary\Source;$(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PrecompiledHeaderFile />
+      <LanguageStandard>stdcpp20</LanguageStandard>
+      <LanguageStandard_C>stdc17</LanguageStandard_C>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -233,6 +241,7 @@
     <ClInclude Include="..\Include\ImGui\imgui_internal.h" />
     <ClInclude Include="Source\3DComputerGraphicWithOpenGL.h" />
     <ClInclude Include="Source\Common.h" />
+    <ClInclude Include="Source\CoreMinimal.h" />
     <ClInclude Include="Source\Windows\IntroductionWindow.h" />
     <ClInclude Include="Source\Windows\SelectorWindow.h" />
   </ItemGroup>
@@ -242,6 +251,9 @@
   </ItemGroup>
   <ItemGroup>
     <Natvis Include="..\Include\ImGui\imgui.natvis" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="Resource\TableOfContents.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

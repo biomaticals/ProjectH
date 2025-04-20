@@ -3,36 +3,30 @@
 
 #pragma once
 
+#include "CoreMinimal.h"
 #include <list>
 #include "Common.h"
 
-static void DrawSelectorWindow()
+struct FSelectorWindowData
 {
-	static std::list<FSampleCodeData> SampleCodeDataList;
+public:
+	FSelectorWindowData();
+	~FSelectorWindowData();
 
-	if (ImGui::CollapsingHeader("Part02 Introduction to OpenGL"))
-	{
-		ImGui::Indent();
-		if (ImGui::CollapsingHeader("Chapter05 Basic OpenGL Tool"))
-		{
-			ImGui::Indent();
-			if (ImGui::CollapsingHeader("Section 03 Sample OpenGL Program"))
-			{
-				ImGui::MenuItem("Code 5-2", nullptr);
+	void Draw(bool* bOpen);
 
-				
-			}
-			
-			ImGui::Unindent();
-		}
-		
-		ImGui::Unindent();
-	}
-	
+public:
+	bool bDraw;
 
-	if (ImGui::CollapsingHeader("Part03 Graphic Pipeline"))
-	{
+private:
+	std::list<FSampleCodeData> CodeDataList;
 
-	}
 
+#pragma region File Resource
+public:
+	const std::string FindContext(unsigned int Part, unsigned int Chapter, unsigned int Section, unsigned int SampleCode);
+
+private:
+	const std::filesystem::path TableOfContentsPath;
+#pragma endregion
 };

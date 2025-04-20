@@ -1,10 +1,16 @@
+// Copyright 2025. Team Unique Turtle ; https://github.com/biomaticals. All rights reserved.
+// All contents cannot be copied, distributed, revised.
+
 #pragma once
 
-#include <iostream>
+#include "CoreMinimal.h"
+#include <string>
+#include <fstream>
+#include <filesystem>
 
 struct FWindowData
 {
-    bool ShowIntroduction = true;
+    bool bShowIntroduction = true;
 };
 
 struct FSampleCodeData
@@ -15,6 +21,7 @@ struct FSampleCodeData
     , Section(0)
     , Name("")
     , SampleCode("")
+    , Description("")
     {
 
     }
@@ -30,5 +37,17 @@ struct FSampleCodeData
     const char* Name;
     const char* SampleCode;
     const char* Description;
-    GLFWimage Output;
 };
+
+static std::string ReadFileToString(const std::filesystem::path& FilePath)
+{
+    std::ifstream Stream(FilePath, std::ios::in |std::ios::binary);
+    if (!Stream)
+    {
+        std::cerr << std::format("failed to open {}\n", FilePath.string());
+        return {};
+    }
+
+    std::string Contents((std::istreambuf_iterator<char>(Stream)), std::istreambuf_iterator<char>());
+    return Contents;
+}

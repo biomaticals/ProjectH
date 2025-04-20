@@ -8,52 +8,52 @@
 
 int main(int, char**)
 {
-    glfwSetErrorCallback(glfw_error_callback);
-    if (!glfwInit())
-        return 1;
+	glfwSetErrorCallback(glfw_error_callback);
+	if (!glfwInit())
+		return 1;
 
-    const char* glsl_version = "#version 130";
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);
+	const char* glsl_version = "#version 130";
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);
 
-    GLFWwindow* window = glfwCreateWindow(1280, 720, "3D CG With OpenGL by biomatic", nullptr, nullptr);
-    if (window == nullptr)
-        return 1;
-    glfwMakeContextCurrent(window);
-    glfwSwapInterval(1);
+	GLFWwindow* window = glfwCreateWindow(1280, 720, "3D CG With OpenGL by biomatic", nullptr, nullptr);
+	if (window == nullptr)
+		return 1;
+	glfwMakeContextCurrent(window);
+	glfwSwapInterval(1);
 
-    IMGUI_CHECKVERSION();
-    ImGui::CreateContext();
-    ImGuiIO& io = ImGui::GetIO(); (void)io;
-    io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
-    io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;
+	IMGUI_CHECKVERSION();
+	ImGui::CreateContext();
+	ImGuiIO& io = ImGui::GetIO(); (void)io;
+	io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
+	io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;
 
-    ImGui::StyleColorsDark();
+	ImGui::StyleColorsDark();
 
-    ImGui_ImplGlfw_InitForOpenGL(window, true);
-    ImGui_ImplOpenGL3_Init(glsl_version);
+	ImGui_ImplGlfw_InitForOpenGL(window, true);
+	ImGui_ImplOpenGL3_Init(glsl_version);
 
-    // demo
-    bool show_demo_window = true;
+	// demo
+	bool show_demo_window = true;
 
-    bool ShowMainWindow = true;
-    bool ShowSubWindow = true;
-    bool ShowSelectorWindow = true;
+	bool ShowMainWindow = true;
+	bool ShowSubWindow = true;
+	bool ShowSelectorWindow = true;
 
-    ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
+	ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
 
-    while (!glfwWindowShouldClose(window))
-    {
-        glfwPollEvents();
-        if (glfwGetWindowAttrib(window, GLFW_ICONIFIED) != 0)
-        {
-            ImGui_ImplGlfw_Sleep(10);
-            continue;
-        }
+	while (!glfwWindowShouldClose(window))
+	{
+		glfwPollEvents();
+		if (glfwGetWindowAttrib(window, GLFW_ICONIFIED) != 0)
+		{
+			ImGui_ImplGlfw_Sleep(10);
+			continue;
+		}
 
-        ImGui_ImplOpenGL3_NewFrame();
-        ImGui_ImplGlfw_NewFrame();
-        ImGui::NewFrame();
+		ImGui_ImplOpenGL3_NewFrame();
+		ImGui_ImplGlfw_NewFrame();
+		ImGui::NewFrame();
 
 		static bool no_titlebar = false;
 		static bool no_scrollbar = false;
@@ -79,72 +79,74 @@ int main(int, char**)
 		if (no_bring_to_front)  CoreWindowFlags |= ImGuiWindowFlags_NoBringToFrontOnFocus;
 		if (unsaved_document)   CoreWindowFlags |= ImGuiWindowFlags_UnsavedDocument;
 
-        // 1. Windows
+		// 1. Windows
 		const ImGuiViewport* MainViewport = ImGui::GetMainViewport();
 		ImGui::SetNextWindowPos(ImVec2(MainViewport->WorkPos.x, MainViewport->WorkPos.y), ImGuiCond_Always);
-        ImGui::SetNextWindowSize(ImVec2(3.f * MainViewport->Size.x / 4.f, MainViewport->Size.y / 2.f), ImGuiCond_Always);
+		ImGui::SetNextWindowSize(ImVec2(3.f * MainViewport->Size.x / 4.f, MainViewport->Size.y / 2.f), ImGuiCond_Always);
 		ImGui::Begin("MainWindow", &ShowMainWindow, CoreWindowFlags);
-        MainWindow = ImGui::GetCurrentWindow();
+		MainWindow = ImGui::GetCurrentWindow();
 		ImGui::End();
 
-        ImGui::SetNextWindowPos(ImVec2(MainViewport->WorkPos.x, MainViewport->Size.y / 2.f), ImGuiCond_Always);
-        ImGui::SetNextWindowSize(ImVec2(3.f * MainViewport->Size.x / 4.f, MainViewport->Size.y / 2.f), ImGuiCond_Always);
-        ImGui::Begin("SubWindow", &ShowSubWindow, CoreWindowFlags);
-        
-        SubWindow = ImGui::GetCurrentWindow();
-        ImGui::End();
+		ImGui::SetNextWindowPos(ImVec2(MainViewport->WorkPos.x, MainViewport->Size.y / 2.f), ImGuiCond_Always);
+		ImGui::SetNextWindowSize(ImVec2(3.f * MainViewport->Size.x / 4.f, MainViewport->Size.y / 2.f), ImGuiCond_Always);
+		ImGui::Begin("SubWindow", &ShowSubWindow, CoreWindowFlags);
+		
+		SubWindow = ImGui::GetCurrentWindow();
+		ImGui::End();
 
-        ImGui::SetNextWindowPos(ImVec2(3.f * MainViewport->Size.x / 4.f, MainViewport->WorkPos.y), ImGuiCond_Always);
-        ImGui::SetNextWindowSize(ImVec2(MainViewport->Size.x / 4.f, MainViewport->Size.y), ImGuiCond_Always);
-        ImGui::Begin("SelectorWindow", &ShowSelectorWindow, CoreWindowFlags);
-        SelectorWindow = ImGui::GetCurrentWindow();
-        DrawSelectorWindow();
-        ImGui::End();
+		static FSelectorWindowData SelecWindowData;
 
-        // 2. Main Menu
-        static FWindowData WindowData;
-        if(WindowData.ShowIntroduction) 
-        {
-            ShowIntroduction(&WindowData.ShowIntroduction);
-        }
+		ImGui::SetNextWindowPos(ImVec2(3.f * MainViewport->Size.x / 4.f, MainViewport->WorkPos.y), ImGuiCond_Always);
+		ImGui::SetNextWindowSize(ImVec2(MainViewport->Size.x / 4.f, MainViewport->Size.y), ImGuiCond_Always);
+		ImGui::Begin("SelectorWindow", &ShowSelectorWindow, CoreWindowFlags);
+		SelectorWindow = ImGui::GetCurrentWindow();
+		SelecWindowData.Draw(&SelecWindowData.bDraw);
+		ImGui::End();
 
-        ShowMainMenuBar(&WindowData);
+		// 2. Main Menu
+		static FWindowData WindowData;
+		if(WindowData.bShowIntroduction) 
+		{
+			ShowIntroduction(&WindowData.bShowIntroduction);
+		}
 
-        // remain this for R&D
-        if (show_demo_window)
-            ImGui::ShowDemoWindow(&show_demo_window);
+		ShowMainMenuBar(&WindowData);
 
-        ImGui::Render();
-        int display_w, display_h;
-        glfwGetFramebufferSize(window, &display_w, &display_h);
-        glViewport(0, 0, display_w, display_h);
-        glClearColor(clear_color.x * clear_color.w, clear_color.y * clear_color.w, clear_color.z * clear_color.w, clear_color.w);
-        glClear(GL_COLOR_BUFFER_BIT);
-        ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+		// remain this for R&D
+		if (show_demo_window)
+			ImGui::ShowDemoWindow(&show_demo_window);
 
-        glfwSwapBuffers(window);
-    }
+		ImGui::Render();
+		int display_w, display_h;
+		glfwGetFramebufferSize(window, &display_w, &display_h);
+		glViewport(0, 0, display_w, display_h);
+		glClearColor(clear_color.x * clear_color.w, clear_color.y * clear_color.w, clear_color.z * clear_color.w, clear_color.w);
+		glClear(GL_COLOR_BUFFER_BIT);
+		ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
-    ImGui_ImplOpenGL3_Shutdown();
-    ImGui_ImplGlfw_Shutdown();
-    ImGui::DestroyContext();
+		glfwSwapBuffers(window);
+	}
 
-    glfwDestroyWindow(window);
-    glfwTerminate();
+	ImGui_ImplOpenGL3_Shutdown();
+	ImGui_ImplGlfw_Shutdown();
+	ImGui::DestroyContext();
 
-    return 0;
+	glfwDestroyWindow(window);
+	glfwTerminate();
+
+	return 0;
 }
 
 static void glfw_error_callback(int error, const char* description)
 {
-    fprintf(stderr, "GLFW Error %d: %s\n", error, description);
+	fprintf(stderr, "GLFW Error %d: %s\n", error, description);
 }
 
 static void ShowMainMenuBar(FWindowData* MainMenuBarData)
 {
-    if (ImGui::BeginMainMenuBar())
-    {
-        ImGui::MenuItem("Introduction", nullptr, &MainMenuBarData->ShowIntroduction);
-        ImGui::EndMainMenuBar();
-    }
+	if (ImGui::BeginMainMenuBar())
+	{
+		ImGui::MenuItem("Introduction", nullptr, &MainMenuBarData->bShowIntroduction);
+		ImGui::EndMainMenuBar();
+	}
 }
