@@ -45,6 +45,13 @@ void FIntroductionWindowData::Draw(bool* bOpen)
 		ImGui::Text("To contact him, please use the phone number or email address below.");
 		ImGui::Text("Phone Number : +82 10 3902 8624 (Republic of Korea)");
 		ImGui::Text("E-mail : biomaticals@naver.com");
+		ImGui::NewLine();
+
+		if (ImGui::Button("Close", ImVec2(-FLT_MIN, 0.f)))
+		{
+			*bOpen = false;
+		}
+
 		ImGui::End();
 		return;
 	}
