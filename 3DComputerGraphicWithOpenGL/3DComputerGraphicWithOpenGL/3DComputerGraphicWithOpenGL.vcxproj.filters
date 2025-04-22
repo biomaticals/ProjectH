@@ -56,6 +56,12 @@
     <ClCompile Include="Source\Windows\SelectorWindow.cpp">
       <Filter>소스 파일\Windows</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Windows\UTWindow.cpp">
+      <Filter>소스 파일\Windows</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Windows\UTMainWindow.cpp">
+      <Filter>소스 파일\Windows</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Include\ImGui\imconfig.h">
@@ -90,6 +96,12 @@
     </ClInclude>
     <ClInclude Include="Source\CoreMinimal.h">
       <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Windows\UTWindow.h">
+      <Filter>헤더 파일\Windows</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Windows\UTMainWindow.h">
+      <Filter>헤더 파일\Windows</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

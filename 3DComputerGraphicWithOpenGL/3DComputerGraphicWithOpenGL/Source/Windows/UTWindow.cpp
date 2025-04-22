@@ -6,8 +6,8 @@
 #include <imgui_impl_opengl3.h>
 #include <iostream>
 
-UTWindow::UTWindow(const std::string& title, int width, int height)
-    : Title(title), Width(width), Height(height)
+UTWindow::UTWindow(const std::string& Title, int Width, int Height)
+    : Title(Title), Width(Width), Height(Height)
 {
     SetupGLFWWindow();
     InitImGui();
@@ -16,30 +16,7 @@ UTWindow::UTWindow(const std::string& title, int width, int height)
 UTWindow::~UTWindow()
 {
     glfwMakeContextCurrent(GLFWWindow);
-    ImGui_ImplOpenGL3_Shutdown();
-    ImGui_ImplGlfw_Shutdown();
     glfwDestroyWindow(GLFWWindow);
-}
-
-void UTWindow::SetupGLFWWindow()
-{
-    GLFWWindow = glfwCreateWindow(Width, Height, Title.c_str(), nullptr, nullptr);
-    if (!GLFWWindow) 
-    {
-        std::cerr << "Failed to create window: " << Title << std::endl;
-        exit(1);
-    }
-    glfwMakeContextCurrent(GLFWWindow);
-    glfwSwapInterval(1);
-    glViewport(0, 0, Width, Height);
-    glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
-}
-
-void UTWindow::InitImGui()
-{
-    glfwMakeContextCurrent(GLFWWindow);
-    ImGui_ImplGlfw_InitForOpenGL(GLFWWindow, true);
-    ImGui_ImplOpenGL3_Init("#version 130");
 }
 
 void UTWindow::NewFrame()
@@ -74,7 +51,43 @@ bool UTWindow::ShouldClose() const
     return glfwWindowShouldClose(GLFWWindow);
 }
 
-void UTWindow::PollEvents()
+bool UTWindow::IsVisible() const
 {
-    glfwPollEvents();
+    return glfwGetWindowAttrib(GLFWWindow, GLFW_VISIBLE);
+}
+
+bool UTWindow::IsFocused() const
+{
+    return glfwGetWindowAttrib(GLFWWindow, GLFW_FOCUSED);
+}
+
+bool UTWindow::IsMinimized() const
+{
+    return glfwGetWindowAttrib(GLFWWindow, GLFW_ICONIFIED);
+}
+
+GLFWwindow* UTWindow::GetGLFWWindow() const
+{
+    return GLFWWindow;
+}
+
+void UTWindow::SetupGLFWWindow()
+{
+    GLFWWindow = glfwCreateWindow(Width, Height, Title.c_str(), nullptr, nullptr);
+    if (!GLFWWindow) 
+    {
+        std::cerr << "Failed to create window: " << Title << std::endl;
+        exit(1);
+    }
+    glfwMakeContextCurrent(GLFWWindow);
+    glfwSwapInterval(1);
+    glViewport(0, 0, Width, Height);
+    glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
+}
+
+void UTWindow::InitImGui()
+{
+    glfwMakeContextCurrent(GLFWWindow);
+    ImGui::CreateContext();
+    ImGui::StyleColorsDark();
 }

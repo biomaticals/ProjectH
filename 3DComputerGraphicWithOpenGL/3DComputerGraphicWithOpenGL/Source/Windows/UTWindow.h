@@ -9,22 +9,26 @@
 class UTWindow 
 {
 public:
-    UTWindow(const std::string& title, int width, int height);
-    ~UTWindow();
-
-    void InitImGui();
+    UTWindow(const std::string& Title, int Width, int Height);
+    virtual ~UTWindow();
     void NewFrame();
-    void RenderUI();
-    void RenderDrawData();
+    virtual void RenderUI();
+    virtual void RenderDrawData();
 
     bool ShouldClose() const;
-    void PollEvents();
+    bool IsVisible() const;
+    bool IsFocused() const;
+    bool IsMinimized() const;
+
+    GLFWwindow* GetGLFWWindow() const;
+
+private:
+    void SetupGLFWWindow();
+    void InitImGui();
 
 private:
     GLFWwindow* GLFWWindow;
     std::string Title;
     int Width;
     int Height;
-
-    void SetupGLFWWindow();
 };

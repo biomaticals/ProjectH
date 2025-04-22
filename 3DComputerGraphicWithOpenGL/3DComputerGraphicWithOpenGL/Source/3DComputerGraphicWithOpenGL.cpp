@@ -8,129 +8,49 @@
 
 int main(int, char**)
 {
-	glfwSetErrorCallback(glfw_error_callback);
+	//glfwSetErrorCallback(glfw_error_callback);
 	if (!glfwInit())
 		return 1;
 
-	const char* glsl_version = "#version 130";
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);
 	IMGUI_CHECKVERSION();
 
-	MainWindow = glfwCreateWindow(1280, 720, "3D CG With OpenGL by biomatic", nullptr, nullptr);
-	if (MainWindow == nullptr)
+	MainWindow = new UTMainWindow("3D CG With OpenGL by biomatic", 1280, 720);
+	if(MainWindow == nullptr)
 		return 1;
 
-	OutputWindow = glfwCreateWindow(640, 360, "TEST", nullptr, nullptr);
+	OutputWindow = new UTWindow("Output", 640, 360);
 	if(OutputWindow == nullptr)
 		return 1;
 
-	InitMainWindow();
-	//InitOutputWindow();
+	ImGui_ImplGlfw_InitForOpenGL(MainWindow->GetGLFWWindow(), true);
+	ImGui_ImplOpenGL3_Init(glsl_version);
 	glfwSwapInterval(1);
 
-	ImGui::CreateContext();
-	ImGui::StyleColorsDark();
-
-	ImGui_ImplGlfw_InitForOpenGL(MainWindow, true);
-	ImGui_ImplOpenGL3_Init(glsl_version);
-
-	// demo
-	bool show_demo_window = true;
-	bool ShowInputWindow = true;
-	bool ShowDescriptionWindow = true;
-	bool ShowSelectorWindow = true;
-
-	while (true)
+	while (MainWindow->ShouldClose() == false)
 	{
+		MainWindow->NewFrame();
+		MainWindow->RenderUI();
+		MainWindow->RenderDrawData();
+
+		if (OutputWindow->ShouldClose() == false)
+		{
+			OutputWindow->NewFrame();
+			OutputWindow->RenderUI();
+			OutputWindow->RenderDrawData();
+		}
+		else
+		{
+			
+		}
+
 		glfwPollEvents();
-		if (glfwGetWindowAttrib(MainWindow, GLFW_ICONIFIED) != 0)
-		{
-			ImGui_ImplGlfw_Sleep(10);
-			continue;
-		}
-
-		ImGui_ImplOpenGL3_NewFrame();
-		ImGui_ImplGlfw_NewFrame();
-		ImGui::NewFrame();
-
-		static bool no_titlebar = false;
-		static bool no_scrollbar = false;
-		static bool no_menu = false;
-		static bool no_move = true;
-		static bool no_resize = true;
-		static bool no_collapse = true;
-		static bool no_close = true;
-		static bool no_nav = false;
-		static bool no_background = false;
-		static bool no_bring_to_front = false;
-		static bool unsaved_document = false;
-
-		ImGuiWindowFlags CoreWindowFlags = 0;
-		if (no_titlebar)        CoreWindowFlags |= ImGuiWindowFlags_NoTitleBar;
-		if (no_scrollbar)       CoreWindowFlags |= ImGuiWindowFlags_NoScrollbar;
-		if (!no_menu)           CoreWindowFlags |= ImGuiWindowFlags_MenuBar;
-		if (no_move)            CoreWindowFlags |= ImGuiWindowFlags_NoMove;
-		if (no_resize)          CoreWindowFlags |= ImGuiWindowFlags_NoResize;
-		if (no_collapse)        CoreWindowFlags |= ImGuiWindowFlags_NoCollapse;
-		if (no_nav)             CoreWindowFlags |= ImGuiWindowFlags_NoNav;
-		if (no_background)      CoreWindowFlags |= ImGuiWindowFlags_NoBackground;
-		if (no_bring_to_front)  CoreWindowFlags |= ImGuiWindowFlags_NoBringToFrontOnFocus;
-		if (unsaved_document)   CoreWindowFlags |= ImGuiWindowFlags_UnsavedDocument;
-
-		// 1. Windows
-		const ImGuiViewport* MainViewport = ImGui::GetMainViewport();
-		ImGui::SetNextWindowPos(ImVec2(MainViewport->WorkPos.x, MainViewport->WorkPos.y), ImGuiCond_Always);
-		ImGui::SetNextWindowSize(ImVec2(6.f * MainViewport->Size.x / 10.f, MainViewport->Size.y / 2.f), ImGuiCond_Always);
-		ImGui::Begin("InputWindow", &ShowInputWindow, CoreWindowFlags);
-		InputWindow = ImGui::GetCurrentWindow();
-		ImGui::End();
-
-		ImGui::SetNextWindowPos(ImVec2(MainViewport->WorkPos.x, MainViewport->Size.y / 2.f), ImGuiCond_Always);
-		ImGui::SetNextWindowSize(ImVec2(6.f * MainViewport->Size.x / 10.f, MainViewport->Size.y / 2.f), ImGuiCond_Always);
-		ImGui::Begin("DescriptionWindow", &ShowDescriptionWindow, CoreWindowFlags);
-		
-		DescriptionWindow = ImGui::GetCurrentWindow();
-		ImGui::End();
-
-		static FSelectorWindowData SelecWindowData;
-
-		ImGui::SetNextWindowPos(ImVec2(6.f * MainViewport->Size.x / 10.f, MainViewport->WorkPos.y), ImGuiCond_Always);
-		ImGui::SetNextWindowSize(ImVec2(4.f * MainViewport->Size.x / 10.f, MainViewport->Size.y), ImGuiCond_Always);
-		ImGui::Begin("SelectorWindow", &ShowSelectorWindow, CoreWindowFlags);
-		SelectorWindow = ImGui::GetCurrentWindow();
-		SelecWindowData.Draw(&SelecWindowData.bDraw);
-		ImGui::End();
-
-		// 2. Main Menu
-		static FWindowData WindowData;
-		if(WindowData.bShowIntroduction) 
-		{
-			ShowIntroduction(&WindowData.bShowIntroduction);
-		}
-
-		ShowMainMenuBar(&WindowData);
-
-		// remain this for R&D
-		if (show_demo_window)
-			ImGui::ShowDemoWindow(&show_demo_window);
-
-		ImGui::Render();
-		int display_w, display_h;
-		glfwGetFramebufferSize(MainWindow, &display_w, &display_h);
-		glViewport(0, 0, display_w, display_h);
-		glClearColor(clear_color.x * clear_color.w, clear_color.y * clear_color.w, clear_color.z * clear_color.w, clear_color.w);
-		glClear(GL_COLOR_BUFFER_BIT);
-		ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
-
-		glfwSwapBuffers(MainWindow);
 	}
 
 	ImGui_ImplOpenGL3_Shutdown();
 	ImGui_ImplGlfw_Shutdown();
 	ImGui::DestroyContext();
-
-	glfwDestroyWindow(MainWindow);
 	glfwTerminate();
 
 	return 0;
@@ -139,28 +59,4 @@ int main(int, char**)
 static void glfw_error_callback(int error, const char* description)
 {
 	fprintf(stderr, "GLFW Error %d: %s\n", error, description);
-}
-
-static void InitMainWindow()
-{
-
-	glfwMakeContextCurrent(MainWindow);
-	glMatrixMode(GL_PROJECTION);
-	glLoadIdentity();
-	glOrtho(-1, 1, -1, 1, -1, 1);
-	glClearColor(0.45f, 0.55f, 0.60f, 1.f);
-}
-
-static void InitOutputWindow()
-{
-
-}
-
-static void ShowMainMenuBar(FWindowData* MainMenuBarData)
-{
-	if (ImGui::BeginMainMenuBar())
-	{
-		ImGui::MenuItem("Introduction", nullptr, &MainMenuBarData->bShowIntroduction);
-		ImGui::EndMainMenuBar();
-	}
 }
