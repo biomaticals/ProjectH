@@ -24,10 +24,13 @@ int main(int, char**)
 	if(OutputWindow == nullptr)
 		return 1;
 
-	ImGui_ImplGlfw_InitForOpenGL(MainWindow->GetGLFWWindow(), true);
-	ImGui_ImplOpenGL3_Init(glsl_version);
-	glfwSwapInterval(1);
+	glfwMakeContextCurrent(MainWindow->GetGLFWWindow());
+    ImGui::SetCurrentContext(MainWindow->GuiContext);
+    ImGui_ImplOpenGL3_Init(glsl_version); // Only Mainwindow
+    ImGui_ImplOpenGL3_NewFrame();
+    ImGui_ImplGlfw_InitForOpenGL(MainWindow->GetGLFWWindow(), true);
 
+	glfwSwapInterval(1);
 	while (MainWindow->ShouldClose() == false)
 	{
 		MainWindow->NewFrame();

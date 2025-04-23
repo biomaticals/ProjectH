@@ -12,7 +12,9 @@ public:
 	UTMainWindow(const std::string& Title, int Width, int Height);
 	virtual ~UTMainWindow();
 
+	virtual void NewFrame() override; 
 	virtual void RenderUI() override;
+	virtual void RenderDrawData() override;
 
 public:
 	bool ShowInputWindow = true;

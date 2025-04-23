@@ -11,7 +11,7 @@ class UTWindow
 public:
     UTWindow(const std::string& Title, int Width, int Height);
     virtual ~UTWindow();
-    void NewFrame();
+    virtual void NewFrame();
     virtual void RenderUI();
     virtual void RenderDrawData();
 
@@ -21,6 +21,7 @@ public:
     bool IsMinimized() const;
 
     GLFWwindow* GetGLFWWindow() const;
+    ImGuiContext* GuiContext;
 
 private:
     void SetupGLFWWindow();
@@ -32,3 +33,4 @@ private:
     int Width;
     int Height;
 };
+static void FocusCallback(GLFWwindow* Window, int Focused);

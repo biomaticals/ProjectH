@@ -1,9 +1,9 @@
 // Copyright 2025. Team Unique Turtle ; https://github.com/biomaticals. All rights reserved.
 // All contents cannot be copied, distributed, revised.
 
+#pragma once
+
 #include "UTWindow.h"
-#include <imgui_impl_glfw.h>
-#include <imgui_impl_opengl3.h>
 #include <iostream>
 
 UTWindow::UTWindow(const std::string& Title, int Width, int Height)
@@ -21,28 +21,26 @@ UTWindow::~UTWindow()
 
 void UTWindow::NewFrame()
 {
-    glfwMakeContextCurrent(GLFWWindow);
-    ImGui_ImplOpenGL3_NewFrame();
-    ImGui_ImplGlfw_NewFrame();
-    ImGui::NewFrame();
+	glfwMakeContextCurrent(GetGLFWWindow());
+    //ImGui::SetCurrentContext(GuiContext);
+    //ImGui::NewFrame();
 }
 
 void UTWindow::RenderUI()
 {
-    ImGui::Begin(Title.c_str());
-    ImGui::Text("TEST", Title.c_str());
-    ImGui::End();
+    //ImGui::Begin(Title.c_str());
+    //ImGui::Text("TEST", Title.c_str());
+    //ImGui::End();
 }
 
 void UTWindow::RenderDrawData()
 {
-    ImGui::Render();
-
+    //ImGui::Render();
     int display_w, display_h;
-    glfwGetFramebufferSize(GLFWWindow, &display_w, &display_h);
-    glViewport(0, 0, display_w, display_h);
+    //glfwGetFramebufferSize(GLFWWindow, &display_w, &display_h);
+    //glViewport(0, 0, display_w, display_h);
     glClear(GL_COLOR_BUFFER_BIT);
-    ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+    //ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
     glfwSwapBuffers(GLFWWindow);
 }
 
@@ -88,6 +86,16 @@ void UTWindow::SetupGLFWWindow()
 void UTWindow::InitImGui()
 {
     glfwMakeContextCurrent(GLFWWindow);
-    ImGui::CreateContext();
+    glfwSetWindowFocusCallback(GLFWWindow, FocusCallback);
+    GuiContext = ImGui::CreateContext();
+    ImGui::SetCurrentContext(GuiContext);
     ImGui::StyleColorsDark();
+}
+
+void FocusCallback(GLFWwindow* Window, int Focused)
+{
+	if (Focused)
+		printf("Window got focus\n");
+	else
+		printf("Window lost focus\n");
 }

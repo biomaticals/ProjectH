@@ -15,6 +15,15 @@ UTMainWindow::~UTMainWindow()
 
 }
 
+void UTMainWindow::NewFrame()
+{
+	glfwMakeContextCurrent(GetGLFWWindow());
+    ImGui::SetCurrentContext(GuiContext);
+    ImGui_ImplOpenGL3_NewFrame();
+	ImGui_ImplGlfw_NewFrame();
+    ImGui::NewFrame();
+}
+
 void UTMainWindow::RenderUI()
 {
 	static bool no_titlebar = false;
@@ -83,3 +92,13 @@ void UTMainWindow::RenderUI()
 		ImGui::ShowDemoWindow(&show_demo_window);
 }
 
+void UTMainWindow::RenderDrawData()
+{
+	ImGui::Render();
+	int display_w, display_h;
+	glfwGetFramebufferSize(GetGLFWWindow(), &display_w, &display_h);
+	glViewport(0, 0, display_w, display_h);
+	glClear(GL_COLOR_BUFFER_BIT);
+	ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+	glfwSwapBuffers(GetGLFWWindow());
+}
