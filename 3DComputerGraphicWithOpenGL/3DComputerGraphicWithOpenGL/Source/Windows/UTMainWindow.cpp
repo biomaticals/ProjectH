@@ -52,14 +52,15 @@ void UTMainWindow::RenderUI()
 
 	// 1. Windows
 	const ImGuiViewport* MainViewport = ImGui::GetMainViewport();
+	float InputWindowTitleBarSize = ImGui::GetFontSize() + ImGui::GetStyle().FramePadding.y * 2;
 	ImGui::SetNextWindowPos(ImVec2(MainViewport->WorkPos.x, MainViewport->WorkPos.y), ImGuiCond_Always);
 	ImGui::SetNextWindowSize(ImVec2(6.f * MainViewport->Size.x / 10.f, MainViewport->Size.y / 2.f), ImGuiCond_Always);
 	ImGui::Begin("InputWindow", &ShowInputWindow, CoreWindowFlags);
 	InputWindow = ImGui::GetCurrentWindow();
 	ImGui::End();
 
-	ImGui::SetNextWindowPos(ImVec2(MainViewport->WorkPos.x, MainViewport->Size.y / 2.f), ImGuiCond_Always);
-	ImGui::SetNextWindowSize(ImVec2(6.f * MainViewport->Size.x / 10.f, MainViewport->Size.y / 2.f), ImGuiCond_Always);
+	ImGui::SetNextWindowPos(ImVec2(MainViewport->WorkPos.x, MainViewport->Size.y / 2.f + InputWindowTitleBarSize), ImGuiCond_Always);
+	ImGui::SetNextWindowSize(ImVec2(6.f * MainViewport->Size.x / 10.f, MainViewport->Size.y / 2.f - InputWindowTitleBarSize), ImGuiCond_Always);
 	ImGui::Begin("DescriptionWindow", &ShowDescriptionWindow, CoreWindowFlags);
 
 	DescriptionWindow = ImGui::GetCurrentWindow();

@@ -13,7 +13,7 @@ public:
 	virtual ~UTMainWindow();
 
 	virtual void NewFrame() override; 
-	virtual void RenderUI() override;
+	virtual void RenderUI();
 	virtual void RenderDrawData() override;
 
 public:

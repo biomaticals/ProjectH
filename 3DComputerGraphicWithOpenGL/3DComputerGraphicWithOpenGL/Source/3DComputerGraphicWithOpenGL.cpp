@@ -40,7 +40,6 @@ int main(int, char**)
 		if (OutputWindow->ShouldClose() == false)
 		{
 			OutputWindow->NewFrame();
-			OutputWindow->RenderUI();
 			OutputWindow->RenderDrawData();
 		}
 		else

@@ -22,25 +22,14 @@ UTWindow::~UTWindow()
 void UTWindow::NewFrame()
 {
 	glfwMakeContextCurrent(GetGLFWWindow());
-    //ImGui::SetCurrentContext(GuiContext);
-    //ImGui::NewFrame();
-}
-
-void UTWindow::RenderUI()
-{
-    //ImGui::Begin(Title.c_str());
-    //ImGui::Text("TEST", Title.c_str());
-    //ImGui::End();
 }
 
 void UTWindow::RenderDrawData()
 {
-    //ImGui::Render();
     int display_w, display_h;
-    //glfwGetFramebufferSize(GLFWWindow, &display_w, &display_h);
-    //glViewport(0, 0, display_w, display_h);
+    glfwGetFramebufferSize(GLFWWindow, &display_w, &display_h);
+    glViewport(0, 0, display_w, display_h);
     glClear(GL_COLOR_BUFFER_BIT);
-    //ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
     glfwSwapBuffers(GLFWWindow);
 }
 
