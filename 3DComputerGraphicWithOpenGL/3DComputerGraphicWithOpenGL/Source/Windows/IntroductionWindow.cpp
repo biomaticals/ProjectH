@@ -34,15 +34,15 @@ void FIntroductionWindowData::Draw(bool* bOpen)
 		ImGui::TextLinkOpenURL("https://github.com/biomaticals/3DComputerGraphicWithOpenGL");
 		ImGui::NewLine();
 		ImGui::SeparatorText("biomatic");
-		ImGui::Text("biomatic is a game client programmer from Korea with 4 years of experience.");
+		ImGui::Text("I am a game client programmer from Korea with 4 years of experience.");
 		ImGui::NewLine();
 
-		ImGui::Text("To visit his technical blog, please follow this link.");
+		ImGui::Text("To visit my technical blog, please follow this link.");
 		ImGui::Text("Unfortunately, the technical blog does not support English.");
 		ImGui::NewLine();
 		ImGui::TextLinkOpenURL("https://biomaticals.notion.site/GUI-1daed2b75184805fa19cfd4eb4be638f?pvs=4");
 		ImGui::NewLine();
-		ImGui::Text("To contact him, please use the phone number or email address below.");
+		ImGui::Text("To contact, please use the phone number or email address below.");
 		ImGui::Text("Phone Number : +82 10 3902 8624 (Republic of Korea)");
 		ImGui::Text("E-mail : biomaticals@naver.com");
 		ImGui::NewLine();

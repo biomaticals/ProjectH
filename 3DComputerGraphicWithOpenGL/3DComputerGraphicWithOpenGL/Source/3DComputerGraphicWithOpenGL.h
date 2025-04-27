@@ -6,6 +6,7 @@
 #include "CoreMinimal.h"
 #include "Common.h"
 #include "Windows/UTMainWindow.h"
+#include "Windows/UTOutputWindow.h"
 #include "Windows/IntroductionWindow.h"
 #include "Windows/SelectorWindow.h"
 

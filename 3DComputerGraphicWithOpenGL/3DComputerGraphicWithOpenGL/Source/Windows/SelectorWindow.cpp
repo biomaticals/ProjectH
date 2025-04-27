@@ -12,7 +12,7 @@
 
 FSelectorWindowData::FSelectorWindowData()
 	: bDraw(true)
-	, CodeDataList()
+	, ExampleCodeDataList()
 	, TableOfContentsPath("Resource\\TableOfContents.txt")
 {
 
@@ -21,6 +21,16 @@ FSelectorWindowData::FSelectorWindowData()
 FSelectorWindowData::~FSelectorWindowData()
 {
 
+}
+
+auto FSelectorWindowData::UpdateSelectedExample(unsigned int Part, unsigned int Chapter, unsigned int Section, unsigned int CodeIndex)
+{
+	if(SelectedExampleCodeData.Part == Part && SelectedExampleCodeData.Chapter == Chapter && SelectedExampleCodeData.Section == Section && SelectedExampleCodeData.CodeIndex == CodeIndex)
+		return;
+
+	FExampleCodeData Target = FExampleCodeData(Part, Chapter, Section, CodeIndex);
+	auto Result = std::find(ExampleCodeDataList.begin(), ExampleCodeDataList.end(), Target);
+	SelectedExampleCodeData = Result._Ptr->_Myval;
 }
 
 void FSelectorWindowData::Draw(bool* bOpen)
@@ -37,7 +47,10 @@ void FSelectorWindowData::Draw(bool* bOpen)
 			if (ImGui::CollapsingHeader(FindContext(2, 5, 3, 0).c_str()))
 			{
 				ImGui::Indent();
-				ImGui::MenuItem(FindContext(2, 5, 3, 2).c_str(), nullptr);
+				if (ImGui::MenuItem(FindContext(2, 5, 3, 2).c_str(), nullptr))
+				{
+					UpdateSelectedExample(2, 5, 3, 2);
+				}
 				ImGui::Unindent();
 			}
 			ImGui::Unindent();
@@ -51,7 +64,12 @@ void FSelectorWindowData::Draw(bool* bOpen)
 	}
 };
 
-const std::string FSelectorWindowData::FindContext(unsigned int Part, unsigned int Chapter, unsigned int Section, unsigned int SampleCode)
+const FExampleCodeData FSelectorWindowData::GetExampleCodeData() const
+{
+	return SelectedExampleCodeData;
+}
+
+const std::string FSelectorWindowData::FindContext(unsigned int Part, unsigned int Chapter, unsigned int Section, unsigned int CodeIndex)
 {
 	std::ifstream Stream(TableOfContentsPath, std::ios::in);
 	std::string Line{};
@@ -96,9 +114,9 @@ const std::string FSelectorWindowData::FindContext(unsigned int Part, unsigned i
 		}
 	}
 
-	if (SampleCode != 0)
+	if (CodeIndex != 0)
 	{
-		Keyword = std::format("Code {}-{}", Chapter, SampleCode);
+		Keyword = std::format("Code {}-{}", Chapter, CodeIndex);
 		while (std::getline(Stream, Line))
 		{
 			if (auto Position = Line.find(Keyword); Position != std::string::npos)

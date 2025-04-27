@@ -14,17 +14,21 @@ public:
 	~FSelectorWindowData();
 
 	void Draw(bool* bOpen);
-
-public:
-	bool bDraw;
+	const FExampleCodeData GetExampleCodeData() const;
 
 private:
-	std::list<FSampleCodeData> CodeDataList;
+	auto UpdateSelectedExample(unsigned int Part, unsigned int Chapter, unsigned int Section, unsigned int CodeIndex);
 
+public:
+	bool bDraw = true;
+
+private:
+	std::list<FExampleCodeData> ExampleCodeDataList;
+	FExampleCodeData SelectedExampleCodeData;
 
 #pragma region File Resource
-public:
-	const std::string FindContext(unsigned int Part, unsigned int Chapter, unsigned int Section, unsigned int SampleCode);
+private:
+	const std::string FindContext(unsigned int Part, unsigned int Chapter, unsigned int Section, unsigned int CodeIndex);
 
 private:
 	const std::filesystem::path TableOfContentsPath;

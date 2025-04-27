@@ -13,7 +13,7 @@ public:
 	virtual ~UTMainWindow();
 
 	virtual void NewFrame() override; 
-	virtual void RenderUI();
+	virtual void RenderUI() override;
 	virtual void RenderDrawData() override;
 
 public:
@@ -24,6 +24,10 @@ public:
 
 	// remain for r&d
 	bool show_demo_window = true;
+
+private:
+	void DrawInputWindow();
+	void DrawDescriptionWindow();
 
 private:
 	const ImGuiWindow* InputWindow = nullptr;

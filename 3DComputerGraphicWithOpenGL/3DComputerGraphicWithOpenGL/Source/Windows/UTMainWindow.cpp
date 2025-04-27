@@ -2,8 +2,9 @@
 // All contents cannot be copied, distributed, revised.
 
 #include "UTMainWindow.h"
-#include "SelectorWindow.h"
+#include "3DComputerGraphicWithOpenGL.h"
 #include "IntroductionWindow.h"
+#include "SelectorWindow.h"
 
 UTMainWindow::UTMainWindow(const std::string& Title, int Width, int Height)
 	: UTWindow(Title, Width, Height)
@@ -57,17 +58,17 @@ void UTMainWindow::RenderUI()
 	ImGui::SetNextWindowSize(ImVec2(6.f * MainViewport->Size.x / 10.f, MainViewport->Size.y / 2.f), ImGuiCond_Always);
 	ImGui::Begin("InputWindow", &ShowInputWindow, CoreWindowFlags);
 	InputWindow = ImGui::GetCurrentWindow();
+	DrawInputWindow();
 	ImGui::End();
 
 	ImGui::SetNextWindowPos(ImVec2(MainViewport->WorkPos.x, MainViewport->Size.y / 2.f + InputWindowTitleBarSize), ImGuiCond_Always);
 	ImGui::SetNextWindowSize(ImVec2(6.f * MainViewport->Size.x / 10.f, MainViewport->Size.y / 2.f - InputWindowTitleBarSize), ImGuiCond_Always);
 	ImGui::Begin("DescriptionWindow", &ShowDescriptionWindow, CoreWindowFlags);
-
 	DescriptionWindow = ImGui::GetCurrentWindow();
+	DrawDescriptionWindow();
 	ImGui::End();
 
 	static FSelectorWindowData SelecWindowData;
-
 	ImGui::SetNextWindowPos(ImVec2(6.f * MainViewport->Size.x / 10.f, MainViewport->WorkPos.y), ImGuiCond_Always);
 	ImGui::SetNextWindowSize(ImVec2(4.f * MainViewport->Size.x / 10.f, MainViewport->Size.y), ImGuiCond_Always);
 	ImGui::Begin("SelectorWindow", &ShowSelectorWindow, CoreWindowFlags);
@@ -102,4 +103,18 @@ void UTMainWindow::RenderDrawData()
 	glClear(GL_COLOR_BUFFER_BIT);
 	ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 	glfwSwapBuffers(GetGLFWWindow());
+}
+
+void UTMainWindow::DrawInputWindow()
+{
+	if (SelectorWindow)
+	{
+		//SelectorWindow->
+	}
+
+}
+
+void UTMainWindow::DrawDescriptionWindow()
+{
+
 }

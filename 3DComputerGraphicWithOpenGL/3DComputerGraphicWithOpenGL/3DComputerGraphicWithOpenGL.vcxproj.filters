@@ -62,6 +62,9 @@
     <ClCompile Include="Source\Windows\UTMainWindow.cpp">
       <Filter>소스 파일\Windows</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Windows\UTOutputWindow.cpp">
+      <Filter>소스 파일\Windows</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Include\ImGui\imconfig.h">
@@ -103,6 +106,9 @@
     <ClInclude Include="Source\Windows\UTMainWindow.h">
       <Filter>헤더 파일\Windows</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Windows\UTOutputWindow.h">
+      <Filter>헤더 파일\Windows</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\Include\ImGui\imgui.ini">
@@ -119,6 +125,9 @@
   </ItemGroup>
   <ItemGroup>
     <Text Include="Resource\TableOfContents.txt">
+      <Filter>리소스 파일</Filter>
+    </Text>
+    <Text Include="Resource\Part2_Codes.txt">
       <Filter>리소스 파일</Filter>
     </Text>
   </ItemGroup>

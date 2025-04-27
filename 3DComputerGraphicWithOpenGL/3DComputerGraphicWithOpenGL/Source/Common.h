@@ -13,29 +13,48 @@ struct FWindowData
     bool bShowIntroduction = true;
 };
 
-struct FSampleCodeData
+struct FExampleCodeData
 {
-    FSampleCodeData()
+    FExampleCodeData()
     : Part(0)
     , Chapter(0)
     , Section(0)
+    , CodeIndex(0)
     , Name("")
-    , SampleCode("")
+    , Codes(0)
     , Description("")
     {
 
     }
 
-    ~FSampleCodeData()
+    FExampleCodeData(unsigned int InPart, unsigned int InChapter, unsigned int InSection, unsigned int InCodeIndex)
+        : Part(InPart)
+        , Chapter(InChapter)
+        , Section(InSection)
+        , CodeIndex(InCodeIndex)
+        , Name("")
+        , Codes(0)
+        , Description("")
     {
 
+     }
+
+    ~FExampleCodeData()
+    {
+
+    }
+
+    bool operator==(const FExampleCodeData& Other)
+    {
+        return Part == Other.Part && Chapter == Other.Chapter && Section == Other.Section && CodeIndex == Other.CodeIndex;
     }
 
     unsigned int Part;
     unsigned int Chapter;
     unsigned int Section;
+    unsigned int CodeIndex;
     const char* Name;
-    const char* SampleCode;
+    const char* Codes;
     const char* Description;
 };
 

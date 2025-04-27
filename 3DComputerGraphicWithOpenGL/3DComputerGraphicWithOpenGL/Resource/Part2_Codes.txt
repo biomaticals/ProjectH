@@ -1,0 +1,12 @@
+// Copyright 2025. Team Unique Turtle ; https://github.com/biomaticals. All rights reserved.
+// All contents cannot be copied, distributed, revised.
+
+2.5.3.2
+//Start
+#include <glut.h>
+#include <gl.h>
+#include <glu.h>
+
+void MyDisaply()
+{
+glClear(GL_)}

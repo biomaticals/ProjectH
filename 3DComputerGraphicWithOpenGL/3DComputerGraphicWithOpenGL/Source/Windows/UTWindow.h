@@ -12,6 +12,7 @@ public:
     UTWindow(const std::string& Title, int Width, int Height);
     virtual ~UTWindow();
     virtual void NewFrame();
+    virtual void RenderUI(){};
     virtual void RenderDrawData();
 
     bool ShouldClose() const;
