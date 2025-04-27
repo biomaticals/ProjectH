@@ -5,6 +5,8 @@
 
 #include "3DComputerGraphicWithOpenGL.h"
 #include "imgui_internal.h"
+#include "imgui_impl_glfw.h"
+#include <GLFW/glfw3.h>
 
 int main(int, char**)
 {
@@ -33,21 +35,25 @@ int main(int, char**)
 	glfwSwapInterval(1);
 	while (MainWindow->ShouldClose() == false)
 	{
+		glfwPollEvents();
+		
 		MainWindow->NewFrame();
 		MainWindow->RenderUI();
 		MainWindow->RenderDrawData();
 
-		if (OutputWindow->ShouldClose() == false)
+		if (OutputWindow)
 		{
-			OutputWindow->NewFrame();
-			OutputWindow->RenderDrawData();
+			if (OutputWindow->ShouldClose() == false)
+			{
+				OutputWindow->NewFrame();
+				OutputWindow->RenderDrawData();
+			}
+			else
+			{
+				delete OutputWindow;
+				OutputWindow = nullptr;
+			}
 		}
-		else
-		{
-			
-		}
-
-		glfwPollEvents();
 	}
 
 	ImGui_ImplOpenGL3_Shutdown();
