@@ -29,6 +29,10 @@ private:
 	void DrawInputWindow();
 	void DrawDescriptionWindow();
 
+public:
+	static FSelectorWindowData SelecWindowData;
+	static FWindowData WindowData;
+
 private:
 	const ImGuiWindow* InputWindow = nullptr;
 	const ImGuiWindow* DescriptionWindow = nullptr;

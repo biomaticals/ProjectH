@@ -26,11 +26,34 @@ FSelectorWindowData::~FSelectorWindowData()
 auto FSelectorWindowData::UpdateSelectedExample(unsigned int Part, unsigned int Chapter, unsigned int Section, unsigned int CodeIndex)
 {
 	if(SelectedExampleCodeData.Part == Part && SelectedExampleCodeData.Chapter == Chapter && SelectedExampleCodeData.Section == Section && SelectedExampleCodeData.CodeIndex == CodeIndex)
+	{
+		bSelectedExampleChanged = false;
 		return;
+	}
 
+	bSelectedExampleChanged = true;
 	FExampleCodeData Target = FExampleCodeData(Part, Chapter, Section, CodeIndex);
 	auto Result = std::find(ExampleCodeDataList.begin(), ExampleCodeDataList.end(), Target);
 	SelectedExampleCodeData = Result._Ptr->_Myval;
+}
+
+bool FSelectorWindowData::LinkExampleCode()
+{
+	std::ifstream Stream(TableOfContentsPath, std::ios::in);
+	std::string Line{};
+	std::string Found{};
+	if (Stream.is_open())
+	{
+		while (std::getline(Stream, Line))
+		{
+			if (auto Position = Line.find("Part"); Position != std::string::npos)
+			{
+				Found = std::string(Line).substr(Position);
+				break;
+			}
+		}
+	}
+	return Found;
 }
 
 void FSelectorWindowData::Draw(bool* bOpen)
@@ -67,6 +90,11 @@ void FSelectorWindowData::Draw(bool* bOpen)
 const FExampleCodeData FSelectorWindowData::GetExampleCodeData() const
 {
 	return SelectedExampleCodeData;
+}
+
+const bool FSelectorWindowData::HasSelectedExampleChanged() const
+{
+	return bSelectedExampleChanged;
 }
 
 const std::string FSelectorWindowData::FindContext(unsigned int Part, unsigned int Chapter, unsigned int Section, unsigned int CodeIndex)

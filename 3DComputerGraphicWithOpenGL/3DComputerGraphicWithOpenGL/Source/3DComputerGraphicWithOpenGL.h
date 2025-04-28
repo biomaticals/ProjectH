@@ -11,9 +11,13 @@
 #include "Windows/SelectorWindow.h"
 
 static UTMainWindow* MainWindow = nullptr;
-static UTWindow* OutputWindow = nullptr;
+static UTOutputWindow* OutputWindow = nullptr;
 
 int main(int, char**);
 
 static void glfw_error_callback(int error, const char* description);
 
+void CreateMainWindow();
+void CreateOutputWindow(bool bHide = true);
+void DestroyMainWindow();
+void DestroyOutputWindow();

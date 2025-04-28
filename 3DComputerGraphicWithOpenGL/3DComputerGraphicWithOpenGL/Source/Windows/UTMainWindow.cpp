@@ -68,7 +68,6 @@ void UTMainWindow::RenderUI()
 	DrawDescriptionWindow();
 	ImGui::End();
 
-	static FSelectorWindowData SelecWindowData;
 	ImGui::SetNextWindowPos(ImVec2(6.f * MainViewport->Size.x / 10.f, MainViewport->WorkPos.y), ImGuiCond_Always);
 	ImGui::SetNextWindowSize(ImVec2(4.f * MainViewport->Size.x / 10.f, MainViewport->Size.y), ImGuiCond_Always);
 	ImGui::Begin("SelectorWindow", &ShowSelectorWindow, CoreWindowFlags);
@@ -77,7 +76,6 @@ void UTMainWindow::RenderUI()
 	ImGui::End();
 
 	// 2. Main Menu
-	static FWindowData WindowData;
 	if (WindowData.bShowIntroduction)
 	{
 		ShowIntroduction(&WindowData.bShowIntroduction);

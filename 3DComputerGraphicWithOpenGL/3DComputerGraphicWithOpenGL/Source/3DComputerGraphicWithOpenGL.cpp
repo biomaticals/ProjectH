@@ -18,32 +18,8 @@ int main(int, char**)
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);
 	IMGUI_CHECKVERSION();
 
-	GLFWmonitor* Monitor = glfwGetPrimaryMonitor();
-	const GLFWvidmode* Mode = glfwGetVideoMode(Monitor);
-	int MonitorWidth = Mode->width;
-	int MonitorHeight = Mode->height;
-
-	int MainWindowWidth = MonitorWidth * 5 / 10;
-	int MainWindowHeight = MonitorHeight * 8 / 10;
-
-	MainWindow = new UTMainWindow("3D CG With OpenGL by biomatic", MainWindowWidth, MainWindowHeight);
-	if(MainWindow == nullptr)
-		return 1;
-
-	int MainWindowPositionX = MonitorWidth * 1 / 10;
-	int MainWindowPositionY = MonitorHeight * 1 / 10;
-	glfwSetWindowPos(MainWindow->GetGLFWWindow(), MainWindowPositionX, MainWindowPositionY);
-
-	int OutputWindowWidth = MonitorWidth * 3 / 10;
-	int OutputWindowHeight = MonitorHeight * 8 / 10;
-	OutputWindow = new UTOutputWindow("Output", OutputWindowWidth, OutputWindowHeight);
-	if(OutputWindow == nullptr)
-		return 1;
-
-	int OutputWindowPositionX = MonitorWidth * 6 / 10;
-	int OutputWindowPositionY = MonitorHeight * 1 / 10;
-	glfwSetWindowPos(OutputWindow->GetGLFWWindow(), OutputWindowPositionX, OutputWindowPositionY);
-	glfwHideWindow(OutputWindow->GetGLFWWindow());
+	CreateMainWindow();
+	CreateOutputWindow(true);
 
 	glfwMakeContextCurrent(MainWindow->GetGLFWWindow());
     ImGui::SetCurrentContext(MainWindow->GuiContext);
@@ -70,8 +46,7 @@ int main(int, char**)
 			}
 			else
 			{
-				delete OutputWindow;
-				OutputWindow = nullptr;
+				DestroyOutputWindow();
 			}
 		}
 	}
@@ -90,4 +65,54 @@ int main(int, char**)
 static void glfw_error_callback(int error, const char* description)
 {
 	fprintf(stderr, "GLFW Error %d: %s\n", error, description);
+}
+
+void CreateMainWindow()
+{
+	GLFWmonitor* Monitor = glfwGetPrimaryMonitor();
+	const GLFWvidmode* Mode = glfwGetVideoMode(Monitor);
+	int MonitorWidth = Mode->width;
+	int MonitorHeight = Mode->height;
+
+	int MainWindowWidth = MonitorWidth * 5 / 10;
+	int MainWindowHeight = MonitorHeight * 8 / 10;
+
+	MainWindow = new UTMainWindow("3D CG With OpenGL by biomatic", MainWindowWidth, MainWindowHeight);
+	if(MainWindow == nullptr)
+		return;
+
+	int MainWindowPositionX = MonitorWidth * 1 / 10;
+	int MainWindowPositionY = MonitorHeight * 1 / 10;
+	glfwSetWindowPos(MainWindow->GetGLFWWindow(), MainWindowPositionX, MainWindowPositionY);
+}
+
+void CreateOutputWindow(bool bHide = true)
+{
+	GLFWmonitor* Monitor = glfwGetPrimaryMonitor();
+	const GLFWvidmode* Mode = glfwGetVideoMode(Monitor);
+	int MonitorWidth = Mode->width;
+	int MonitorHeight = Mode->height;
+	int OutputWindowWidth = MonitorWidth * 3 / 10;
+	int OutputWindowHeight = MonitorHeight * 8 / 10;
+	OutputWindow = new UTOutputWindow("Output", OutputWindowWidth, OutputWindowHeight);
+	if(OutputWindow == nullptr)
+		return;
+
+	int OutputWindowPositionX = MonitorWidth * 6 / 10;
+	int OutputWindowPositionY = MonitorHeight * 1 / 10;
+	glfwSetWindowPos(OutputWindow->GetGLFWWindow(), OutputWindowPositionX, OutputWindowPositionY);
+	if(bHide)
+		glfwHideWindow(OutputWindow->GetGLFWWindow());
+}
+
+void DestroyMainWindow()
+{
+	delete MainWindow;
+	MainWindow = nullptr;
+}
+
+void DestroyOutputWindow()
+{
+	delete OutputWindow;
+	OutputWindow = nullptr;
 }
