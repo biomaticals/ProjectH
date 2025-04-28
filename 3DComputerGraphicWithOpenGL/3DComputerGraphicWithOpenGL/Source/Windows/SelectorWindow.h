@@ -16,24 +16,11 @@ public:
 	void Draw(bool* bOpen);
 	const FExampleCodeData GetExampleCodeData() const;
 	const bool HasSelectedExampleChanged() const;
-	
-private:
-	auto UpdateSelectedExample(unsigned int Part, unsigned int Chapter, unsigned int Section, unsigned int CodeIndex);
-	bool LinkExampleCode();
 
 public:
 	bool bDraw = true;
 
 private:
-	std::list<FExampleCodeData> ExampleCodeDataList;
-	FExampleCodeData SelectedExampleCodeData;
 	bool bSelectedExampleChanged;
-
-#pragma region File Resource
-private:
-	const std::string FindContext(unsigned int Part, unsigned int Chapter, unsigned int Section, unsigned int CodeIndex);
-
-private:
-	const std::filesystem::path TableOfContentsPath;
 #pragma endregion
 };

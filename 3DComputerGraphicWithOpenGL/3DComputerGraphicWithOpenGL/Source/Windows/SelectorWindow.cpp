@@ -3,12 +3,6 @@
 
 #include "SelectorWindow.h"
 #include "Common.h"
-#include <String>
-#include <filesystem>
-#include <iostream>
-#include <istream>
-#include <fstream>
-#include <format>
 
 FSelectorWindowData::FSelectorWindowData()
 	: bDraw(true)
@@ -21,39 +15,6 @@ FSelectorWindowData::FSelectorWindowData()
 FSelectorWindowData::~FSelectorWindowData()
 {
 
-}
-
-auto FSelectorWindowData::UpdateSelectedExample(unsigned int Part, unsigned int Chapter, unsigned int Section, unsigned int CodeIndex)
-{
-	if(SelectedExampleCodeData.Part == Part && SelectedExampleCodeData.Chapter == Chapter && SelectedExampleCodeData.Section == Section && SelectedExampleCodeData.CodeIndex == CodeIndex)
-	{
-		bSelectedExampleChanged = false;
-		return;
-	}
-
-	bSelectedExampleChanged = true;
-	FExampleCodeData Target = FExampleCodeData(Part, Chapter, Section, CodeIndex);
-	auto Result = std::find(ExampleCodeDataList.begin(), ExampleCodeDataList.end(), Target);
-	SelectedExampleCodeData = Result._Ptr->_Myval;
-}
-
-bool FSelectorWindowData::LinkExampleCode()
-{
-	std::ifstream Stream(TableOfContentsPath, std::ios::in);
-	std::string Line{};
-	std::string Found{};
-	if (Stream.is_open())
-	{
-		while (std::getline(Stream, Line))
-		{
-			if (auto Position = Line.find("Part"); Position != std::string::npos)
-			{
-				Found = std::string(Line).substr(Position);
-				break;
-			}
-		}
-	}
-	return Found;
 }
 
 void FSelectorWindowData::Draw(bool* bOpen)
@@ -87,73 +48,7 @@ void FSelectorWindowData::Draw(bool* bOpen)
 	}
 };
 
-const FExampleCodeData FSelectorWindowData::GetExampleCodeData() const
-{
-	return SelectedExampleCodeData;
-}
-
 const bool FSelectorWindowData::HasSelectedExampleChanged() const
 {
 	return bSelectedExampleChanged;
-}
-
-const std::string FSelectorWindowData::FindContext(unsigned int Part, unsigned int Chapter, unsigned int Section, unsigned int CodeIndex)
-{
-	std::ifstream Stream(TableOfContentsPath, std::ios::in);
-	std::string Line{};
-	std::string Found{};
-	
-	std::string Keyword = std::format("Part {:02}", Part);
-	if (Part != 0)
-	{
-		while (std::getline(Stream, Line))
-		{
-			if (auto Position = Line.find(Keyword); Position != std::string::npos)
-			{
-				Found = std::string(Line).substr(Position);
-				break;
-			}
-		}
-	}
-
-	if (Chapter != 0)
-	{
-		Keyword = std::format("Chapter {:02}", Chapter);
-		while (std::getline(Stream, Line))
-		{
-			if (auto Position = Line.find(Keyword); Position != std::string::npos)
-			{
-				Found = std::string(Line).substr(Position);
-				break;
-			}
-		}
-	}
-
-	if (Section != 0)
-	{
-		Keyword = std::format("Section {:02}", Section);
-		while (std::getline(Stream, Line))
-		{
-			if (auto Position = Line.find(Keyword); Position != std::string::npos)
-			{
-				Found = std::string(Line).substr(Position);
-				break;
-			}
-		}
-	}
-
-	if (CodeIndex != 0)
-	{
-		Keyword = std::format("Code {}-{}", Chapter, CodeIndex);
-		while (std::getline(Stream, Line))
-		{
-			if (auto Position = Line.find(Keyword); Position != std::string::npos)
-			{
-				Found = std::string(Line).substr(Position);
-				break;
-			}
-		}
-	}
-
-	return Found;
 }

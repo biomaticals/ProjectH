@@ -1,33 +1,30 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="소스 파일">
-      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
-      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
-    </Filter>
-    <Filter Include="리소스 파일">
-      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
-      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
-    </Filter>
     <Filter Include="imgui">
       <UniqueIdentifier>{3c59d4de-fb31-4465-9794-3e6b1def6e47}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="헤더 파일">
-      <UniqueIdentifier>{4f5598d5-7f35-4262-bef7-cecf14eb9900}</UniqueIdentifier>
     </Filter>
     <Filter Include="imgui\Backends">
       <UniqueIdentifier>{bc0187c9-f7c4-4ded-a747-d26135ac50f9}</UniqueIdentifier>
     </Filter>
-    <Filter Include="헤더 파일\Windows">
-      <UniqueIdentifier>{3313f539-f3df-4458-90e6-75d1f243e4d1}</UniqueIdentifier>
+    <Filter Include="Resources">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
-    <Filter Include="소스 파일\Windows">
+    <Filter Include="Source">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Source\Windows">
       <UniqueIdentifier>{bd3c1657-3947-4cb2-bab3-e8cdb6f1103e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Manager">
+      <UniqueIdentifier>{5f1afe33-19d3-4258-b5cf-955854798686}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\3DComputerGraphicWithOpenGL.cpp">
-      <Filter>소스 파일</Filter>
+      <Filter>Source</Filter>
     </ClCompile>
     <ClCompile Include="..\Include\ImGui\imgui.cpp">
       <Filter>imgui</Filter>
@@ -51,19 +48,22 @@
       <Filter>imgui\Backends</Filter>
     </ClCompile>
     <ClCompile Include="Source\Windows\IntroductionWindow.cpp">
-      <Filter>소스 파일\Windows</Filter>
+      <Filter>Source\Windows</Filter>
     </ClCompile>
     <ClCompile Include="Source\Windows\SelectorWindow.cpp">
-      <Filter>소스 파일\Windows</Filter>
+      <Filter>Source\Windows</Filter>
     </ClCompile>
     <ClCompile Include="Source\Windows\UTWindow.cpp">
-      <Filter>소스 파일\Windows</Filter>
+      <Filter>Source\Windows</Filter>
     </ClCompile>
     <ClCompile Include="Source\Windows\UTMainWindow.cpp">
-      <Filter>소스 파일\Windows</Filter>
+      <Filter>Source\Windows</Filter>
     </ClCompile>
     <ClCompile Include="Source\Windows\UTOutputWindow.cpp">
-      <Filter>소스 파일\Windows</Filter>
+      <Filter>Source\Windows</Filter>
+    </ClCompile>
+    <ClCompile Include="Manager\ResourceManager.cpp">
+      <Filter>Source\Manager</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -85,29 +85,32 @@
     <ClInclude Include="..\Include\ImGui\Backends\imgui_impl_opengl3_loader.h">
       <Filter>imgui\Backends</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Common.h">
-      <Filter>헤더 파일</Filter>
+    <ClInclude Include="Manager\ResourceManager.h">
+      <Filter>Source\Manager</Filter>
     </ClInclude>
     <ClInclude Include="Source\Windows\IntroductionWindow.h">
-      <Filter>헤더 파일\Windows</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\3DComputerGraphicWithOpenGL.h">
-      <Filter>헤더 파일</Filter>
+      <Filter>Source\Windows</Filter>
     </ClInclude>
     <ClInclude Include="Source\Windows\SelectorWindow.h">
-      <Filter>헤더 파일\Windows</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\CoreMinimal.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Windows\UTWindow.h">
-      <Filter>헤더 파일\Windows</Filter>
+      <Filter>Source\Windows</Filter>
     </ClInclude>
     <ClInclude Include="Source\Windows\UTMainWindow.h">
-      <Filter>헤더 파일\Windows</Filter>
+      <Filter>Source\Windows</Filter>
     </ClInclude>
     <ClInclude Include="Source\Windows\UTOutputWindow.h">
-      <Filter>헤더 파일\Windows</Filter>
+      <Filter>Source\Windows</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Windows\UTWindow.h">
+      <Filter>Source\Windows</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\3DComputerGraphicWithOpenGL.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Common.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\CoreMinimal.h">
+      <Filter>Source</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -125,10 +128,7 @@
   </ItemGroup>
   <ItemGroup>
     <Text Include="Resource\TableOfContents.txt">
-      <Filter>리소스 파일</Filter>
-    </Text>
-    <Text Include="Resource\Part2_Codes.txt">
-      <Filter>리소스 파일</Filter>
+      <Filter>Resources</Filter>
     </Text>
   </ItemGroup>
 </Project>

@@ -223,6 +223,7 @@
     <ClCompile Include="..\Include\ImGui\imgui_draw.cpp" />
     <ClCompile Include="..\Include\ImGui\imgui_tables.cpp" />
     <ClCompile Include="..\Include\ImGui\imgui_widgets.cpp" />
+    <ClCompile Include="Manager\ResourceManager.cpp" />
     <ClCompile Include="Source\3DComputerGraphicWithOpenGL.cpp" />
     <ClCompile Include="Source\Windows\IntroductionWindow.cpp" />
     <ClCompile Include="Source\Windows\SelectorWindow.cpp" />
@@ -242,6 +243,7 @@
     <ClInclude Include="..\Include\ImGui\imconfig.h" />
     <ClInclude Include="..\Include\ImGui\imgui.h" />
     <ClInclude Include="..\Include\ImGui\imgui_internal.h" />
+    <ClInclude Include="Manager\ResourceManager.h" />
     <ClInclude Include="Source\3DComputerGraphicWithOpenGL.h" />
     <ClInclude Include="Source\Common.h" />
     <ClInclude Include="Source\CoreMinimal.h" />
@@ -259,7 +261,6 @@
     <Natvis Include="..\Include\ImGui\imgui.natvis" />
   </ItemGroup>
   <ItemGroup>
-    <Text Include="Resource\Part2_Codes.txt" />
     <Text Include="Resource\TableOfContents.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
