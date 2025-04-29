@@ -38,18 +38,19 @@ void ResourceManager::UnloadResources()
 #pragma region Title
 const std::string ResourceManager::FindContext(unsigned int Part, unsigned int Chapter, unsigned int Section, unsigned int CodeIndex)
 {
+	ContextStream = std::ifstream(TableOfContentsPath, std::ios::in);
+
 	std::string Line{};
 	std::string Found{};
 
 	std::string Keyword = std::format("Part {:02}", Part);
 	if (Part != 0)
 	{
-		while (std::getline(Stream, Line))
+		while (std::getline(ContextStream, Line))
 		{
 			if (auto Position = Line.find(Keyword); Position != std::string::npos)
 			{
 				Found = std::string(Line).substr(Position);
-				RecentPosition_ContextFound = Position;
 				break;
 			}
 		}
@@ -58,12 +59,11 @@ const std::string ResourceManager::FindContext(unsigned int Part, unsigned int C
 	if (Chapter != 0)
 	{
 		Keyword = std::format("Chapter {:02}", Chapter);
-		while (std::getline(Stream, Line))
+		while (std::getline(ContextStream, Line))
 		{
 			if (auto Position = Line.find(Keyword); Position != std::string::npos)
 			{
 				Found = std::string(Line).substr(Position);
-				RecentPosition_ContextFound = Position;
 				break;
 			}
 		}
@@ -72,12 +72,11 @@ const std::string ResourceManager::FindContext(unsigned int Part, unsigned int C
 	if (Section != 0)
 	{
 		Keyword = std::format("Section {:02}", Section);
-		while (std::getline(Stream, Line))
+		while (std::getline(ContextStream, Line))
 		{
 			if (auto Position = Line.find(Keyword); Position != std::string::npos)
 			{
 				Found = std::string(Line).substr(Position);
-				RecentPosition_ContextFound = Position;
 				break;
 			}
 		}
@@ -86,12 +85,11 @@ const std::string ResourceManager::FindContext(unsigned int Part, unsigned int C
 	if (CodeIndex != 0)
 	{
 		Keyword = std::format("Code {}-{}", Chapter, CodeIndex);
-		while (std::getline(Stream, Line))
+		while (std::getline(ContextStream, Line))
 		{
 			if (auto Position = Line.find(Keyword); Position != std::string::npos)
 			{
 				Found = std::string(Line).substr(Position);
-				RecentPosition_ContextFound = Position;
 				break;
 			}
 		}
@@ -118,21 +116,53 @@ auto ResourceManager::UpdateSelectedExample(unsigned int Part, unsigned int Chap
 
 bool ResourceManager::LinkExampleCode()
 {
-	std::ifstream Stream(TableOfContentsPath, std::ios::in);
-	std::string Line{};
-	std::string Found{};
-	if (Stream.is_open())
+	ExampleCodePath = std::filesystem::path("Resource\\ExampleCode.txt");
+
+	ExampleCodeStream = std::ifstream(ExampleCodePath, std::ios::in);
+	if (!ExampleCodeStream.is_open())
 	{
-		while (std::getline(Stream, Line))
-		{
-			if (auto Position = Line.find("Part"); Position != std::string::npos)
-			{
-				Found = std::string(Line).substr(Position);
-				break;
-			}
-		}
+		std::cerr << "Failed to open ExampleCode.txt" << std::endl;
+		return false;
 	}
-	return Found;
+
+	std::string Line{};
+	while (std::getline(ExampleCodeStream, Line))
+	{
+		FExampleCodeData ExampleCodeData = FExampleCodeData();
+		if (Line.find("Part") != std::string::npos)
+		{
+			ExampleCodeData.Part = std::stoi(Line.substr(Line.find("Part") + 5));
+		}
+		else if (Line.find("Chapter") != std::string::npos)
+		{
+			ExampleCodeData.Chapter = std::stoi(Line.substr(Line.find("Chapter") + 8));
+		}
+		else if (Line.find("Section") != std::string::npos)
+		{
+			ExampleCodeData.Section = std::stoi(Line.substr(Line.find("Section") + 8));
+		}
+		else if (Line.find("Code") != std::string::npos)
+		{
+			std::string CodeIndexString = Line.substr(Line.find("Code") + 5);
+			size_t DelimiterPosition = CodeIndexString.find('-');
+			if (DelimiterPosition != std::string::npos)
+			{
+				CodeIndexString = CodeIndexString.substr(0, DelimiterPosition);
+			}
+			else
+			{
+				CodeIndexString = CodeIndexString.substr(CodeIndexString.find(' ') + 1);
+			}
+			ExampleCodeData.CodeIndex = std::stoi(CodeIndexString);
+			UpdateSelectedExample(ExampleCodeData.Part, ExampleCodeData.Chapter, ExampleCodeData.Section, ExampleCodeData.CodeIndex);
+			break;
+		}
+
+		if (bSelectedExampleChanged)
+			break;
+
+	}
+	return true;
 }
 
 const FExampleCodeData ResourceManager::GetExampleCodeData() const

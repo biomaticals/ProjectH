@@ -32,7 +32,7 @@ public:
 	
 private:
 	std::filesystem::path TableOfContentsPath;
-	std::ifstream Stream(TableOfContentsPath, std::ios::in);
+	std::ifstream ContextStream;
 	
 #pragma endregion
 
@@ -42,6 +42,8 @@ public:
 	const FExampleCodeData GetExampleCodeData() const;
 
 private:
+	std::filesystem::path ExampleCodePath;
+	std::ifstream ExampleCodeStream;
 	FExampleCodeData SelectedExampleCodeData;
 	bool bSelectedExampleChanged;
 #pragma endregion
