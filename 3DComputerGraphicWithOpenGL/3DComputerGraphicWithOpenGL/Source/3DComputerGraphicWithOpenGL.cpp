@@ -8,66 +8,7 @@
 #include "imgui_impl_glfw.h"
 #include <GLFW/glfw3.h>
 
-int main(int, char**)
-{
-	//glfwSetErrorCallback(glfw_error_callback);
-	if (!glfwInit())
-		return 1;
-
-	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);
-	IMGUI_CHECKVERSION();
-
-	CreateMainWindow();
-	CreateOutputWindow(true);
-
-	glfwMakeContextCurrent(MainWindow->GetGLFWWindow());
-    ImGui::SetCurrentContext(MainWindow->GuiContext);
-    ImGui_ImplOpenGL3_Init(glsl_version); // Only Mainwindow
-    ImGui_ImplOpenGL3_NewFrame();
-    ImGui_ImplGlfw_InitForOpenGL(MainWindow->GetGLFWWindow(), true);
-
-	glfwSwapInterval(1);
-	while (MainWindow->ShouldClose() == false)
-	{
-		glfwPollEvents();
-		
-		MainWindow->NewFrame();
-		MainWindow->RenderUI();
-		MainWindow->RenderDrawData();
-
-		if (OutputWindow)
-		{
-			if (OutputWindow->ShouldClose() == false)
-			{
-				OutputWindow->NewFrame();
-				OutputWindow->RenderUI();
-				OutputWindow->RenderDrawData();
-			}
-			else
-			{
-				DestroyOutputWindow();
-			}
-		}
-	}
-
-	ImGui_ImplOpenGL3_Shutdown();
-	ImGui_ImplGlfw_Shutdown();
-	ImGui::DestroyContext();
-	glfwTerminate();
-
-	delete MainWindow;
-	MainWindow = nullptr;
-
-	return 0;
-}
-
-static void glfw_error_callback(int error, const char* description)
-{
-	fprintf(stderr, "GLFW Error %d: %s\n", error, description);
-}
-
-void CreateMainWindow()
+void UTG::CreateMainWindow()
 {
 	GLFWmonitor* Monitor = glfwGetPrimaryMonitor();
 	const GLFWvidmode* Mode = glfwGetVideoMode(Monitor);
@@ -86,7 +27,7 @@ void CreateMainWindow()
 	glfwSetWindowPos(MainWindow->GetGLFWWindow(), MainWindowPositionX, MainWindowPositionY);
 }
 
-void CreateOutputWindow(bool bHide = true)
+void UTG::CreateOutputWindow(bool bHide)
 {
 	GLFWmonitor* Monitor = glfwGetPrimaryMonitor();
 	const GLFWvidmode* Mode = glfwGetVideoMode(Monitor);
@@ -105,14 +46,73 @@ void CreateOutputWindow(bool bHide = true)
 		glfwHideWindow(OutputWindow->GetGLFWWindow());
 }
 
-void DestroyMainWindow()
+void UTG::DestroyMainWindow()
 {
 	delete MainWindow;
 	MainWindow = nullptr;
 }
 
-void DestroyOutputWindow()
+void UTG::DestroyOutputWindow()
 {
 	delete OutputWindow;
 	OutputWindow = nullptr;
+}
+
+int main(int, char**)
+{
+	//glfwSetErrorCallback(glfw_error_callback);
+	if (!glfwInit())
+		return 1;
+
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);
+	IMGUI_CHECKVERSION();
+
+	UTG::CreateMainWindow();
+	UTG::CreateOutputWindow(true);
+
+	glfwMakeContextCurrent(UTG::MainWindow->GetGLFWWindow());
+    ImGui::SetCurrentContext(UTG::MainWindow->GuiContext);
+    ImGui_ImplOpenGL3_Init(glsl_version); // Only Mainwindow
+    ImGui_ImplOpenGL3_NewFrame();
+    ImGui_ImplGlfw_InitForOpenGL(UTG::MainWindow->GetGLFWWindow(), true);
+
+	glfwSwapInterval(1);
+	while (UTG::MainWindow->ShouldClose() == false)
+	{
+		glfwPollEvents();
+		
+		UTG::MainWindow->NewFrame();
+		UTG::MainWindow->RenderUI();
+		UTG::MainWindow->RenderDrawData();
+
+		if (UTG::OutputWindow)
+		{
+			if (UTG::OutputWindow->ShouldClose() == false)
+			{
+				UTG::OutputWindow->NewFrame();
+				UTG::OutputWindow->RenderUI();
+				UTG::OutputWindow->RenderDrawData();
+			}
+			else
+			{
+				UTG::DestroyOutputWindow();
+			}
+		}
+	}
+
+	ImGui_ImplOpenGL3_Shutdown();
+	ImGui_ImplGlfw_Shutdown();
+	ImGui::DestroyContext();
+	glfwTerminate();
+
+	delete UTG::MainWindow;
+	UTG::MainWindow = nullptr;
+
+	return 0;
+}
+
+static void glfw_error_callback(int error, const char* description)
+{
+	fprintf(stderr, "GLFW Error %d: %s\n", error, description);
 }

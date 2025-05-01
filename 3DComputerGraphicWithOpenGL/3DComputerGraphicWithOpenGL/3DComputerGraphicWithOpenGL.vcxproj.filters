@@ -47,12 +47,6 @@
     <ClCompile Include="..\Include\ImGui\Backends\imgui_impl_opengl3.cpp">
       <Filter>imgui\Backends</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Windows\IntroductionWindow.cpp">
-      <Filter>Source\Windows</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Windows\SelectorWindow.cpp">
-      <Filter>Source\Windows</Filter>
-    </ClCompile>
     <ClCompile Include="Source\Windows\UTWindow.cpp">
       <Filter>Source\Windows</Filter>
     </ClCompile>
@@ -62,7 +56,7 @@
     <ClCompile Include="Source\Windows\UTOutputWindow.cpp">
       <Filter>Source\Windows</Filter>
     </ClCompile>
-    <ClCompile Include="Manager\ResourceManager.cpp">
+    <ClCompile Include="Source\Manager\ResourceManager.cpp">
       <Filter>Source\Manager</Filter>
     </ClCompile>
   </ItemGroup>
@@ -85,15 +79,6 @@
     <ClInclude Include="..\Include\ImGui\Backends\imgui_impl_opengl3_loader.h">
       <Filter>imgui\Backends</Filter>
     </ClInclude>
-    <ClInclude Include="Manager\ResourceManager.h">
-      <Filter>Source\Manager</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Windows\IntroductionWindow.h">
-      <Filter>Source\Windows</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Windows\SelectorWindow.h">
-      <Filter>Source\Windows</Filter>
-    </ClInclude>
     <ClInclude Include="Source\Windows\UTMainWindow.h">
       <Filter>Source\Windows</Filter>
     </ClInclude>
@@ -111,6 +96,9 @@
     </ClInclude>
     <ClInclude Include="Source\CoreMinimal.h">
       <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Manager\ResourceManager.h">
+      <Filter>Source\Manager</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

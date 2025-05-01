@@ -16,6 +16,15 @@ public:
 	virtual void RenderUI() override;
 	virtual void RenderDrawData() override;
 
+	void UpdateWindowDrawContext();
+
+private:
+	void DrawInputWindow();
+	void DrawSelectorWindow();
+	void DrawDescriptionWindow();
+
+	void ShowIntroductionWindow(bool* bOpen);
+
 public:
 	bool ShowInputWindow = true;
 	bool ShowDescriptionWindow = true;
@@ -24,14 +33,6 @@ public:
 
 	// remain for r&d
 	bool show_demo_window = true;
-
-private:
-	void DrawInputWindow();
-	void DrawDescriptionWindow();
-
-public:
-	static FSelectorWindowData SelecWindowData;
-	static FWindowData WindowData;
 
 private:
 	const ImGuiWindow* InputWindow = nullptr;

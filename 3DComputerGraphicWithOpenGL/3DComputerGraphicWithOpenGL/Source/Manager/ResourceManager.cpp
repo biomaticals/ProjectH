@@ -3,19 +3,54 @@
 
 #include "ResourceManager.h"
 
+ResourceManager* ResourceManager::Instance = nullptr;
+
 ResourceManager::ResourceManager()
 {
-	Instance = nullptr;
-	bSelectedExampleChanged = false;
+#pragma region Title
 	TableOfContentsPath = std::filesystem::path("Resource\\TableOfContents.txt");
+	ContextStream = std::ifstream();
+	LatestFoundPart = 0;
+	LatestFoundChapter = 0;
+	LatestFoundSection = 0;
+	LatestFoundCodeIndex = 0;
+#pragma endregion
+
+#pragma region ExampleCode	
+	ExampleCodePath = std::filesystem::path("Resource\\ExampleCode.txt");
+	ExampleCodeStream = std::ifstream();
+	SelectedExampleCodeData = FExampleCodeData();
+	bSelectedExampleChanged = false;
+	ExampleCodeDataList = std::vector<FExampleCodeData>();
+	ExampleCodeDataList.reserve(100);
+#pragma endregion
 }
 
 ResourceManager::~ResourceManager()
 {
+	if (ContextStream.is_open())
+	{
+		ContextStream.close();
+	}
 
+	if (ExampleCodeStream.is_open())
+	{
+		ExampleCodeStream.close();
+	}
+
+	if (ExampleCodeDataList.size() > 0)
+	{
+		ExampleCodeDataList.clear();
+	}
+
+	if (Instance != nullptr)
+	{
+		delete Instance;
+		Instance = nullptr;
+	}
 }
 
-ResourceManager* ResourceManager::GetResourceManager()
+const ResourceManager* ResourceManager::GetResourceManager() const
 {
 	if (Instance == nullptr)
 	{
@@ -27,7 +62,7 @@ ResourceManager* ResourceManager::GetResourceManager()
 
 bool ResourceManager::LoadResources()
 {
-
+	return true;
 }
 
 void ResourceManager::UnloadResources()
@@ -44,19 +79,20 @@ const std::string ResourceManager::FindContext(unsigned int Part, unsigned int C
 	std::string Found{};
 
 	std::string Keyword = std::format("Part {:02}", Part);
-	if (Part != 0)
+	if (Part != 0 && Part != LatestFoundPart)
 	{
 		while (std::getline(ContextStream, Line))
 		{
 			if (auto Position = Line.find(Keyword); Position != std::string::npos)
 			{
 				Found = std::string(Line).substr(Position);
+				LatestFoundPart = Part;
 				break;
 			}
 		}
 	}
 
-	if (Chapter != 0)
+	if (Chapter != 0 && Chapter != LatestFoundChapter)
 	{
 		Keyword = std::format("Chapter {:02}", Chapter);
 		while (std::getline(ContextStream, Line))
@@ -64,12 +100,13 @@ const std::string ResourceManager::FindContext(unsigned int Part, unsigned int C
 			if (auto Position = Line.find(Keyword); Position != std::string::npos)
 			{
 				Found = std::string(Line).substr(Position);
+				LatestFoundChapter = Chapter;
 				break;
 			}
 		}
 	}
 
-	if (Section != 0)
+	if (Section != 0 && Section != LatestFoundSection)
 	{
 		Keyword = std::format("Section {:02}", Section);
 		while (std::getline(ContextStream, Line))
@@ -77,12 +114,13 @@ const std::string ResourceManager::FindContext(unsigned int Part, unsigned int C
 			if (auto Position = Line.find(Keyword); Position != std::string::npos)
 			{
 				Found = std::string(Line).substr(Position);
+				LatestFoundSection = Section;
 				break;
 			}
 		}
 	}
 
-	if (CodeIndex != 0)
+	if (CodeIndex != 0 && CodeIndex != LatestFoundCodeIndex)
 	{
 		Keyword = std::format("Code {}-{}", Chapter, CodeIndex);
 		while (std::getline(ContextStream, Line))
@@ -90,29 +128,37 @@ const std::string ResourceManager::FindContext(unsigned int Part, unsigned int C
 			if (auto Position = Line.find(Keyword); Position != std::string::npos)
 			{
 				Found = std::string(Line).substr(Position);
+				LatestFoundCodeIndex = CodeIndex;
 				break;
 			}
 		}
 	}
 
-	return Found;
+	if (Found != "")
+	{
+		LatestFoundContext = Found;
+		return Found;
+	}
+	
+	return LatestFoundContext;
+
 }
 #pragma endregion
 
 #pragma region ExampleCode
-auto ResourceManager::UpdateSelectedExample(unsigned int Part, unsigned int Chapter, unsigned int Section, unsigned int CodeIndex)
-{
-	if (SelectedExampleCodeData.Part == Part && SelectedExampleCodeData.Chapter == Chapter && SelectedExampleCodeData.Section == Section && SelectedExampleCodeData.CodeIndex == CodeIndex)
-	{
-		bSelectedExampleChanged = false;
-		return;
-	}
-
-	bSelectedExampleChanged = true;
-	FExampleCodeData Target = FExampleCodeData(Part, Chapter, Section, CodeIndex);
-	auto Result = std::find(ExampleCodeDataList.begin(), ExampleCodeDataList.end(), Target);
-	SelectedExampleCodeData = Result._Ptr->_Myval;
-}
+//auto ResourceManager::UpdateSelectedExample(unsigned int Part, unsigned int Chapter, unsigned int //Section, unsigned int CodeIndex)
+//{
+//	if (SelectedExampleCodeData.Part == Part && SelectedExampleCodeData.Chapter == Chapter && //SelectedExampleCodeData.Section == Section && SelectedExampleCodeData.CodeIndex == CodeIndex)
+//	{
+//		bSelectedExampleChanged = false;
+//		return;
+//	}
+//
+//	bSelectedExampleChanged = true;
+//	FExampleCodeData Target = FExampleCodeData(Part, Chapter, Section, CodeIndex);
+//	auto Result = std::find(ExampleCodeDataList.begin(), ExampleCodeDataList.end(), Target);
+//	SelectedExampleCodeData = Result._Ptr->_Myval;
+//}
 
 bool ResourceManager::LinkExampleCode()
 {
@@ -154,7 +200,7 @@ bool ResourceManager::LinkExampleCode()
 				CodeIndexString = CodeIndexString.substr(CodeIndexString.find(' ') + 1);
 			}
 			ExampleCodeData.CodeIndex = std::stoi(CodeIndexString);
-			UpdateSelectedExample(ExampleCodeData.Part, ExampleCodeData.Chapter, ExampleCodeData.Section, ExampleCodeData.CodeIndex);
+			//UpdateSelectedExample(ExampleCodeData.Part, ExampleCodeData.Chapter, ExampleCodeData.Section, ExampleCodeData.CodeIndex);
 			break;
 		}
 
@@ -165,7 +211,7 @@ bool ResourceManager::LinkExampleCode()
 	return true;
 }
 
-const FExampleCodeData ResourceManager::GetExampleCodeData() const
+const FExampleCodeData ResourceManager::GetSelectedExampleCodeData() const
 {
 	return SelectedExampleCodeData;
 }

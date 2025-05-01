@@ -8,6 +8,8 @@
 #include "Common.h"
 #include <fstream>
 
+#define RESOURCE_MANAGER ResourceManager::GetResourceManager()
+
 class ResourceManager
 {
 protected:
@@ -15,7 +17,7 @@ protected:
 	~ResourceManager();
 
 public:
-	ResourceManager* GetResourceManager();
+	const ResourceManager* GetResourceManager() const;
 
 private:
 	static ResourceManager* Instance;
@@ -23,7 +25,7 @@ private:
 #pragma region Load & Unload
 public:
 	bool LoadResources();
-	void UnloadResources();
+	void UnloadResources();	
 #pragma endregion
 
 #pragma region Title
@@ -33,23 +35,30 @@ public:
 private:
 	std::filesystem::path TableOfContentsPath;
 	std::ifstream ContextStream;
-	
+
+	unsigned int LatestFoundPart;
+	unsigned int LatestFoundChapter;
+	unsigned int LatestFoundSection;
+	unsigned int LatestFoundCodeIndex;
+	std::string LatestFoundContext;
 #pragma endregion
 
 #pragma region ExampleCode
 public:
 	bool LinkExampleCode();
-	const FExampleCodeData GetExampleCodeData() const;
+	const FExampleCodeData GetSelectedExampleCodeData() const;
 
 private:
 	std::filesystem::path ExampleCodePath;
 	std::ifstream ExampleCodeStream;
 	FExampleCodeData SelectedExampleCodeData;
 	bool bSelectedExampleChanged;
+
+	std::vector<FExampleCodeData> ExampleCodeDataList;
 #pragma endregion
 
 
-	std::vector<FExampleCodeData> ExampleCodeDataList;
+
 private:
-	auto UpdateSelectedExample(unsigned int Part, unsigned int Chapter, unsigned int Section, unsigned int CodeIndex);
+	//auto UpdateSelectedExample(unsigned int Part, unsigned int Chapter, unsigned int Section, unsigned int CodeIndex);
 };

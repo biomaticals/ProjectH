@@ -4,7 +4,7 @@
 #include "UTOutputWindow.h"
 
 UTOutputWindow::UTOutputWindow(const std::string& Title, int Width, int Height)
-	: UTOutputWindow(Title, Width, Height)
+	: UTWindow(Title, Width, Height)
 {
 }
 

@@ -7,17 +7,18 @@
 #include "Common.h"
 #include "Windows/UTMainWindow.h"
 #include "Windows/UTOutputWindow.h"
-#include "Windows/IntroductionWindow.h"
-#include "Windows/SelectorWindow.h"
 
-static UTMainWindow* MainWindow = nullptr;
-static UTOutputWindow* OutputWindow = nullptr;
+namespace UTG
+{
+	static UTMainWindow* MainWindow = nullptr;
+	static UTOutputWindow* OutputWindow = nullptr; 
+	
+	void CreateMainWindow();
+	void CreateOutputWindow(bool bHide = true);
+	void DestroyMainWindow();
+	void DestroyOutputWindow();
+}
 
 int main(int, char**);
-
 static void glfw_error_callback(int error, const char* description);
 
-void CreateMainWindow();
-void CreateOutputWindow(bool bHide = true);
-void DestroyMainWindow();
-void DestroyOutputWindow();

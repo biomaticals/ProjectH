@@ -8,11 +8,6 @@
 #include <fstream>
 #include <filesystem>
 
-struct FWindowData
-{
-    bool bShowIntroduction = true;
-};
-
 struct FExampleCodeData
 {
     FExampleCodeData()
