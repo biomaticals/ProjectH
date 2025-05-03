@@ -12,3 +12,25 @@ UTOutputWindow::~UTOutputWindow()
 {
 
 }
+
+void UTOutputWindow::RenderDrawData()
+{
+	MyDisplay();
+}
+
+void UTOutputWindow::MyDisplay()
+{
+int display_w, display_h;
+	glfwGetFramebufferSize(GetGLFWWindow(), &display_w, &display_h);
+	glViewport(0, 0, display_w, display_h);
+	glClear(GL_COLOR_BUFFER_BIT);
+	glBegin(GL_POLYGON);
+	glVertex3f(-0.5f, -0.5f, 0.f);
+	glVertex3f(0.5f, -0.5, 0.f);
+	glVertex3f(0.5f, 0.5f, 0.f);
+	glVertex3f(-0.5f, 0.5f, 0.f);
+	glEnd();
+	glFlush();
+	//ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+	glfwSwapBuffers(GetGLFWWindow());
+}

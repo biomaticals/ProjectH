@@ -17,10 +17,13 @@ protected:
 	~ResourceManager();
 
 public:
-	const ResourceManager* GetResourceManager() const;
-
+	static ResourceManager* GetResourceManager();
+	
 private:
 	static ResourceManager* Instance;
+
+public:
+	void UpdateManager();
 
 #pragma region Load & Unload
 public:
@@ -30,7 +33,7 @@ public:
 
 #pragma region Title
 public:
-	const std::string FindContext(unsigned int Part, unsigned int Chapter, unsigned int Section, unsigned int CodeIndex);
+	const std::string GetNextTitleContext();
 	
 private:
 	std::filesystem::path TableOfContentsPath;
@@ -56,9 +59,4 @@ private:
 
 	std::vector<FExampleCodeData> ExampleCodeDataList;
 #pragma endregion
-
-
-
-private:
-	//auto UpdateSelectedExample(unsigned int Part, unsigned int Chapter, unsigned int Section, unsigned int CodeIndex);
 };

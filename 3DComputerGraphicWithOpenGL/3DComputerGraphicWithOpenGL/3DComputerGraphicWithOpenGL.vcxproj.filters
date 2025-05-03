@@ -118,5 +118,8 @@
     <Text Include="Resource\TableOfContents.txt">
       <Filter>Resources</Filter>
     </Text>
+    <Text Include="Resource\2.5.3.2.txt">
+      <Filter>Resources</Filter>
+    </Text>
   </ItemGroup>
 </Project>

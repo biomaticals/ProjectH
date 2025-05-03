@@ -9,7 +9,7 @@ ResourceManager::ResourceManager()
 {
 #pragma region Title
 	TableOfContentsPath = std::filesystem::path("Resource\\TableOfContents.txt");
-	ContextStream = std::ifstream();
+	ContextStream = std::ifstream(TableOfContentsPath, std::ios::in);
 	LatestFoundPart = 0;
 	LatestFoundChapter = 0;
 	LatestFoundSection = 0;
@@ -18,7 +18,7 @@ ResourceManager::ResourceManager()
 
 #pragma region ExampleCode	
 	ExampleCodePath = std::filesystem::path("Resource\\ExampleCode.txt");
-	ExampleCodeStream = std::ifstream();
+	ExampleCodeStream = std::ifstream(ExampleCodePath, std::ios::in);
 	SelectedExampleCodeData = FExampleCodeData();
 	bSelectedExampleChanged = false;
 	ExampleCodeDataList = std::vector<FExampleCodeData>();
@@ -50,7 +50,7 @@ ResourceManager::~ResourceManager()
 	}
 }
 
-const ResourceManager* ResourceManager::GetResourceManager() const
+ResourceManager* ResourceManager::GetResourceManager()
 {
 	if (Instance == nullptr)
 	{
@@ -60,6 +60,13 @@ const ResourceManager* ResourceManager::GetResourceManager() const
 	return Instance;
 }
 
+void ResourceManager::UpdateManager()
+{
+	ContextStream = std::ifstream(TableOfContentsPath, std::ios::in);
+	ExampleCodeStream = std::ifstream(ExampleCodePath, std::ios::in);
+}
+
+#pragma region Load & Unload
 bool ResourceManager::LoadResources()
 {
 	return true;
@@ -69,79 +76,26 @@ void ResourceManager::UnloadResources()
 {
 
 }
+#pragma endregion
 
 #pragma region Title
-const std::string ResourceManager::FindContext(unsigned int Part, unsigned int Chapter, unsigned int Section, unsigned int CodeIndex)
+const std::string ResourceManager::GetNextTitleContext()
 {
-	ContextStream = std::ifstream(TableOfContentsPath, std::ios::in);
-
 	std::string Line{};
 	std::string Found{};
 
-	std::string Keyword = std::format("Part {:02}", Part);
-	if (Part != 0 && Part != LatestFoundPart)
+	while (std::getline(ContextStream, Line))
 	{
-		while (std::getline(ContextStream, Line))
+		auto Position = Line.find(": ");
+
+		if (Position != std::string::npos)
 		{
-			if (auto Position = Line.find(Keyword); Position != std::string::npos)
-			{
-				Found = std::string(Line).substr(Position);
-				LatestFoundPart = Part;
-				break;
-			}
+			Found = std::string(Line).substr(Position + 1);
+			return Found;
 		}
 	}
 
-	if (Chapter != 0 && Chapter != LatestFoundChapter)
-	{
-		Keyword = std::format("Chapter {:02}", Chapter);
-		while (std::getline(ContextStream, Line))
-		{
-			if (auto Position = Line.find(Keyword); Position != std::string::npos)
-			{
-				Found = std::string(Line).substr(Position);
-				LatestFoundChapter = Chapter;
-				break;
-			}
-		}
-	}
-
-	if (Section != 0 && Section != LatestFoundSection)
-	{
-		Keyword = std::format("Section {:02}", Section);
-		while (std::getline(ContextStream, Line))
-		{
-			if (auto Position = Line.find(Keyword); Position != std::string::npos)
-			{
-				Found = std::string(Line).substr(Position);
-				LatestFoundSection = Section;
-				break;
-			}
-		}
-	}
-
-	if (CodeIndex != 0 && CodeIndex != LatestFoundCodeIndex)
-	{
-		Keyword = std::format("Code {}-{}", Chapter, CodeIndex);
-		while (std::getline(ContextStream, Line))
-		{
-			if (auto Position = Line.find(Keyword); Position != std::string::npos)
-			{
-				Found = std::string(Line).substr(Position);
-				LatestFoundCodeIndex = CodeIndex;
-				break;
-			}
-		}
-	}
-
-	if (Found != "")
-	{
-		LatestFoundContext = Found;
-		return Found;
-	}
-	
-	return LatestFoundContext;
-
+	return "";
 }
 #pragma endregion
 

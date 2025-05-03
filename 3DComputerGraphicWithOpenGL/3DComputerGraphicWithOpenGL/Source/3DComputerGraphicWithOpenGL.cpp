@@ -7,6 +7,7 @@
 #include "imgui_internal.h"
 #include "imgui_impl_glfw.h"
 #include <GLFW/glfw3.h>
+#include "Manager/ResourceManager.h"
 
 void UTG::CreateMainWindow()
 {
@@ -19,6 +20,7 @@ void UTG::CreateMainWindow()
 	int MainWindowHeight = MonitorHeight * 8 / 10;
 
 	MainWindow = new UTMainWindow("3D CG With OpenGL by biomatic", MainWindowWidth, MainWindowHeight);
+	return;
 	if(MainWindow == nullptr)
 		return;
 
@@ -35,15 +37,15 @@ void UTG::CreateOutputWindow(bool bHide)
 	int MonitorHeight = Mode->height;
 	int OutputWindowWidth = MonitorWidth * 3 / 10;
 	int OutputWindowHeight = MonitorHeight * 8 / 10;
-	OutputWindow = new UTOutputWindow("Output", OutputWindowWidth, OutputWindowHeight);
+	OutputWindow = new UTOutputWindow("OutputWindow", OutputWindowWidth, OutputWindowHeight);
 	if(OutputWindow == nullptr)
 		return;
 
 	int OutputWindowPositionX = MonitorWidth * 6 / 10;
 	int OutputWindowPositionY = MonitorHeight * 1 / 10;
 	glfwSetWindowPos(OutputWindow->GetGLFWWindow(), OutputWindowPositionX, OutputWindowPositionY);
-	if(bHide)
-		glfwHideWindow(OutputWindow->GetGLFWWindow());
+	//if(bHide)
+	//	glfwHideWindow(OutputWindow->GetGLFWWindow());
 }
 
 void UTG::DestroyMainWindow()
@@ -58,28 +60,34 @@ void UTG::DestroyOutputWindow()
 	OutputWindow = nullptr;
 }
 
+void UTG::UpdateManager()
+{
+	RESOURCE_MANAGER->UpdateManager();
+}
+
 int main(int, char**)
 {
 	//glfwSetErrorCallback(glfw_error_callback);
 	if (!glfwInit())
 		return 1;
 
-	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);
-	IMGUI_CHECKVERSION();
+	//glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+	//glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);
+	//IMGUI_CHECKVERSION();
 
 	UTG::CreateMainWindow();
 	UTG::CreateOutputWindow(true);
 
-	glfwMakeContextCurrent(UTG::MainWindow->GetGLFWWindow());
-    ImGui::SetCurrentContext(UTG::MainWindow->GuiContext);
-    ImGui_ImplOpenGL3_Init(glsl_version); // Only Mainwindow
-    ImGui_ImplOpenGL3_NewFrame();
-    ImGui_ImplGlfw_InitForOpenGL(UTG::MainWindow->GetGLFWWindow(), true);
+	//glfwMakeContextCurrent(UTG::MainWindow->GetGLFWWindow());
+    //ImGui::SetCurrentContext(UTG::MainWindow->GuiContext);
+    //ImGui_ImplOpenGL3_Init(glsl_version); // Only Mainwindow
+   // ImGui_ImplOpenGL3_NewFrame();
+    //ImGui_ImplGlfw_InitForOpenGL(UTG::MainWindow->GetGLFWWindow(), true);
 
 	glfwSwapInterval(1);
 	while (UTG::MainWindow->ShouldClose() == false)
 	{
+		UTG::UpdateManager();
 		glfwPollEvents();
 		
 		UTG::MainWindow->NewFrame();
@@ -101,9 +109,9 @@ int main(int, char**)
 		}
 	}
 
-	ImGui_ImplOpenGL3_Shutdown();
-	ImGui_ImplGlfw_Shutdown();
-	ImGui::DestroyContext();
+	//ImGui_ImplOpenGL3_Shutdown();
+	//ImGui_ImplGlfw_Shutdown();
+	//ImGui::DestroyContext();
 	glfwTerminate();
 
 	delete UTG::MainWindow;

@@ -21,7 +21,7 @@ UTWindow::~UTWindow()
 
 void UTWindow::NewFrame()
 {
-	glfwMakeContextCurrent(GetGLFWWindow());
+	glfwMakeContextCurrent(GLFWWindow);
 }
 
 void UTWindow::RenderDrawData()
@@ -30,9 +30,16 @@ void UTWindow::RenderDrawData()
     glfwGetFramebufferSize(GLFWWindow, &display_w, &display_h);
     glViewport(0, 0, display_w, display_h);
     glClear(GL_COLOR_BUFFER_BIT);
-
-	RenderUI();
     glfwSwapBuffers(GLFWWindow);
+}
+
+void UTWindow::InitImGui()
+{
+    //glfwMakeContextCurrent(GLFWWindow);
+    //glfwSetWindowFocusCallback(GLFWWindow, FocusCallback);
+    //GuiContext = ImGui::CreateContext();
+    //ImGui::SetCurrentContext(GuiContext);
+    //ImGui::StyleColorsDark();
 }
 
 bool UTWindow::ShouldClose() const
@@ -72,15 +79,6 @@ void UTWindow::SetupGLFWWindow()
     glfwSwapInterval(1);
     glViewport(0, 0, Width, Height);
     glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
-}
-
-void UTWindow::InitImGui()
-{
-    glfwMakeContextCurrent(GLFWWindow);
-    glfwSetWindowFocusCallback(GLFWWindow, FocusCallback);
-    GuiContext = ImGui::CreateContext();
-    ImGui::SetCurrentContext(GuiContext);
-    ImGui::StyleColorsDark();
 }
 
 void FocusCallback(GLFWwindow* Window, int Focused)

@@ -17,6 +17,7 @@ namespace UTG
 	void CreateOutputWindow(bool bHide = true);
 	void DestroyMainWindow();
 	void DestroyOutputWindow();
+	void UpdateManager();
 }
 
 int main(int, char**);

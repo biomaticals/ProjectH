@@ -14,6 +14,7 @@ public:
     virtual void NewFrame();
     virtual void RenderUI(){};
     virtual void RenderDrawData();
+    virtual void InitImGui();
 
     bool ShouldClose() const;
     bool IsVisible() const;
@@ -25,7 +26,6 @@ public:
 
 private:
     void SetupGLFWWindow();
-    void InitImGui();
 
 private:
     GLFWwindow* GLFWWindow;

@@ -257,6 +257,7 @@
     <Natvis Include="..\Include\ImGui\imgui.natvis" />
   </ItemGroup>
   <ItemGroup>
+    <Text Include="Resource\2.5.3.2.txt" />
     <Text Include="Resource\TableOfContents.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

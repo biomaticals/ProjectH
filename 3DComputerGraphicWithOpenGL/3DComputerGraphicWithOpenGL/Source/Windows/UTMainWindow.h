@@ -15,6 +15,7 @@ public:
 	virtual void NewFrame() override; 
 	virtual void RenderUI() override;
 	virtual void RenderDrawData() override;
+	virtual void InitImGui() override;
 
 	void UpdateWindowDrawContext();
 
