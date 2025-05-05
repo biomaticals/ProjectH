@@ -8,13 +8,6 @@
 #include "Windows/UTMainWindow.h"
 #include "Windows/UTOutputWindow.h"
 
-extern UTMainWindow* MainWindow;
-extern UTOutputWindow* OutputWindow; 
-
-static void CreateMainWindow();
-static void CreateOutputWindow(bool bHide = true);
-void DestroyMainWindow();
-void DestroyOutputWindow();
 void UpdateManager();
 
 int main(int, char**);

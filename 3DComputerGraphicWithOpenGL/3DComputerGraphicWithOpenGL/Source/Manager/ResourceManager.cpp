@@ -43,11 +43,7 @@ ResourceManager::~ResourceManager()
 		ExampleCodeDataList.clear();
 	}
 
-	if (Instance != nullptr)
-	{
-		delete Instance;
-		Instance = nullptr;
-	}
+	Destroy();
 }
 
 ResourceManager* ResourceManager::GetResourceManager()
@@ -60,7 +56,16 @@ ResourceManager* ResourceManager::GetResourceManager()
 	return Instance;
 }
 
-void ResourceManager::UpdateManager()
+void ResourceManager::Destroy()
+{
+	if (Instance != nullptr)
+	{
+		delete Instance;
+		Instance = nullptr;
+	}
+}
+
+void ResourceManager::Update()
 {
 	ContextStream = std::ifstream(TableOfContentsPath, std::ios::in);
 	ExampleCodeStream = std::ifstream(ExampleCodePath, std::ios::in);

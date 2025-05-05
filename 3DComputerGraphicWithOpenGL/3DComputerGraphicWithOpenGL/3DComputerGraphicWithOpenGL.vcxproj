@@ -225,6 +225,7 @@
     <ClCompile Include="..\Include\ImGui\imgui_widgets.cpp" />
     <ClCompile Include="Source\3DComputerGraphicWithOpenGL.cpp" />
     <ClCompile Include="Source\Manager\ResourceManager.cpp" />
+    <ClCompile Include="Source\Manager\WindowManager.cpp" />
     <ClCompile Include="Source\Windows\UTMainWindow.cpp" />
     <ClCompile Include="Source\Windows\UTOutputWindow.cpp" />
     <ClCompile Include="Source\Windows\UTWindow.cpp" />
@@ -245,6 +246,7 @@
     <ClInclude Include="Source\Common.h" />
     <ClInclude Include="Source\CoreMinimal.h" />
     <ClInclude Include="Source\Manager\ResourceManager.h" />
+    <ClInclude Include="Source\Manager\WindowManager.h" />
     <ClInclude Include="Source\Windows\UTMainWindow.h" />
     <ClInclude Include="Source\Windows\UTOutputWindow.h" />
     <ClInclude Include="Source\Windows\UTWindow.h" />

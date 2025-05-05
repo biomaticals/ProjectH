@@ -4,6 +4,7 @@
 #include "UTMainWindow.h"
 #include "3DComputerGraphicWithOpenGL.h"
 #include "Manager/ResourceManager.h"
+#include "Manager/WindowManager.h"
 
 UTMainWindow::UTMainWindow(const std::string& Title, int Width, int Height)
 	: UTWindow(Title, Width, Height)
@@ -141,7 +142,7 @@ void UTMainWindow::DrawSelectorWindow()
 				ImGui::Indent();
 				if (ImGui::MenuItem(RESOURCE_MANAGER->GetNextTitleContext().c_str(), nullptr))
 				{
-					glfwShowWindow(OutputWindow->GetGLFWWindow());
+					glfwShowWindow(OUTPUT_WINDOW->GetGLFWWindow());
 				}
 				ImGui::Unindent();
 			}

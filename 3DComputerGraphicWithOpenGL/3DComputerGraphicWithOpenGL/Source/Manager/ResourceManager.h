@@ -3,10 +3,10 @@
 
 #pragma once
 
-#include "CoreMinimal.h"
-#include <list>
 #include "Common.h"
+#include "CoreMinimal.h"
 #include <fstream>
+#include <list>
 
 #define RESOURCE_MANAGER ResourceManager::GetResourceManager()
 
@@ -18,12 +18,13 @@ protected:
 
 public:
 	static ResourceManager* GetResourceManager();
+	static void Destroy();
 	
 private:
 	static ResourceManager* Instance;
 
 public:
-	void UpdateManager();
+	void Update();
 
 #pragma region Load & Unload
 public:
