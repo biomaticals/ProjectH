@@ -7,16 +7,15 @@
 #include <iostream>
 
 UTWindow::UTWindow(const std::string& Title, int Width, int Height)
-    : Title(Title), Width(Width), Height(Height)
+	: Title(Title), Width(Width), Height(Height)
 {
-    SetupGLFWWindow();
-    InitImGui();
+
 }
 
 UTWindow::~UTWindow()
 {
-    glfwMakeContextCurrent(GLFWWindow);
-    glfwDestroyWindow(GLFWWindow);
+	glfwMakeContextCurrent(GLFWWindow);
+	glfwDestroyWindow(GLFWWindow);
 }
 
 void UTWindow::NewFrame()
@@ -26,59 +25,51 @@ void UTWindow::NewFrame()
 
 void UTWindow::RenderDrawData()
 {
-    int display_w, display_h;
-    glfwGetFramebufferSize(GLFWWindow, &display_w, &display_h);
-    glViewport(0, 0, display_w, display_h);
-    glClear(GL_COLOR_BUFFER_BIT);
-    glfwSwapBuffers(GLFWWindow);
+	int display_w, display_h;
+	glfwGetFramebufferSize(GLFWWindow, &display_w, &display_h);
+	glViewport(0, 0, display_w, display_h);
+	glClear(GL_COLOR_BUFFER_BIT);
+	glfwSwapBuffers(GLFWWindow);
 }
 
-void UTWindow::InitImGui()
+void UTWindow::Initialize()
 {
-    //glfwMakeContextCurrent(GLFWWindow);
-    //glfwSetWindowFocusCallback(GLFWWindow, FocusCallback);
-    //GuiContext = ImGui::CreateContext();
-    //ImGui::SetCurrentContext(GuiContext);
-    //ImGui::StyleColorsDark();
+	GLFWWindow = glfwCreateWindow(Width, Height, Title.c_str(), nullptr, nullptr);
+	if (!GLFWWindow)
+	{
+		std::cerr << "Failed to create window: " << Title << std::endl;
+		exit(1);
+	}
+	glfwMakeContextCurrent(GLFWWindow);
+	glViewport(0, 0, Width, Height);
+	glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
+	glfwSwapInterval(1);
+	glfwSetWindowFocusCallback(GLFWWindow, FocusCallback);
 }
 
 bool UTWindow::ShouldClose() const
 {
-    return glfwWindowShouldClose(GLFWWindow);
+	return glfwWindowShouldClose(GLFWWindow);
 }
 
 bool UTWindow::IsVisible() const
 {
-    return glfwGetWindowAttrib(GLFWWindow, GLFW_VISIBLE);
+	return glfwGetWindowAttrib(GLFWWindow, GLFW_VISIBLE);
 }
 
 bool UTWindow::IsFocused() const
 {
-    return glfwGetWindowAttrib(GLFWWindow, GLFW_FOCUSED);
+	return glfwGetWindowAttrib(GLFWWindow, GLFW_FOCUSED);
 }
 
 bool UTWindow::IsMinimized() const
 {
-    return glfwGetWindowAttrib(GLFWWindow, GLFW_ICONIFIED);
+	return glfwGetWindowAttrib(GLFWWindow, GLFW_ICONIFIED);
 }
 
 GLFWwindow* UTWindow::GetGLFWWindow() const
 {
-    return GLFWWindow;
-}
-
-void UTWindow::SetupGLFWWindow()
-{
-    GLFWWindow = glfwCreateWindow(Width, Height, Title.c_str(), nullptr, nullptr);
-    if (!GLFWWindow) 
-    {
-        std::cerr << "Failed to create window: " << Title << std::endl;
-        exit(1);
-    }
-    glfwMakeContextCurrent(GLFWWindow);
-    glfwSwapInterval(1);
-    glViewport(0, 0, Width, Height);
-    glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
+	return GLFWWindow;
 }
 
 void FocusCallback(GLFWwindow* Window, int Focused)

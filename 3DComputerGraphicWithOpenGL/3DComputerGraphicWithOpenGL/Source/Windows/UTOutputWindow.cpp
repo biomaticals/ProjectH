@@ -6,6 +6,7 @@
 UTOutputWindow::UTOutputWindow(const std::string& Title, int Width, int Height)
 	: UTWindow(Title, Width, Height)
 {
+	Initialize();
 }
 
 UTOutputWindow::~UTOutputWindow()
@@ -20,7 +21,7 @@ void UTOutputWindow::RenderDrawData()
 
 void UTOutputWindow::MyDisplay()
 {
-int display_w, display_h;
+	int display_w, display_h;
 	glfwGetFramebufferSize(GetGLFWWindow(), &display_w, &display_h);
 	glViewport(0, 0, display_w, display_h);
 	glClear(GL_COLOR_BUFFER_BIT);
@@ -31,6 +32,6 @@ int display_w, display_h;
 	glVertex3f(-0.5f, 0.5f, 0.f);
 	glEnd();
 	glFlush();
-	//ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+
 	glfwSwapBuffers(GetGLFWWindow());
 }

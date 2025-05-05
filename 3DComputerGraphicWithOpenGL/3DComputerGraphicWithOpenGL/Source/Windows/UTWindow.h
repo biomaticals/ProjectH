@@ -12,20 +12,15 @@ public:
     UTWindow(const std::string& Title, int Width, int Height);
     virtual ~UTWindow();
     virtual void NewFrame();
-    virtual void RenderUI(){};
     virtual void RenderDrawData();
-    virtual void InitImGui();
+    virtual void Initialize();
 
     bool ShouldClose() const;
     bool IsVisible() const;
     bool IsFocused() const;
     bool IsMinimized() const;
-
+    
     GLFWwindow* GetGLFWWindow() const;
-    ImGuiContext* GuiContext;
-
-private:
-    void SetupGLFWWindow();
 
 private:
     GLFWwindow* GLFWWindow;
@@ -33,4 +28,5 @@ private:
     int Width;
     int Height;
 };
+
 static void FocusCallback(GLFWwindow* Window, int Focused);

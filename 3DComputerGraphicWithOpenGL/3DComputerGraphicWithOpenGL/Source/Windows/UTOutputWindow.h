@@ -9,9 +9,10 @@
 class UTOutputWindow : public UTWindow
 {
 public:
-    UTOutputWindow(const std::string& Title, int Width, int Height);
-    virtual ~UTOutputWindow();
+	UTOutputWindow(const std::string& Title, int Width, int Height);
+	virtual ~UTOutputWindow();
 	virtual void RenderDrawData() override;
+
 private:
-    void MyDisplay();
+	void MyDisplay();
 };

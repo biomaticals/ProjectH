@@ -13,11 +13,11 @@ public:
 	virtual ~UTMainWindow();
 
 	virtual void NewFrame() override; 
-	virtual void RenderUI() override;
+	virtual void RenderUI();
 	virtual void RenderDrawData() override;
-	virtual void InitImGui() override;
+	virtual void Initialize() override;
 
-	void UpdateWindowDrawContext();
+	ImGuiContext* GetGuiContext() const;
 
 private:
 	void DrawInputWindow();
@@ -36,6 +36,7 @@ public:
 	bool show_demo_window = true;
 
 private:
+	ImGuiContext* GuiContext = nullptr;
 	const ImGuiWindow* InputWindow = nullptr;
 	const ImGuiWindow* DescriptionWindow = nullptr;
 	const ImGuiWindow* SelectorWindow = nullptr;
