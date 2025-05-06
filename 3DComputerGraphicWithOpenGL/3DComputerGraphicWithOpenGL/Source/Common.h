@@ -53,15 +53,6 @@ struct FExampleCodeData
     const char* Description;
 };
 
-static std::string ReadFileToString(const std::filesystem::path& FilePath)
-{
-    std::ifstream Stream(FilePath, std::ios::in |std::ios::binary);
-    if (!Stream)
-    {
-        std::cerr << std::format("failed to open {}\n", FilePath.string());
-        return {};
-    }
-
-    std::string Contents((std::istreambuf_iterator<char>(Stream)), std::istreambuf_iterator<char>());
-    return Contents;
-}
+extern std::string ReadFileToString(const std::filesystem::path& FilePath);
+extern std::string LeftTrim(const std::string& Str);
+extern std::string RightTrim(const std::string& Str);

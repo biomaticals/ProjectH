@@ -10,10 +10,6 @@ ResourceManager::ResourceManager()
 #pragma region Title
 	TableOfContentsPath = std::filesystem::path("Resource\\TableOfContents.txt");
 	ContextStream = std::ifstream(TableOfContentsPath, std::ios::in);
-	LatestFoundPart = 0;
-	LatestFoundChapter = 0;
-	LatestFoundSection = 0;
-	LatestFoundCodeIndex = 0;
 #pragma endregion
 
 #pragma region ExampleCode	
@@ -79,7 +75,20 @@ bool ResourceManager::LoadResources()
 
 void ResourceManager::UnloadResources()
 {
+	if (ContextStream.is_open())
+	{
+		ContextStream.close();
+	}
 
+	if (ExampleCodeStream.is_open())
+	{
+		ExampleCodeStream.close();
+	}
+
+	if (ExampleCodeDataList.size() > 0)
+	{
+		ExampleCodeDataList.clear();
+	}
 }
 #pragma endregion
 
@@ -95,8 +104,7 @@ const std::string ResourceManager::GetNextTitleContext()
 
 		if (Position != std::string::npos)
 		{
-			Found = std::string(Line).substr(Position + 1);
-			return Found;
+			return LeftTrim(Line);
 		}
 	}
 
@@ -159,7 +167,6 @@ bool ResourceManager::LinkExampleCode()
 				CodeIndexString = CodeIndexString.substr(CodeIndexString.find(' ') + 1);
 			}
 			ExampleCodeData.CodeIndex = std::stoi(CodeIndexString);
-			//UpdateSelectedExample(ExampleCodeData.Part, ExampleCodeData.Chapter, ExampleCodeData.Section, ExampleCodeData.CodeIndex);
 			break;
 		}
 

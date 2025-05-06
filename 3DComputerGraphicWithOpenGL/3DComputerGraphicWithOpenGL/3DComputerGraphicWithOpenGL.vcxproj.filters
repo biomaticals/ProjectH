@@ -62,6 +62,9 @@
     <ClCompile Include="Source\Manager\WindowManager.cpp">
       <Filter>Source\Manager</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Common.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Include\ImGui\imconfig.h">

@@ -39,12 +39,6 @@ public:
 private:
 	std::filesystem::path TableOfContentsPath;
 	std::ifstream ContextStream;
-
-	unsigned int LatestFoundPart;
-	unsigned int LatestFoundChapter;
-	unsigned int LatestFoundSection;
-	unsigned int LatestFoundCodeIndex;
-	std::string LatestFoundContext;
 #pragma endregion
 
 #pragma region ExampleCode
