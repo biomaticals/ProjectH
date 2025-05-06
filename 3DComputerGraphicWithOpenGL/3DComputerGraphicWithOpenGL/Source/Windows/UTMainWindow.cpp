@@ -81,16 +81,16 @@ void UTMainWindow::RenderUI()
 	{
 		ShowIntroductionWindow(&bShowIntroduction);
 	}
-	
+
 	if (ImGui::BeginMainMenuBar())
 	{
 		ImGui::MenuItem("Introduction", nullptr, &bShowIntroduction);
 		ImGui::EndMainMenuBar();
 	}
-	
+
 	// remain this for R&D
-	//if (show_demo_window)
-	//	ImGui::ShowDemoWindow(&show_demo_window);
+	if (show_demo_window)
+		ImGui::ShowDemoWindow(&show_demo_window);
 }
 
 void UTMainWindow::RenderDrawData()
@@ -165,16 +165,25 @@ void UTMainWindow::DrawDescriptionWindow()
 void UTMainWindow::ShowIntroductionWindow(bool* bOpen)
 {
 	const ImGuiViewport* MainViewport = ImGui::GetMainViewport();
-	
+
 	ImGuiWindowFlags WindowFlags{};
 	WindowFlags |= ImGuiWindowFlags_NoResize;
 	WindowFlags |= ImGuiWindowFlags_UnsavedDocument;
-	
+
 	ImGui::SetNextWindowPos(ImVec2(MainViewport->WorkSize.x / 2.f - 400.f, MainViewport->WorkSize.y /2.f - 250.f), ImGuiCond_Appearing);
 	ImGui::SetNextWindowPos(ImVec2(MainViewport->WorkSize.x / 2.f - 400.f, MainViewport->WorkSize.y /2.f - 250.f), ImGuiCond_Appearing);
 	ImGui::SetNextWindowPos(ImVec2(MainViewport->WorkSize.x / 2.f - 400.f, MainViewport->WorkSize.y /2.f - 250.f), ImGuiCond_Appearing);
 	ImGui::SetNextWindowSize(ImVec2(800, 500.f), ImGuiCond_Appearing);
-	if (ImGui::Begin("Introduction", bOpen, WindowFlags))
+	ImGui::SetNextWindowFocus();
+
+	ImGuiPopupFlags PopupFlags{};
+	PopupFlags |= ImGuiPopupFlags_NoOpenOverExistingPopup;
+	PopupFlags |= ImGuiPopupFlags_AnyPopupId;
+	PopupFlags |= ImGuiPopupFlags_AnyPopupLevel;
+	PopupFlags |= ImGuiPopupFlags_MouseButtonLeft;
+
+	ImGui::OpenPopup("Introduction", PopupFlags);
+	if(ImGui::BeginPopupModal("Introduction", NULL, ImGuiWindowFlags_AlwaysAutoResize))
 	{
 		ImGui::SeparatorText("3D CG With OpenGl by biomatic");
 		ImGui::Text("This project was initiated to learn and practice the OpenGL API.");
@@ -192,8 +201,8 @@ void UTMainWindow::ShowIntroductionWindow(bool* bOpen)
 		ImGui::SeparatorText("biomatic");
 		ImGui::Text("I am a game client programmer from Korea with 4 years of experience.");
 		ImGui::NewLine();
-	
-	
+
+
 		ImGui::Text("To visit my technical blog, please follow this link.");
 		ImGui::Text("Unfortunately, the technical blog does not support English.");
 		ImGui::NewLine();
@@ -203,18 +212,19 @@ void UTMainWindow::ShowIntroductionWindow(bool* bOpen)
 		ImGui::Text("Phone Number : +82 10 3902 8624 (Republic of Korea)");
 		ImGui::Text("E-mail : biomaticals@naver.com");
 		ImGui::NewLine();
-	
-	
+
 		if (ImGui::Button("Close", ImVec2(-FLT_MIN, 0.f)))
 		{
+			ImGui::CloseCurrentPopup();
 			*bOpen = false;
 		}
-	
-	
-		ImGui::End();
+
+		ImGui::EndPopup();
 		return;
 	}
-	
-	
-	ImGui::End();
+
+
+	ImGui::EndPopup();
+
+	ImGui::SetWindowFocus("Introduction");
 }
