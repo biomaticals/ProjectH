@@ -34,24 +34,11 @@ public:
 
 #pragma region Title
 public:
-	const std::string GetNextTitleContext();
+	const std::string GetNextTitleContext(TitleType& OutTitleType);
+	const std::string FindTitleContext(unsigned int InPart, unsigned int InChapter, unsigned int InSection, unsigned int InCodeIndex);
 	
 private:
 	std::filesystem::path TableOfContentsPath;
 	std::ifstream ContextStream;
-#pragma endregion
-
-#pragma region ExampleCode
-public:
-	bool LinkExampleCode();
-	const FExampleCodeData GetSelectedExampleCodeData() const;
-
-private:
-	std::filesystem::path ExampleCodePath;
-	std::ifstream ExampleCodeStream;
-	FExampleCodeData SelectedExampleCodeData;
-	bool bSelectedExampleChanged;
-
-	std::vector<FExampleCodeData> ExampleCodeDataList;
 #pragma endregion
 };

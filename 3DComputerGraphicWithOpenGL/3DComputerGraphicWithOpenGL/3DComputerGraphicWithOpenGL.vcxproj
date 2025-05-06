@@ -243,6 +243,7 @@
     <ClInclude Include="..\Include\ImGui\imconfig.h" />
     <ClInclude Include="..\Include\ImGui\imgui.h" />
     <ClInclude Include="..\Include\ImGui\imgui_internal.h" />
+    <ClInclude Include="CodeSample.h" />
     <ClInclude Include="Source\3DComputerGraphicWithOpenGL.h" />
     <ClInclude Include="Source\Common.h" />
     <ClInclude Include="Source\CoreMinimal.h" />

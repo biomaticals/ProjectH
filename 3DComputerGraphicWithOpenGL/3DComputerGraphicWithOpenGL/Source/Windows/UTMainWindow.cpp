@@ -131,16 +131,18 @@ void UTMainWindow::DrawInputWindow()
 
 void UTMainWindow::DrawSelectorWindow()
 {
-	if (ImGui::CollapsingHeader(RESOURCE_MANAGER->GetNextTitleContext().c_str()))
+	TitleType TitleType;
+
+	if (ImGui::CollapsingHeader(RESOURCE_MANAGER->GetNextTitleContext(TitleType).c_str()))
 	{
 		ImGui::Indent();
-		if (ImGui::CollapsingHeader(RESOURCE_MANAGER->GetNextTitleContext().c_str()))
+		if (ImGui::CollapsingHeader(RESOURCE_MANAGER->GetNextTitleContext(TitleType).c_str()))
 		{
 			ImGui::Indent();
-			if (ImGui::CollapsingHeader(RESOURCE_MANAGER->GetNextTitleContext().c_str()))
+			if (ImGui::CollapsingHeader(RESOURCE_MANAGER->GetNextTitleContext(TitleType).c_str()))
 			{
 				ImGui::Indent();
-				if (ImGui::MenuItem(RESOURCE_MANAGER->GetNextTitleContext().c_str(), nullptr))
+				if (ImGui::MenuItem(RESOURCE_MANAGER->GetNextTitleContext(TitleType).c_str(), nullptr))
 				{
 					glfwShowWindow(OUTPUT_WINDOW->GetGLFWWindow());
 				}

@@ -2,6 +2,7 @@
 // All contents cannot be copied, distributed, revised.
 
 #include "ResourceManager.h"
+#include "format"
 
 ResourceManager* ResourceManager::Instance = nullptr;
 
@@ -11,15 +12,6 @@ ResourceManager::ResourceManager()
 	TableOfContentsPath = std::filesystem::path("Resource\\TableOfContents.txt");
 	ContextStream = std::ifstream(TableOfContentsPath, std::ios::in);
 #pragma endregion
-
-#pragma region ExampleCode	
-	ExampleCodePath = std::filesystem::path("Resource\\ExampleCode.txt");
-	ExampleCodeStream = std::ifstream(ExampleCodePath, std::ios::in);
-	SelectedExampleCodeData = FExampleCodeData();
-	bSelectedExampleChanged = false;
-	ExampleCodeDataList = std::vector<FExampleCodeData>();
-	ExampleCodeDataList.reserve(100);
-#pragma endregion
 }
 
 ResourceManager::~ResourceManager()
@@ -27,16 +19,6 @@ ResourceManager::~ResourceManager()
 	if (ContextStream.is_open())
 	{
 		ContextStream.close();
-	}
-
-	if (ExampleCodeStream.is_open())
-	{
-		ExampleCodeStream.close();
-	}
-
-	if (ExampleCodeDataList.size() > 0)
-	{
-		ExampleCodeDataList.clear();
 	}
 
 	Destroy();
@@ -64,7 +46,6 @@ void ResourceManager::Destroy()
 void ResourceManager::Update()
 {
 	ContextStream = std::ifstream(TableOfContentsPath, std::ios::in);
-	ExampleCodeStream = std::ifstream(ExampleCodePath, std::ios::in);
 }
 
 #pragma region Load & Unload
@@ -79,21 +60,11 @@ void ResourceManager::UnloadResources()
 	{
 		ContextStream.close();
 	}
-
-	if (ExampleCodeStream.is_open())
-	{
-		ExampleCodeStream.close();
-	}
-
-	if (ExampleCodeDataList.size() > 0)
-	{
-		ExampleCodeDataList.clear();
-	}
 }
 #pragma endregion
 
 #pragma region Title
-const std::string ResourceManager::GetNextTitleContext()
+const std::string ResourceManager::GetNextTitleContext(TitleType& OutTitleType)
 {
 	std::string Line{};
 	std::string Found{};
@@ -104,81 +75,96 @@ const std::string ResourceManager::GetNextTitleContext()
 
 		if (Position != std::string::npos)
 		{
-			return LeftTrim(Line);
+			size_t Offset = 0;
+			const std::string Result = LeftTrim(Line, Offset);
+
+			if (Offset == 0)
+			{
+				OutTitleType = TitleType::TitleType_Part;
+			}
+			else if (Offset == 1)
+			{
+				OutTitleType = TitleType::TitleType_Chapter;
+			}
+			else if (Offset == 2)
+			{
+				OutTitleType = TitleType::TitleType_Section;
+			}
+			else if (Offset == 3)
+			{
+				OutTitleType = TitleType::TitleType_ExampleCode;
+			}
+			else
+			{
+				OutTitleType = TitleType::TitleType_None;
+			}
+
+
+			return Result;
 		}
 	}
 
 	return "";
 }
-#pragma endregion
 
-#pragma region ExampleCode
-//auto ResourceManager::UpdateSelectedExample(unsigned int Part, unsigned int Chapter, unsigned int //Section, unsigned int CodeIndex)
-//{
-//	if (SelectedExampleCodeData.Part == Part && SelectedExampleCodeData.Chapter == Chapter && //SelectedExampleCodeData.Section == Section && SelectedExampleCodeData.CodeIndex == CodeIndex)
-//	{
-//		bSelectedExampleChanged = false;
-//		return;
-//	}
-//
-//	bSelectedExampleChanged = true;
-//	FExampleCodeData Target = FExampleCodeData(Part, Chapter, Section, CodeIndex);
-//	auto Result = std::find(ExampleCodeDataList.begin(), ExampleCodeDataList.end(), Target);
-//	SelectedExampleCodeData = Result._Ptr->_Myval;
-//}
-
-bool ResourceManager::LinkExampleCode()
+const std::string ResourceManager::FindTitleContext(unsigned int InPart, unsigned int InChapter, unsigned int InSection, unsigned int InCodeIndex)
 {
-	ExampleCodePath = std::filesystem::path("Resource\\ExampleCode.txt");
-
-	ExampleCodeStream = std::ifstream(ExampleCodePath, std::ios::in);
-	if (!ExampleCodeStream.is_open())
-	{
-		std::cerr << "Failed to open ExampleCode.txt" << std::endl;
-		return false;
-	}
+	std::ifstream _ContextStream(TableOfContentsPath, std::ios::in);
 
 	std::string Line{};
-	while (std::getline(ExampleCodeStream, Line))
+	std::string Found{};
+	std::string Keyword = std::format("Part {:02}", InPart);
+	if (InPart != 0)
 	{
-		FExampleCodeData ExampleCodeData = FExampleCodeData();
-		if (Line.find("Part") != std::string::npos)
+		while (std::getline(_ContextStream, Line))
 		{
-			ExampleCodeData.Part = std::stoi(Line.substr(Line.find("Part") + 5));
-		}
-		else if (Line.find("Chapter") != std::string::npos)
-		{
-			ExampleCodeData.Chapter = std::stoi(Line.substr(Line.find("Chapter") + 8));
-		}
-		else if (Line.find("Section") != std::string::npos)
-		{
-			ExampleCodeData.Section = std::stoi(Line.substr(Line.find("Section") + 8));
-		}
-		else if (Line.find("Code") != std::string::npos)
-		{
-			std::string CodeIndexString = Line.substr(Line.find("Code") + 5);
-			size_t DelimiterPosition = CodeIndexString.find('-');
-			if (DelimiterPosition != std::string::npos)
+			if (auto Position = Line.find(Keyword); Position != std::string::npos)
 			{
-				CodeIndexString = CodeIndexString.substr(0, DelimiterPosition);
+				Found = std::string(Line).substr(Position);
+				break;
 			}
-			else
-			{
-				CodeIndexString = CodeIndexString.substr(CodeIndexString.find(' ') + 1);
-			}
-			ExampleCodeData.CodeIndex = std::stoi(CodeIndexString);
-			break;
 		}
-
-		if (bSelectedExampleChanged)
-			break;
-
 	}
-	return true;
-}
 
-const FExampleCodeData ResourceManager::GetSelectedExampleCodeData() const
-{
-	return SelectedExampleCodeData;
+	if (InChapter != 0)
+	{
+		Keyword = std::format("Chapter {:02}", InChapter);
+		while (std::getline(_ContextStream, Line))
+		{
+			if (auto Position = Line.find(Keyword); Position != std::string::npos)
+			{
+				Found = std::string(Line).substr(Position);
+				break;
+			}
+		}
+	}
+
+	if (InSection != 0)
+	{
+		Keyword = std::format("Section {:02}", InSection);
+		while (std::getline(_ContextStream, Line))
+		{
+			if (auto Position = Line.find(Keyword); Position != std::string::npos)
+			{
+				Found = std::string(Line).substr(Position);
+				break;
+			}
+		}
+	}
+
+	if (InCodeIndex != 0)
+	{
+		Keyword = std::format("Code {}-{}", InChapter, InCodeIndex);
+		while (std::getline(_ContextStream, Line))
+		{
+			if (auto Position = Line.find(Keyword); Position != std::string::npos)
+			{
+				Found = std::string(Line).substr(Position);
+				break;
+			}
+		}
+	}
+
+	return Found;
 }
 #pragma endregion
