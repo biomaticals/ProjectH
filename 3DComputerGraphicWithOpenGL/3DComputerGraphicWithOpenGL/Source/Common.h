@@ -8,95 +8,64 @@
 #include <fstream>
 #include <filesystem>
 
-enum TitleType
+enum ETitleType
 {
 	TitleType_None = 0,
 	TitleType_Part,
 	TitleType_Chapter,
 	TitleType_Section,
 	TitleType_ExampleCode,
+	TitleType_End,
 };
 
-struct ExampleCode
+struct FExampleCode
 {
-	ExampleCode();
-	const ExampleCode& operator=(const ExampleCode& Other);
+	FExampleCode();
+	FExampleCode(const std::string& InTitle, void (*InDrawFunction)(), const std::string& InDescription);
+	FExampleCode(const FExampleCode& Other);
+	~FExampleCode();
+	const FExampleCode& operator=(const FExampleCode& Other);
 
     std::string Title;
 	void (*DrawFunction)();
 	std::string Description;
 };
 
-struct Section
+struct FSection
 {
-	Section();
-    const Section& operator=(const Section& Other);
+	FSection();
+	FSection(const std::string& InTitle);
+    const FSection& operator=(const FSection& Other);
 
 	std::string Title;
-	std::vector<ExampleCode> ExampleCodes;
+	std::vector<FExampleCode> ExampleCodes;
 };
 
-struct Chapter
+struct FChapter
 {
-	Chapter();
-	const Chapter& operator=(const Chapter& Other);
+	FChapter();
+	FChapter(const std::string& InTitle);
+	const FChapter& operator=(const FChapter& Other);
 
 	std::string Title;
-	std::vector<Section> Sections;
+	std::vector<FSection> Sections;
 };
 
-struct Part
+struct FPart
 {
-	Part();
-	const Part& operator=(const Part& Other);
+	FPart();
+	FPart(const std::string& InTitle);
+	const FPart& operator=(const FPart& Other);
 
 	std::string Title;
-	std::vector<Chapter> Chapters;
+	std::vector<FChapter> Chapters;
 };
 
-struct FExampleCodeData
+struct FBook
 {
-    FExampleCodeData()
-    : Part(0)
-    , Chapter(0)
-    , Section(0)
-    , CodeIndex(0)
-    , Title("")
-    , DrawFunction(0)
-    , Description("")
-    {
+	FBook();
 
-    }
-
-    FExampleCodeData(unsigned int InPart, unsigned int InChapter, unsigned int InSection, unsigned int InCodeIndex)
-        : Part(InPart)
-        , Chapter(InChapter)
-        , Section(InSection)
-        , CodeIndex(InCodeIndex)
-        , Title("")
-        , DrawFunction(0)
-        , Description("")
-    {
-
-     }
-
-    ~FExampleCodeData()
-    {
-
-    }
-
-    bool operator==(const FExampleCodeData& Other)
-    {
-        return Part == Other.Part && Chapter == Other.Chapter && Section == Other.Section && CodeIndex == Other.CodeIndex;
-    }
-
-    unsigned int Part;
-    unsigned int Chapter;
-    unsigned int Section;
-    unsigned int CodeIndex;
-    const char* Title;
-    void  (*DrawFunction)();
-    const char* Description;
+	std::vector<FPart> Parts;
 };
 
 extern std::string ReadFileToString(const std::filesystem::path& FilePath);

@@ -34,11 +34,11 @@ public:
 
 #pragma region Title
 public:
-	const std::string GetNextTitleContext(TitleType& OutTitleType);
+	bool LoadTitleContext();
+	//bool GetNextTitleContext(ETitleType& OutTitleType, std::string& OutTitleContext);
 	const std::string FindTitleContext(unsigned int InPart, unsigned int InChapter, unsigned int InSection, unsigned int InCodeIndex);
 	
 private:
-	std::filesystem::path TableOfContentsPath;
-	std::ifstream ContextStream;
+	FBook Book;
 #pragma endregion
 };

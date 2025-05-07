@@ -3,14 +3,21 @@
 
 #include "Common.h"
 
-ExampleCode::ExampleCode()
+FExampleCode::FExampleCode()
 	: Title("")
 	, DrawFunction(nullptr)
 	, Description("")
 {
 }
 
-const ExampleCode& ExampleCode::operator=(const ExampleCode& Other)
+FExampleCode::FExampleCode(const std::string& InTitle, void (*InDrawFunction)(), const std::string& InDescription)
+	: Title(InTitle)
+	, DrawFunction(InDrawFunction)
+	, Description(InDescription)
+{
+}
+
+const FExampleCode& FExampleCode::operator=(const FExampleCode& Other)
 {
 	if (this != &Other)
 	{
@@ -21,12 +28,17 @@ const ExampleCode& ExampleCode::operator=(const ExampleCode& Other)
 	return *this;
 }
 
-Section::Section()
+FSection::FSection()
 	: Title("")
 {
 }
 
-const Section& Section::operator=(const Section& Other)
+FSection::FSection(const std::string& InTitle)
+	: Title(InTitle)
+{
+}
+
+const FSection& FSection::operator=(const FSection& Other)
 {
 	if (this != &Other)
 	{
@@ -36,12 +48,17 @@ const Section& Section::operator=(const Section& Other)
 	return *this;
 }
 
-Chapter::Chapter()
+FChapter::FChapter()
 	: Title("")
 {
 }
 
-const Chapter& Chapter::operator=(const Chapter& Other)
+FChapter::FChapter(const std::string& InTitle)
+	: Title(InTitle)
+{
+}
+
+const FChapter& FChapter::operator=(const FChapter& Other)
 {
 	if (this != &Other)
 	{
@@ -51,12 +68,17 @@ const Chapter& Chapter::operator=(const Chapter& Other)
 	return *this;
 }
 
-Part::Part()
+FPart::FPart()
 	: Title("")
 {
 }
 
-const Part& Part::operator=(const Part& Other)
+FPart::FPart(const std::string& InTitle)
+	: Title(InTitle)
+{
+}
+
+const FPart& FPart::operator=(const FPart& Other)
 {
 	if (this != &Other)
 	{
@@ -64,6 +86,10 @@ const Part& Part::operator=(const Part& Other)
 		Chapters = Other.Chapters;
 	}
 	return *this;
+}
+
+FBook::FBook()
+{
 }
 
 std::string ReadFileToString(const std::filesystem::path& FilePath)

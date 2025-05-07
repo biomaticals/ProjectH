@@ -131,7 +131,39 @@ void UTMainWindow::DrawInputWindow()
 
 void UTMainWindow::DrawSelectorWindow()
 {
-	TitleType TitleType;
+	ETitleType TitleType = ETitleType::TitleType_None;
+	ETitleType LastTitleType = ETitleType::TitleType_None;
+	std::string TitleContext = "";
+
+	while (TitleType != ETitleType::TitleType_End &&
+		RESOURCE_MANAGER->GetNextTitleContext(TitleType, TitleContext))
+	{
+		switch (TitleType)
+		{
+		case ETitleType::TitleType_Part:
+			ImGui::TextColored(ImVec4(1.f, 0.5f, 0.f, 1.f), TitleContext.c_str());
+			if(LastTitleType == ETitleType::TitleType_None)
+
+
+
+			break;
+		case ETitleType::TitleType_Chapter:
+			ImGui::TextColored(ImVec4(0.f, 1.f, 0.f, 1.f), TitleContext.c_str());
+			break;
+		case ETitleType::TitleType_Section:
+			ImGui::TextColored(ImVec4(0.f, 0.5f, 1.f, 1.f), TitleContext.c_str());
+			break;
+		case ETitleType::TitleType_ExampleCode:
+			ImGui::TextColored(ImVec4(1.f, 1.f, 0.f, 1.f), TitleContext.c_str());
+			break;
+		default:
+			break;
+		}
+
+
+	}
+
+
 
 	if (ImGui::CollapsingHeader(RESOURCE_MANAGER->GetNextTitleContext(TitleType).c_str()))
 	{
