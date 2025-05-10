@@ -82,13 +82,16 @@ void UTOutputWindow::Initialize()
 
 void UTOutputWindow::RenderDrawData()
 {
-	
+	if (OutputExampleCodeData.IsValid() && OutputExampleCodeData.DrawFunction)
+	{
+		(this->*OutputExampleCodeData.DrawFunction)();
+	}
 }
 
 void UTOutputWindow::SetSelectedExampleCodeData(unsigned int InPart, unsigned int InChapter,unsigned int InSection, unsigned int InCodeIndex)
 {
 	OutputExampleCodeData.Title = RESOURCE_MANAGER->FindTitleContext(InPart, InChapter, InSection,InCodeIndex).c_str();
-	OutputExampleCodeData.DrawFunction = DrawFunctions[InChapter][InSection];
+	OutputExampleCodeData.DrawFunction = DrawFunctions[InChapter][InCodeIndex];
 	OutputExampleCodeData.Description = "";
 }
 

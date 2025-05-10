@@ -78,6 +78,7 @@ bool ResourceManager::LoadTitleContext()
 			StartPosition = Line.find(Prefix);
 			if (StartPosition == std::string::npos)
 				continue;
+			std::string PartTitle = Line.substr(StartPosition);
 
 			StartPosition += Prefix.length();
 			EndPosition = Line.find(Delimeter, StartPosition);
@@ -86,7 +87,6 @@ bool ResourceManager::LoadTitleContext()
 			
 			NumberStr = Line.substr(StartPosition, EndPosition - StartPosition);
 			PartIndex = std::stoi(NumberStr);
-			std::string PartTitle = Line.substr(EndPosition + 2);
 			if (Book.Parts.size() <= PartIndex)
 			{
 				Book.Parts.resize(PartIndex + 1);
@@ -101,7 +101,8 @@ bool ResourceManager::LoadTitleContext()
 			StartPosition = Line.find(Prefix);
 			if (StartPosition == std::string::npos)
 				break;
-
+			std::string ChapterTitle = Line.substr(StartPosition);
+			
 			StartPosition += Prefix.length();
 			EndPosition = Line.find(Delimeter, StartPosition);
 			if (EndPosition == std::string::npos)
@@ -109,7 +110,6 @@ bool ResourceManager::LoadTitleContext()
 
 			NumberStr = Line.substr(StartPosition, EndPosition - StartPosition);
 			ChapterIndex = std::stoi(NumberStr);
-			std::string ChapterTitle = Line.substr(EndPosition + 2);
 			if (Book.Parts[PartIndex].Chapters.size() <= ChapterIndex)
 			{
 				Book.Parts[PartIndex].Chapters.resize(ChapterIndex + 1);
@@ -124,6 +124,7 @@ bool ResourceManager::LoadTitleContext()
 			StartPosition = Line.find(Prefix);
 			if (StartPosition == std::string::npos)
 				break;
+			std::string SectionTitle = Line.substr(StartPosition);
 
 			StartPosition += Prefix.length();
 			EndPosition = Line.find(Delimeter, StartPosition);
@@ -132,7 +133,7 @@ bool ResourceManager::LoadTitleContext()
 
 			NumberStr = Line.substr(StartPosition, EndPosition - StartPosition);
 			SectionIndex = std::stoi(NumberStr);
-			std::string SectionTitle = Line.substr(EndPosition + 2);
+			
 			if (Book.Parts[PartIndex].Chapters[ChapterIndex].Sections.size() <= SectionIndex)
 			{
 				Book.Parts[PartIndex].Chapters[ChapterIndex].Sections.resize(SectionIndex + 1);
@@ -147,6 +148,7 @@ bool ResourceManager::LoadTitleContext()
 			StartPosition = Line.find(Prefix);
 			if (StartPosition == std::string::npos)
 				break;
+			std::string CodeTitle = Line.substr(StartPosition);
 
 			StartPosition += Prefix.length();
 			EndPosition = Line.find(Delimeter, StartPosition);
@@ -161,12 +163,13 @@ bool ResourceManager::LoadTitleContext()
 			StartPosition += 1;
 			NumberStr = Line.substr(StartPosition, EndPosition - StartPosition);
 			CodeIndex = std::stoi(NumberStr);
+			
 			if (Book.Parts[PartIndex].Chapters[ChapterIndex].Sections[SectionIndex].ExampleCodes.size() <= CodeIndex)
 			{
 				Book.Parts[PartIndex].Chapters[ChapterIndex].Sections[SectionIndex].ExampleCodes.resize(CodeIndex + 1);
 			}
 
-			Book.Parts[PartIndex].Chapters[ChapterIndex].Sections[SectionIndex].ExampleCodes[CodeIndex] = FExampleCode(Line.substr(EndPosition + 2));   
+			Book.Parts[PartIndex].Chapters[ChapterIndex].Sections[SectionIndex].ExampleCodes[CodeIndex] = FExampleCode(CodeTitle);   
 		}
 	}
 	ContextStream.close();
@@ -182,53 +185,6 @@ FBook ResourceManager::GetBook() const
 	return Book;
 }
 
-//bool ResourceManager::GetNextTitleContext(ETitleType& OutTitleType, std::string& OutTitleContext)
-//{
-//	std::string Line{};
-//	std::string Found{};
-//
-//	while (std::getline(ContextStream, Line))
-//	{
-//		auto Position = Line.find(": ");
-//
-//		if (Position != std::string::npos)
-//		{
-//			size_t Offset = 0;
-//			OutTitleContext = LeftTrim(Line, Offset);
-//
-//			if (Offset == 0)
-//			{
-//				OutTitleType = ETitleType::TitleType_Part;
-//			}
-//			else if (Offset == 1)
-//			{
-//				OutTitleType = ETitleType::TitleType_Chapter;
-//			}
-//			else if (Offset == 2)
-//			{
-//				OutTitleType = ETitleType::TitleType_Section;
-//			}
-//			else if (Offset == 3)
-//			{
-//				OutTitleType = ETitleType::TitleType_ExampleCode;
-//			}
-//			else
-//			{
-//				OutTitleType = ETitleType::TitleType_None;
-//				return false;
-//			}
-//			return true;
-//		}
-//		else if (Line.find("End") != std::string::npos)
-//		{
-//			OutTitleType = ETitleType::TitleType_End;
-//			return true;
-//		}
-//	}
-//
-//	return false;
-//}
-//
 const std::string ResourceManager::FindTitleContext(unsigned int InPart, unsigned int InChapter,unsigned int InSection, unsigned int InCodeIndex)
 {
 	std::ifstream _ContextStream(TableOfContentsPath, std::ios::in);

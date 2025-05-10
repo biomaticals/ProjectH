@@ -38,8 +38,6 @@ public:
 	bool LoadTitleContext();
 	FBook GetBook() const;
 
-
-	//bool GetNextTitleContext(ETitleType& OutTitleType, std::string& OutTitleContext);
 	const std::string FindTitleContext(unsigned int InPart, unsigned int InChapter, unsigned int InSection, unsigned int InCodeIndex);
 	
 private:
