@@ -8,6 +8,8 @@
 #include <fstream>
 #include <filesystem>
 
+struct FExampleCode;
+
 enum ETitleType
 {
 	TitleType_None = 0,
@@ -18,24 +20,12 @@ enum ETitleType
 	TitleType_End,
 };
 
-struct FExampleCode
-{
-	FExampleCode();
-	FExampleCode(const std::string& InTitle, void (*InDrawFunction)(), const std::string& InDescription);
-	FExampleCode(const FExampleCode& Other);
-	~FExampleCode();
-	const FExampleCode& operator=(const FExampleCode& Other);
-
-    std::string Title;
-	void (*DrawFunction)();
-	std::string Description;
-};
-
 struct FSection
 {
 	FSection();
 	FSection(const std::string& InTitle);
     const FSection& operator=(const FSection& Other);
+	bool IsValid() const;
 
 	std::string Title;
 	std::vector<FExampleCode> ExampleCodes;
@@ -46,6 +36,7 @@ struct FChapter
 	FChapter();
 	FChapter(const std::string& InTitle);
 	const FChapter& operator=(const FChapter& Other);
+	bool IsValid() const;
 
 	std::string Title;
 	std::vector<FSection> Sections;
@@ -56,6 +47,7 @@ struct FPart
 	FPart();
 	FPart(const std::string& InTitle);
 	const FPart& operator=(const FPart& Other);
+	bool IsValid() const;
 
 	std::string Title;
 	std::vector<FChapter> Chapters;

@@ -5,6 +5,7 @@
 
 #include "CoreMinimal.h"
 #include "UTWindow.h"
+#include "Common.h"
 
 class UTMainWindow : public UTWindow
 {
@@ -40,4 +41,6 @@ private:
 	const ImGuiWindow* InputWindow = nullptr;
 	const ImGuiWindow* DescriptionWindow = nullptr;
 	const ImGuiWindow* SelectorWindow = nullptr;
+
+	FBook Book;
 };

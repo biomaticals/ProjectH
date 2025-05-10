@@ -131,63 +131,52 @@ void UTMainWindow::DrawInputWindow()
 
 void UTMainWindow::DrawSelectorWindow()
 {
-	ETitleType TitleType = ETitleType::TitleType_None;
-	ETitleType LastTitleType = ETitleType::TitleType_None;
-	std::string TitleContext = "";
-
-	while (TitleType != ETitleType::TitleType_End &&
-		RESOURCE_MANAGER->GetNextTitleContext(TitleType, TitleContext))
+	if (Book.Parts.size() == 0)
 	{
-		switch (TitleType)
+		if (RESOURCE_MANAGER->LoadTitleContext())
 		{
-		case ETitleType::TitleType_Part:
-			ImGui::TextColored(ImVec4(1.f, 0.5f, 0.f, 1.f), TitleContext.c_str());
-			if(LastTitleType == ETitleType::TitleType_None)
-
-
-
-			break;
-		case ETitleType::TitleType_Chapter:
-			ImGui::TextColored(ImVec4(0.f, 1.f, 0.f, 1.f), TitleContext.c_str());
-			break;
-		case ETitleType::TitleType_Section:
-			ImGui::TextColored(ImVec4(0.f, 0.5f, 1.f, 1.f), TitleContext.c_str());
-			break;
-		case ETitleType::TitleType_ExampleCode:
-			ImGui::TextColored(ImVec4(1.f, 1.f, 0.f, 1.f), TitleContext.c_str());
-			break;
-		default:
-			break;
+			Book = RESOURCE_MANAGER->GetBook();
 		}
-
-
+		else
+		{
+			ImGui::Text("Failed to load title context.");
+			return;
+		}
 	}
 
-
-
-	if (ImGui::CollapsingHeader(RESOURCE_MANAGER->GetNextTitleContext(TitleType).c_str()))
+	for (int i = 0 ; i < Book.Parts.size(); i++)
 	{
-		ImGui::Indent();
-		if (ImGui::CollapsingHeader(RESOURCE_MANAGER->GetNextTitleContext(TitleType).c_str()))
+		if (Book.Parts[i].IsValid() && ImGui::CollapsingHeader(Book.Parts[i].Title.c_str()))
 		{
 			ImGui::Indent();
-			if (ImGui::CollapsingHeader(RESOURCE_MANAGER->GetNextTitleContext(TitleType).c_str()))
+			for (int j = 0 ; j < Book.Parts[i].Chapters.size() ; j++)
 			{
-				ImGui::Indent();
-				if (ImGui::MenuItem(RESOURCE_MANAGER->GetNextTitleContext(TitleType).c_str(), nullptr))
+				if (Book.Parts[i].Chapters[j].IsValid() && ImGui::CollapsingHeader(Book.Parts[i].Chapters[j].Title.c_str()))
 				{
-					glfwShowWindow(OUTPUT_WINDOW->GetGLFWWindow());
+					ImGui::Indent();
+
+
+					for (int k = 0 ; k < Book.Parts[i].Chapters[j].Sections.size() ; k++)
+					{
+						if (Book.Parts[i].Chapters[j].Sections[k].IsValid() && ImGui::CollapsingHeader(Book.Parts[i].Chapters[j].Sections[k].Title.c_str()))
+						{
+							ImGui::Indent();
+							for (int l = 0 ; l <Book.Parts[i].Chapters[j].Sections[k].ExampleCodes.size() ; l++)
+							{
+								if (Book.Parts[i].Chapters[j].Sections[k].ExampleCodes[l].IsValid() && ImGui::MenuItem(Book.Parts[i].Chapters[j].Sections[k].ExampleCodes[l].Title.c_str()))
+								{
+									OUTPUT_WINDOW->SetSelectedExampleCodeData(i, j, k, l);
+									glfwShowWindow(OUTPUT_WINDOW->GetGLFWWindow());
+								}
+							}
+							ImGui::Unindent();
+						}
+					}
+					ImGui::Unindent();
 				}
-				ImGui::Unindent();
 			}
 			ImGui::Unindent();
 		}
-		ImGui::Unindent();
-	}
-	
-	if (ImGui::CollapsingHeader("Part03 Graphic Pipeline"))
-	{
-	
 	}
 }
 
@@ -257,8 +246,6 @@ void UTMainWindow::ShowIntroductionWindow(bool* bOpen)
 		return;
 	}
 
-
 	ImGui::EndPopup();
-
 	ImGui::SetWindowFocus("Introduction");
 }

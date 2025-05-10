@@ -7,6 +7,7 @@
 #include "CoreMinimal.h"
 #include <fstream>
 #include <list>
+#include <filesystem>
 
 #define RESOURCE_MANAGER ResourceManager::GetResourceManager()
 
@@ -35,10 +36,14 @@ public:
 #pragma region Title
 public:
 	bool LoadTitleContext();
+	FBook GetBook() const;
+
+
 	//bool GetNextTitleContext(ETitleType& OutTitleType, std::string& OutTitleContext);
 	const std::string FindTitleContext(unsigned int InPart, unsigned int InChapter, unsigned int InSection, unsigned int InCodeIndex);
 	
 private:
 	FBook Book;
+	std::string TableOfContentsPath = "Resource\\TableOfContents.txt";
 #pragma endregion
 };

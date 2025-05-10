@@ -2,6 +2,7 @@
 // All contents cannot be copied, distributed, revised.
 
 #include "ResourceManager.h"
+#include "Windows/UTOutputWindow.h"
 #include "format"
 
 ResourceManager* ResourceManager::Instance = nullptr;
@@ -13,11 +14,6 @@ ResourceManager::ResourceManager()
 
 ResourceManager::~ResourceManager()
 {
-	if (ContextStream.is_open())
-	{
-		ContextStream.close();
-	}
-
 	Destroy();
 }
 
@@ -42,7 +38,6 @@ void ResourceManager::Destroy()
 
 void ResourceManager::Update()
 {
-	ContextStream = std::ifstream(TableOfContentsPath, std::ios::in);
 }
 
 #pragma region Load & Unload
@@ -53,114 +48,188 @@ bool ResourceManager::LoadResources()
 
 void ResourceManager::UnloadResources()
 {
-	if (ContextStream.is_open())
-	{
-		ContextStream.close();
-	}
+
 }
 #pragma endregion
 
 #pragma region Title
 bool ResourceManager::LoadTitleContext()
 {
+	Book.Parts.clear();
 
-	std::filesystem::path TableOfContentsPath = std::filesystem::path("Resource\\TableOfContents.txt");
 	std::ifstream ContextStream(TableOfContentsPath, std::ios::in);
 
-	FPart* CurrentPart = nullptr;
-	FChapter* CurrentChapter = nullptr;
-	FSection* CurrentSection = nullptr;
+	unsigned int PartIndex = 0;
+	unsigned int ChapterIndex = 0;
+	unsigned int SectionIndex = 0;
+	unsigned int CodeIndex = 0;
+	size_t StartPosition = 0;
+	size_t EndPosition = 0;
+	std::string NumberStr{};
 	std::string Line{};
+	std::string Prefix{};
+	std::string Delimeter{ ": " };
 	while (std::getline(ContextStream, Line))
 	{
-		size_t Indent = 0;
-		while (Indent < Line.size() && Line[Indent] == '\t')
+		if (PartIndex == 0)
 		{
-			++Indent;
+			Prefix = "Part ";
+			Delimeter = ": ";
+			StartPosition = Line.find(Prefix);
+			if (StartPosition == std::string::npos)
+				continue;
+
+			StartPosition += Prefix.length();
+			EndPosition = Line.find(Delimeter, StartPosition);
+			if (EndPosition == std::string::npos)
+				break;
+			
+			NumberStr = Line.substr(StartPosition, EndPosition - StartPosition);
+			PartIndex = std::stoi(NumberStr);
+			std::string PartTitle = Line.substr(EndPosition + 2);
+			if (Book.Parts.size() <= PartIndex)
+			{
+				Book.Parts.resize(PartIndex + 1);
+			}
+			
+			Book.Parts[PartIndex] = FPart(PartTitle);
 		}
-
-		std::string Title = Line.substr(Indent);
-
-		switch (Indent)
+		else if (ChapterIndex == 0)
 		{
-		case 0:
-			Book.Parts.push_back(FPart(Title));
-			CurrentPart = &Book.Parts.back();
-			break;
-		case 1:
-			if (CurrentPart)
-			{
-				CurrentPart->Chapters.push_back(FChapter(Title));
-				CurrentChapter = &CurrentPart->Chapters.back();
-			}
-			break;
-		case 2:
-			if (CurrentChapter)
-			{
-				CurrentChapter->Sections.push_back(FSection(Title));
-				CurrentSection = &CurrentChapter->Sections.back();
-			}
-			break;
-		case 3:
-			if (CurrentSection)
-			{
-				CurrentSection->ExampleCodes.push_back(FExampleCode(Title));
-				//CurrentSection->ExampleCodes.back().DrawFunction = &UTOutputWindow::MyDisplay5_2;
-			}
-			break;
+			Prefix = "Chapter ";
+			Delimeter = ": ";
+			StartPosition = Line.find(Prefix);
+			if (StartPosition == std::string::npos)
+				break;
 
+			StartPosition += Prefix.length();
+			EndPosition = Line.find(Delimeter, StartPosition);
+			if (EndPosition == std::string::npos)
+				break;
+
+			NumberStr = Line.substr(StartPosition, EndPosition - StartPosition);
+			ChapterIndex = std::stoi(NumberStr);
+			std::string ChapterTitle = Line.substr(EndPosition + 2);
+			if (Book.Parts[PartIndex].Chapters.size() <= ChapterIndex)
+			{
+				Book.Parts[PartIndex].Chapters.resize(ChapterIndex + 1);
+			}
+
+			Book.Parts[PartIndex].Chapters[ChapterIndex] = FChapter(ChapterTitle);
+		}
+		else if (SectionIndex == 0)
+		{
+			Prefix = "Section ";
+			Delimeter = ": ";
+			StartPosition = Line.find(Prefix);
+			if (StartPosition == std::string::npos)
+				break;
+
+			StartPosition += Prefix.length();
+			EndPosition = Line.find(Delimeter, StartPosition);
+			if (EndPosition == std::string::npos)
+				break;
+
+			NumberStr = Line.substr(StartPosition, EndPosition - StartPosition);
+			SectionIndex = std::stoi(NumberStr);
+			std::string SectionTitle = Line.substr(EndPosition + 2);
+			if (Book.Parts[PartIndex].Chapters[ChapterIndex].Sections.size() <= SectionIndex)
+			{
+				Book.Parts[PartIndex].Chapters[ChapterIndex].Sections.resize(SectionIndex + 1);
+			}
+
+			Book.Parts[PartIndex].Chapters[ChapterIndex].Sections[SectionIndex] = FSection(SectionTitle);
+		}
+		else
+		{
+			Prefix = "Code ";
+			Delimeter = ": ";
+			StartPosition = Line.find(Prefix);
+			if (StartPosition == std::string::npos)
+				break;
+
+			StartPosition += Prefix.length();
+			EndPosition = Line.find(Delimeter, StartPosition);
+			if (EndPosition == std::string::npos)
+				break;
+
+			std::string IntermediateStr = Line.substr(StartPosition, EndPosition - StartPosition);
+			StartPosition = Line.find("-");
+			if (StartPosition == std::string::npos)
+				break;
+
+			StartPosition += 1;
+			NumberStr = Line.substr(StartPosition, EndPosition - StartPosition);
+			CodeIndex = std::stoi(NumberStr);
+			if (Book.Parts[PartIndex].Chapters[ChapterIndex].Sections[SectionIndex].ExampleCodes.size() <= CodeIndex)
+			{
+				Book.Parts[PartIndex].Chapters[ChapterIndex].Sections[SectionIndex].ExampleCodes.resize(CodeIndex + 1);
+			}
+
+			Book.Parts[PartIndex].Chapters[ChapterIndex].Sections[SectionIndex].ExampleCodes[CodeIndex] = FExampleCode(Line.substr(EndPosition + 2));   
 		}
 	}
-}
+	ContextStream.close();
 
-bool ResourceManager::GetNextTitleContext(ETitleType& OutTitleType, std::string& OutTitleContext)
-{
-	std::string Line{};
-	std::string Found{};
-
-	while (std::getline(ContextStream, Line))
-	{
-		auto Position = Line.find(": ");
-
-		if (Position != std::string::npos)
-		{
-			size_t Offset = 0;
-			OutTitleContext = LeftTrim(Line, Offset);
-
-			if (Offset == 0)
-			{
-				OutTitleType = ETitleType::TitleType_Part;
-			}
-			else if (Offset == 1)
-			{
-				OutTitleType = ETitleType::TitleType_Chapter;
-			}
-			else if (Offset == 2)
-			{
-				OutTitleType = ETitleType::TitleType_Section;
-			}
-			else if (Offset == 3)
-			{
-				OutTitleType = ETitleType::TitleType_ExampleCode;
-			}
-			else
-			{
-				OutTitleType = ETitleType::TitleType_None;
-				return false;
-			}
-			return true;
-		}
-		else if (Line.find("End") != std::string::npos)
-		{
-			OutTitleType = ETitleType::TitleType_End;
-			return true;
-		}
-	}
+	if (Book.Parts.size() > 0)
+		return true;
 
 	return false;
 }
 
-const std::string ResourceManager::FindTitleContext(unsigned int InPart, unsigned int InChapter, unsigned int InSection, unsigned int InCodeIndex)
+FBook ResourceManager::GetBook() const
+{
+	return Book;
+}
+
+//bool ResourceManager::GetNextTitleContext(ETitleType& OutTitleType, std::string& OutTitleContext)
+//{
+//	std::string Line{};
+//	std::string Found{};
+//
+//	while (std::getline(ContextStream, Line))
+//	{
+//		auto Position = Line.find(": ");
+//
+//		if (Position != std::string::npos)
+//		{
+//			size_t Offset = 0;
+//			OutTitleContext = LeftTrim(Line, Offset);
+//
+//			if (Offset == 0)
+//			{
+//				OutTitleType = ETitleType::TitleType_Part;
+//			}
+//			else if (Offset == 1)
+//			{
+//				OutTitleType = ETitleType::TitleType_Chapter;
+//			}
+//			else if (Offset == 2)
+//			{
+//				OutTitleType = ETitleType::TitleType_Section;
+//			}
+//			else if (Offset == 3)
+//			{
+//				OutTitleType = ETitleType::TitleType_ExampleCode;
+//			}
+//			else
+//			{
+//				OutTitleType = ETitleType::TitleType_None;
+//				return false;
+//			}
+//			return true;
+//		}
+//		else if (Line.find("End") != std::string::npos)
+//		{
+//			OutTitleType = ETitleType::TitleType_End;
+//			return true;
+//		}
+//	}
+//
+//	return false;
+//}
+//
+const std::string ResourceManager::FindTitleContext(unsigned int InPart, unsigned int InChapter,unsigned int InSection, unsigned int InCodeIndex)
 {
 	std::ifstream _ContextStream(TableOfContentsPath, std::ios::in);
 

@@ -2,31 +2,7 @@
 // All contents cannot be copied, distributed, revised.
 
 #include "Common.h"
-
-FExampleCode::FExampleCode()
-	: Title("")
-	, DrawFunction(nullptr)
-	, Description("")
-{
-}
-
-FExampleCode::FExampleCode(const std::string& InTitle, void (*InDrawFunction)(), const std::string& InDescription)
-	: Title(InTitle)
-	, DrawFunction(InDrawFunction)
-	, Description(InDescription)
-{
-}
-
-const FExampleCode& FExampleCode::operator=(const FExampleCode& Other)
-{
-	if (this != &Other)
-	{
-		Title = Other.Title;
-		DrawFunction = Other.DrawFunction;
-		Description = Other.Description;
-	}
-	return *this;
-}
+#include "Windows/UTOutputWindow.h"
 
 FSection::FSection()
 	: Title("")
@@ -46,6 +22,11 @@ const FSection& FSection::operator=(const FSection& Other)
 		ExampleCodes = Other.ExampleCodes;
 	}
 	return *this;
+}
+
+bool FSection::IsValid() const
+{
+	return !Title.empty();
 }
 
 FChapter::FChapter()
@@ -68,6 +49,11 @@ const FChapter& FChapter::operator=(const FChapter& Other)
 	return *this;
 }
 
+bool FChapter::IsValid() const
+{
+	return !Title.empty();
+}
+
 FPart::FPart()
 	: Title("")
 {
@@ -86,6 +72,11 @@ const FPart& FPart::operator=(const FPart& Other)
 		Chapters = Other.Chapters;
 	}
 	return *this;
+}
+
+bool FPart::IsValid() const
+{
+	return !Title.empty();
 }
 
 FBook::FBook()
@@ -108,11 +99,13 @@ std::string ReadFileToString(const std::filesystem::path& FilePath)
 std::string LeftTrim(const std::string& Str, size_t& OutOffset)
 {
 	size_t FirstNonSpace = Str.find_first_not_of(" \t\n\r");
+	OutOffset = FirstNonSpace;
 	return (FirstNonSpace == std::string::npos) ? "" : Str.substr(FirstNonSpace);
 }
 
 std::string RightTrim(const std::string& Str, size_t& OutOffset)
 {
 	size_t LastNonSpace = Str.find_last_not_of(" \t\n\r");
+	OutOffset = LastNonSpace;
 	return (LastNonSpace == std::string::npos) ? "" : Str.substr(0, LastNonSpace + 1);
 }
