@@ -1,2 +1,0 @@
-# 3DComputerGraphicWithOpenGL
-BJH's 3DComputerGraphicWithOpenGL
