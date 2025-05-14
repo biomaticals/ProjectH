@@ -1,0 +1,270 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <VCProjectVersion>17.0</VCProjectVersion>
+    <Keyword>Win32Proj</Keyword>
+    <ProjectGuid>{e654f052-4a18-49f9-8b98-9fc91ff7a90b}</ProjectGuid>
+    <RootNamespace>My3DComputerGraphicWithOpenGL</RootNamespace>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v143</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v143</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v143</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v143</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="Shared">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="..\Property\PropertySheet.props" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="..\Property\PropertySheet.props" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="..\Property\PropertySheet.props" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="..\Property\PropertySheet.props" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <OutDir>$(SolutionDir)Binaries\$(Platform)\$(Configuration)\</OutDir>
+    <IntDir>$(SolutionDir)Intermediate\$(platform)\$(Configuration)\</IntDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <OutDir>$(SolutionDir)Binaries\$(Platform)\$(Configuration)\</OutDir>
+    <IntDir>$(SolutionDir)Intermediate\$(platform)\$(Configuration)\</IntDir>
+    <LinkIncremental>
+    </LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <OutDir>$(SolutionDir)Binaries\$(Platform)\$(Configuration)\</OutDir>
+    <IntDir>$(SolutionDir)Intermediate\$(platform)\$(Configuration)\</IntDir>
+    <LinkIncremental />
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <OutDir>$(SolutionDir)Binaries\$(Platform)\$(Configuration)\</OutDir>
+    <IntDir>$(SolutionDir)Intermediate\$(platform)\$(Configuration)\</IntDir>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <WarningLevel>Level4</WarningLevel>
+      <SDLCheck>
+      </SDLCheck>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;_UNICODE;UNICODE%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>
+      </ConformanceMode>
+      <AdditionalIncludeDirectories>Source;..\Include;..\Include\ImGui;..\Include\ImGui\Backends;%(AdditionalIncludeDirectories)$(InsideStaticMathLibrarySolutionDir)Source;$(OutsideStaticMathLibrarySolutionDir)OutsideStaticMathLibrary\Source;$(InsideDynamicMathLibrarySolutionDir)Source;$(OutsideDynamicMathLibrarySolutionDir)OutsideDynamicMathLibrary\Source</AdditionalIncludeDirectories>
+      <PrecompiledHeaderFile />
+      <AdditionalOptions>/utf-8 %(AdditionalOptions)</AdditionalOptions>
+      <LanguageStandard>stdcpp20</LanguageStandard>
+      <LanguageStandard_C>stdc17</LanguageStandard_C>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>OutsideStaticMathLibrary.lib;OutsideDynamicMathLibrary.lib;opengl32.lib;glfw3.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(OutsideStaticMathLibrarySolutionDir)Binaries\$(Platform)\$(Configuration);$(OutsideDynamicMathLibrarySolutionDir)Binaries\$(Platform)\$(Configuration);$(OutsideStaticMathLibrarySolutionDir)Binaries\$(Platform)\$(Configuration);$(OutsideDynamicMathLibrarySolutionDir)Binaries\$(Platform)\$(Configuration);..\Library\$(Platform)\GLFW;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <IgnoreAllDefaultLibraries>
+      </IgnoreAllDefaultLibraries>
+      <IgnoreSpecificDefaultLibraries>msvcrt.lib</IgnoreSpecificDefaultLibraries>
+      <AdditionalOptions>/MACHINE:X86 %(AdditionalOptions)</AdditionalOptions>
+    </Link>
+    <PostBuildEvent>
+      <Command>
+      </Command>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level4</WarningLevel>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>
+      </SDLCheck>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>Source;..\Include;..\Include\ImGui;..\Include\ImGui\Backends;%(AdditionalIncludeDirectories)$(InsideStaticMathLibrarySolutionDir)Source;$(OutsideStaticMathLibrarySolutionDir)OutsideStaticMathLibrary\Source;$(InsideDynamicMathLibrarySolutionDir)Source;$(OutsideDynamicMathLibrarySolutionDir)OutsideDynamicMathLibrary\Source</AdditionalIncludeDirectories>
+      <PrecompiledHeaderFile />
+      <LanguageStandard>stdcpp20</LanguageStandard>
+      <LanguageStandard_C>stdc17</LanguageStandard_C>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>OutsideStaticMathLibrary.lib;OutsideDynamicMathLibrary.lib;opengl32.lib;glfw3.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(OutsideStaticMathLibrarySolutionDir)Binaries\$(Platform)\$(Configuration);$(OutsideDynamicMathLibrarySolutionDir)Binaries\$(Platform)\$(Configuration);..\Library\$(Platform)\GLFW;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <IgnoreSpecificDefaultLibraries>
+      </IgnoreSpecificDefaultLibraries>
+    </Link>
+    <PostBuildEvent>
+      <Command>
+      </Command>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <WarningLevel>Level4</WarningLevel>
+      <SDLCheck>
+      </SDLCheck>
+      <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>Source;..\Include;..\Include\ImGui;..\Include\ImGui\Backends;%(AdditionalIncludeDirectories)$(InsideStaticMathLibrarySolutionDir)Source;$(OutsideStaticMathLibrarySolutionDir)OutsideStaticMathLibrary\Source;$(InsideDynamicMathLibrarySolutionDir)Source;$(OutsideDynamicMathLibrarySolutionDir)OutsideDynamicMathLibrary\Source</AdditionalIncludeDirectories>
+      <PrecompiledHeaderFile />
+      <LanguageStandard>stdcpp20</LanguageStandard>
+      <LanguageStandard_C>stdc17</LanguageStandard_C>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>OutsideStaticMathLibrary.lib;OutsideDynamicMathLibrary.lib;opengl32.lib;glfw3.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(OutsideStaticMathLibrarySolutionDir)Binaries\$(Platform)\$(Configuration);$(OutsideDynamicMathLibrarySolutionDir)Binaries\$(Platform)\$(Configuration);$(OutsideStaticMathLibrarySolutionDir)Binaries\$(Platform)\$(Configuration);$(OutsideDynamicMathLibrarySolutionDir)Binaries\$(Platform)\$(Configuration);..\Library\$(Platform)\GLFW;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <IgnoreSpecificDefaultLibraries>msvcrt.lib</IgnoreSpecificDefaultLibraries>
+    </Link>
+    <PostBuildEvent>
+      <Command>
+      </Command>
+    </PostBuildEvent>
+    <PreBuildEvent>
+      <Command>
+      </Command>
+    </PreBuildEvent>
+    <PreLinkEvent>
+      <Command>
+      </Command>
+    </PreLinkEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <WarningLevel>Level4</WarningLevel>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>
+      </SDLCheck>
+      <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>Source;..\Include;..\Include\ImGui;..\Include\ImGui\Backends;%(AdditionalIncludeDirectories)$(InsideStaticMathLibrarySolutionDir)Source;$(OutsideStaticMathLibrarySolutionDir)OutsideStaticMathLibrary\Source;$(InsideDynamicMathLibrarySolutionDir)Source;$(OutsideDynamicMathLibrarySolutionDir)OutsideDynamicMathLibrary\Source;$(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PrecompiledHeaderFile />
+      <LanguageStandard>stdcpp20</LanguageStandard>
+      <LanguageStandard_C>stdc17</LanguageStandard_C>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>OutsideStaticMathLibrary.lib;OutsideDynamicMathLibrary.lib;opengl32.lib;glfw3.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(OutsideStaticMathLibrarySolutionDir)Binaries\$(Platform)\$(Configuration);$(OutsideDynamicMathLibrarySolutionDir)Binaries\$(Platform)\$(Configuration);..\Library\$(Platform)\GLFW;..\Library\x64\GLFW;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <IgnoreSpecificDefaultLibraries>
+      </IgnoreSpecificDefaultLibraries>
+    </Link>
+    <PostBuildEvent>
+      <Command>
+      </Command>
+    </PostBuildEvent>
+    <ProjectReference>
+      <LinkLibraryDependencies>true</LinkLibraryDependencies>
+    </ProjectReference>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="..\Include\ImGui\Backends\imgui_impl_glfw.cpp" />
+    <ClCompile Include="..\Include\ImGui\Backends\imgui_impl_opengl3.cpp" />
+    <ClCompile Include="..\Include\ImGui\imgui.cpp" />
+    <ClCompile Include="..\Include\ImGui\imgui_demo.cpp" />
+    <ClCompile Include="..\Include\ImGui\imgui_draw.cpp" />
+    <ClCompile Include="..\Include\ImGui\imgui_tables.cpp" />
+    <ClCompile Include="..\Include\ImGui\imgui_widgets.cpp" />
+    <ClCompile Include="Source\3DComputerGraphicWithOpenGL.cpp" />
+    <ClCompile Include="Source\Common.cpp" />
+    <ClCompile Include="Source\Manager\ResourceManager.cpp" />
+    <ClCompile Include="Source\Manager\WindowManager.cpp" />
+    <ClCompile Include="Source\Windows\UTMainWindow.cpp" />
+    <ClCompile Include="Source\Windows\UTOutputWindow.cpp" />
+    <ClCompile Include="Source\Windows\UTWindow.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\InsideStaticMathLibrary\InsideStaticMathLibrary.vcxproj">
+      <Project>{d2c15627-977a-4945-88e7-ea4f47b250ab}</Project>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\Include\ImGui\Backends\imgui_impl_glfw.h" />
+    <ClInclude Include="..\Include\ImGui\Backends\imgui_impl_opengl3.h" />
+    <ClInclude Include="..\Include\ImGui\Backends\imgui_impl_opengl3_loader.h" />
+    <ClInclude Include="..\Include\ImGui\imconfig.h" />
+    <ClInclude Include="..\Include\ImGui\imgui.h" />
+    <ClInclude Include="..\Include\ImGui\imgui_internal.h" />
+    <ClInclude Include="CodeSample.h" />
+    <ClInclude Include="Source\3DComputerGraphicWithOpenGL.h" />
+    <ClInclude Include="Source\Common.h" />
+    <ClInclude Include="Source\CoreMinimal.h" />
+    <ClInclude Include="Source\Manager\ResourceManager.h" />
+    <ClInclude Include="Source\Manager\WindowManager.h" />
+    <ClInclude Include="Source\Windows\UTMainWindow.h" />
+    <ClInclude Include="Source\Windows\UTOutputWindow.h" />
+    <ClInclude Include="Source\Windows\UTWindow.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\Include\ImGui\imgui.ini" />
+    <None Include="..\Include\ImGui\imgui.natstepfilter" />
+  </ItemGroup>
+  <ItemGroup>
+    <Natvis Include="..\Include\ImGui\imgui.natvis" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="Resource\2.5.3.2.txt" />
+    <Text Include="Resource\TableOfContents.txt" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

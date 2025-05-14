@@ -1,0 +1,140 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="imgui">
+      <UniqueIdentifier>{3c59d4de-fb31-4465-9794-3e6b1def6e47}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="imgui\Backends">
+      <UniqueIdentifier>{bc0187c9-f7c4-4ded-a747-d26135ac50f9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resources">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Source">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Source\Windows">
+      <UniqueIdentifier>{bd3c1657-3947-4cb2-bab3-e8cdb6f1103e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Manager">
+      <UniqueIdentifier>{5f1afe33-19d3-4258-b5cf-955854798686}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\CodeSamples">
+      <UniqueIdentifier>{8715dac9-7037-43d2-ae1c-d63a9362439d}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Source\3DComputerGraphicWithOpenGL.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Include\ImGui\imgui.cpp">
+      <Filter>imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Include\ImGui\imgui_demo.cpp">
+      <Filter>imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Include\ImGui\imgui_draw.cpp">
+      <Filter>imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Include\ImGui\imgui_tables.cpp">
+      <Filter>imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Include\ImGui\imgui_widgets.cpp">
+      <Filter>imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Include\ImGui\Backends\imgui_impl_glfw.cpp">
+      <Filter>imgui\Backends</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Include\ImGui\Backends\imgui_impl_opengl3.cpp">
+      <Filter>imgui\Backends</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Windows\UTWindow.cpp">
+      <Filter>Source\Windows</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Windows\UTMainWindow.cpp">
+      <Filter>Source\Windows</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Windows\UTOutputWindow.cpp">
+      <Filter>Source\Windows</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Manager\ResourceManager.cpp">
+      <Filter>Source\Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Manager\WindowManager.cpp">
+      <Filter>Source\Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Common.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\Include\ImGui\imconfig.h">
+      <Filter>imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Include\ImGui\imgui.h">
+      <Filter>imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Include\ImGui\imgui_internal.h">
+      <Filter>imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Include\ImGui\Backends\imgui_impl_glfw.h">
+      <Filter>imgui\Backends</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Include\ImGui\Backends\imgui_impl_opengl3.h">
+      <Filter>imgui\Backends</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Include\ImGui\Backends\imgui_impl_opengl3_loader.h">
+      <Filter>imgui\Backends</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Windows\UTMainWindow.h">
+      <Filter>Source\Windows</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Windows\UTOutputWindow.h">
+      <Filter>Source\Windows</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Windows\UTWindow.h">
+      <Filter>Source\Windows</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\3DComputerGraphicWithOpenGL.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Common.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\CoreMinimal.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Manager\ResourceManager.h">
+      <Filter>Source\Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Manager\WindowManager.h">
+      <Filter>Source\Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="CodeSample.h">
+      <Filter>Source\CodeSamples</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\Include\ImGui\imgui.ini">
+      <Filter>imgui</Filter>
+    </None>
+    <None Include="..\Include\ImGui\imgui.natstepfilter">
+      <Filter>imgui</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Natvis Include="..\Include\ImGui\imgui.natvis">
+      <Filter>imgui</Filter>
+    </Natvis>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="Resource\TableOfContents.txt">
+      <Filter>Resources</Filter>
+    </Text>
+    <Text Include="Resource\2.5.3.2.txt">
+      <Filter>Resources</Filter>
+    </Text>
+  </ItemGroup>
+</Project>

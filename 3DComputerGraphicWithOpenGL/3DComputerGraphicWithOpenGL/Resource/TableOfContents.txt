@@ -1,0 +1,7 @@
+// Copyright 2025. Team Unique Turtle ; https://github.com/biomaticals. All rights reserved.
+// All contents cannot be copied, distributed, revised.
+
+Part 02 : Introduction to OpenGL
+	Chapter 05 : Basic OpenGL Tool
+		Section 03 : Sample OpenGL Program
+			Code 5-2 : Draw white rectangle on a black background
