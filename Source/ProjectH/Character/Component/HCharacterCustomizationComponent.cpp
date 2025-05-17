@@ -703,23 +703,23 @@ void UHCharacterCustomizationComponent::ApplyCustomizationProfile_Internal(FCust
 	UpdateMorphTargetsOnAllMeshes();
 	UpdateSkeletalMerging();
 
-	FLatentActionManager& LatentActionManager = GetWorld()->GetLatentActionManager();
-	int32 LatentActionUUID = HUtilityHelpers::StringHasher(__FUNCTION__);
-	if (FDelayUntilNextTickAction* ApplyCustomizationProfile_NextTick = LatentActionManager.FindExistingAction<FDelayUntilNextTickAction>(GetOwner(), LatentActionUUID))
-	{
-		
-	}
-	else
-	{
-		FLatentActionInfo NewLatentActionInfo{};
-		NewLatentActionInfo.ExecutionFunction = "ApplyCustomizationProfile_Internal_NextTick";
-		NewLatentActionInfo.CallbackTarget = this;
-		NewLatentActionInfo.UUID = HUtilityHelpers::StringHasher(__FUNCTION__);
-		NewLatentActionInfo.Linkage = 1;
-
-		FDelayUntilNextTickAction* NewApplyCustomizationProfile_NextTick = new FDelayUntilNextTickAction(NewLatentActionInfo);
-		LatentActionManager.AddNewAction(this,GetUniqueID(), NewApplyCustomizationProfile_NextTick);
-	}
+	//FLatentActionManager& LatentActionManager = GetWorld()->GetLatentActionManager();
+	//int32 LatentActionUUID = HUtilityHelpers::StringHasher(__FUNCTION__);
+	//if (FDelayUntilNextTickAction* ApplyCustomizationProfile_NextTick = //LatentActionManager.FindExistingAction<FDelayUntilNextTickAction>(GetOwner(), LatentActionUUID))
+	//{
+	//	
+	//}
+	//else
+	//{
+	//	FLatentActionInfo NewLatentActionInfo{};
+	//	NewLatentActionInfo.ExecutionFunction = "ApplyCustomizationProfile_Internal_NextTick";
+	//	NewLatentActionInfo.CallbackTarget = this;
+	//	NewLatentActionInfo.UUID = HUtilityHelpers::StringHasher(__FUNCTION__);
+	//	NewLatentActionInfo.Linkage = 1;
+	//
+	//	FDelayUntilNextTickAction* NewApplyCustomizationProfile_NextTick = new FDelayUntilNextTickAction(NewLatentActionInfo);
+	//	LatentActionManager.AddNewAction(this,GetUniqueID(), NewApplyCustomizationProfile_NextTick);
+	//}
 }
 
 void UHCharacterCustomizationComponent::ApplyCustomizationProfile_Internal_NextTick(FCustomizationProfile InCustomizationProfile)

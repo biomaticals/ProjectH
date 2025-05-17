@@ -12,6 +12,7 @@
 #include "Misc/ScopeExit.h"
 #include "Policies/CondensedJsonPrintPolicy.h"
 #include "SourceCodeNavigation.h"
+#include "UObject/CoreRedirects.h"
 #include "UObject/UObjectIterator.h"
 #include "VisualStudioTools.h"
 
@@ -336,7 +337,15 @@ static TArray<FString> GetModulesByPath(const FString& InDir)
 			return FPaths::IsUnderDirectory(Module, InDir);
 		},
 		[](const FString& Module) {
+#if 0
+			// Old version assumes that each module is in a folder with the same name as the module
 			return FPaths::GetBaseFilename(FPaths::GetPath(*Module));
+#else
+			// New version assumes that each module is in a file with the name Module.Build.cs
+			FString TempString = FPaths::GetBaseFilename(*Module);
+			TempString.RemoveFromEnd(TEXT(".Build"));
+			return TempString;
+#endif
 		});
 
 	return OutResult;
@@ -380,6 +389,24 @@ static void RunAssetScan(
 			FObjectPropertyBase::GetExportPath(Class.Get(), nullptr /*Parent*/, nullptr /*ExportRootScope*/, 0 /*PortFlags*/));
 		});
 
+	// Take account of any core redirects for the blueprint classes we want to scan.
+	for (const auto& BaseClass : FilterBaseClasses)
+	{
+		if (BaseClass.IsValid())
+		{
+			TArray<FCoreRedirectObjectName> PreviousNames;
+			if (FCoreRedirects::FindPreviousNames(ECoreRedirectFlags::Type_Class, BaseClass->GetPathName(), PreviousNames))
+			{
+				for (const auto& PreviousName : PreviousNames)
+				{
+					// FString PreviousString = FObjectPropertyBase::GetExportPath(BaseClass->GetClass()->GetClassPathName(), PreviousName.ToString()); // Alternative way to add /Script/CoreUObject.Class'' wrapper - but not sure it makes sense to use the new class when referencing a previous name
+					FString PreviousString = "/Script/CoreUObject.Class'" + PreviousName.ToString() + "'";
+					Filter.TagsAndValues.Add(FBlueprintTags::NativeParentClassPath, PreviousString);
+				}
+			}
+		}
+	}
+	
 	IAssetRegistry& AssetRegistry = FModuleManager::LoadModuleChecked<FAssetRegistryModule>(TEXT("AssetRegistry")).Get();
 
 	TArray<FAssetData> TargetAssets;

@@ -53,7 +53,7 @@ enum class ECCDACollection : uint8
 };
 
 UENUM(BlueprintType)
-enum class EGender : uint8
+enum class EHGender : uint8
 {
 	Female,
 	Male,
