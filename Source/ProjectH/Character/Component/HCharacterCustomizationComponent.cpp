@@ -18,6 +18,7 @@
 #include "System/Manager/DataTableManager.h"
 #include "System/Manager/HAssetManager.h"
 #include "GroomComponent.h"
+#include "Engine/LatentActionManager.h"
 
 UHCharacterCustomizationComponent::UHCharacterCustomizationComponent(const FObjectInitializer& ObjectInitializer)
 :Super(ObjectInitializer)
@@ -703,12 +704,12 @@ void UHCharacterCustomizationComponent::ApplyCustomizationProfile_Internal(FCust
 	UpdateMorphTargetsOnAllMeshes();
 	UpdateSkeletalMerging();
 
-	//FLatentActionManager& LatentActionManager = GetWorld()->GetLatentActionManager();
-	//int32 LatentActionUUID = HUtilityHelpers::StringHasher(__FUNCTION__);
-	//if (FDelayUntilNextTickAction* ApplyCustomizationProfile_NextTick = //LatentActionManager.FindExistingAction<FDelayUntilNextTickAction>(GetOwner(), LatentActionUUID))
-	//{
-	//	
-	//}
+	FLatentActionManager& LatentActionManager = GetWorld()->GetLatentActionManager();
+	int32 LatentActionUUID = HUtilityHelpers::StringHasher(__FUNCTION__);
+	if (FDelayUntilNextTickAction* ApplyCustomizationProfile_NextTick = LatentActionManager.FindExistingAction<FDelayUntilNextTickAction>(GetOwner(), LatentActionUUID))
+	{
+		
+	}
 	//else
 	//{
 	//	FLatentActionInfo NewLatentActionInfo{};
@@ -718,7 +719,7 @@ void UHCharacterCustomizationComponent::ApplyCustomizationProfile_Internal(FCust
 	//	NewLatentActionInfo.Linkage = 1;
 	//
 	//	FDelayUntilNextTickAction* NewApplyCustomizationProfile_NextTick = new FDelayUntilNextTickAction(NewLatentActionInfo);
-	//	LatentActionManager.AddNewAction(this,GetUniqueID(), NewApplyCustomizationProfile_NextTick);
+	//	LatentActionManager.AddNewAction(this, GetUniqueID(), NewApplyCustomizationProfile_NextTick);
 	//}
 }
 

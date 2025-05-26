@@ -96,11 +96,6 @@ DECLARE_EVENT_ThreeParams(UHCharacterCustomizationComponent, FOnSetEyesHDRVector
 /**
  * HCharacterCustomizationComponent
  * 
- * 罹먮┃?곗쓽 紐? ?섏긽, ?λ퉬, 而ㅼ뒪?곕쭏?댁쭠??SkeletalMeshComponent?ㅼ쓣 愿由ы븳??
- * 
- * HCharacter? ?곌껐
- * 
- * CDA ; CustomizationDataAsset
  */
 UCLASS( Blueprintable, ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class PROJECTH_API UHCharacterCustomizationComponent : public UActorComponent
