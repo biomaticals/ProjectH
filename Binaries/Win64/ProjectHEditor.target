@@ -102,15 +102,27 @@
 			"Type": "RequiredResource"
 		},
 		{
-			"Path": "$(ProjectDir)/Plugins/UTSimpleShader/Binaries/Win64/UnrealEditor-UTSimpleShader.dll",
+			"Path": "$(ProjectDir)/Plugins/StarShaderModule/Binaries/Win64/UnrealEditor-StarShaderModule.dll",
 			"Type": "DynamicLibrary"
 		},
 		{
-			"Path": "$(ProjectDir)/Plugins/UTSimpleShader/Binaries/Win64/UnrealEditor-UTSimpleShader.pdb",
+			"Path": "$(ProjectDir)/Plugins/StarShaderModule/Binaries/Win64/UnrealEditor-StarShaderModule.pdb",
 			"Type": "SymbolFile"
 		},
 		{
-			"Path": "$(ProjectDir)/Plugins/UTSimpleShader/Binaries/Win64/UnrealEditor.modules",
+			"Path": "$(ProjectDir)/Plugins/StarShaderModule/Binaries/Win64/UnrealEditor.modules",
+			"Type": "RequiredResource"
+		},
+		{
+			"Path": "$(ProjectDir)/Plugins/TriangleShaderModule/Binaries/Win64/UnrealEditor-TriangleShaderModule.dll",
+			"Type": "DynamicLibrary"
+		},
+		{
+			"Path": "$(ProjectDir)/Plugins/TriangleShaderModule/Binaries/Win64/UnrealEditor-TriangleShaderModule.pdb",
+			"Type": "SymbolFile"
+		},
+		{
+			"Path": "$(ProjectDir)/Plugins/TriangleShaderModule/Binaries/Win64/UnrealEditor.modules",
 			"Type": "RequiredResource"
 		},
 		{
@@ -8468,7 +8480,11 @@
 			"Type": "UFS"
 		},
 		{
-			"Path": "$(ProjectDir)/Plugins/UTSimpleShader/UTSimpleShader.uplugin",
+			"Path": "$(ProjectDir)/Plugins/StarShaderModule/StarShaderModule.uplugin",
+			"Type": "UFS"
+		},
+		{
+			"Path": "$(ProjectDir)/Plugins/TriangleShaderModule/TriangleShaderModule.uplugin",
 			"Type": "UFS"
 		},
 		{
@@ -34729,6 +34745,7 @@
 		"SkeletalReduction",
 		"SoundFields",
 		"SpeedTreeImporter",
+		"StarShaderModule",
 		"StateTree",
 		"StudioTelemetry",
 		"StylusInput",
@@ -34740,10 +34757,10 @@
 		"TextureFormatOodle",
 		"ToolPresets",
 		"TraceUtilities",
+		"TriangleShaderModule",
 		"UMGWidgetPreview",
 		"UObjectPlugin",
 		"USDCore",
-		"UTSimpleShader",
 		"UVEditor",
 		"UbaController",
 		"UdpMessaging",
