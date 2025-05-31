@@ -1,0 +1,27 @@
+// Copyright 2025. Unique Turtle. All rights reserved.
+
+#include "/Engine/Public/Platform.ush"
+#include "/Engine/Private/Common.ush"
+#include "/Engine/Private/ScreenPass.ush"
+#include "/Engine/Private/PostProcessCommon.ush"
+
+void StarVS
+(
+	in float2 InPosition : ATTRIBUTE0,
+	in float4 InColor : ATTRIBUTE1,
+	out float4 OutPosition : SV_POSITION,
+	out float4 OutColor : COLOR0
+)
+{
+	OutPosition = float4(InPosition, 0, 1);
+	OutColor = InColor;
+}
+
+void StarPS
+(
+	in float4 InPosition : SV_POSITION,
+	in float4 InColor : COLOR0,
+	out float4 OutColor : SV_Target0)
+{
+	OutColor = InColor;	
+}

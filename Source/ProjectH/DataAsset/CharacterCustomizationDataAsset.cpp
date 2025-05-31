@@ -1,4 +1,4 @@
-// Copyright 2024. Unique Turtle. All rights reserved.
+// Copyright 2025. Unique Turtle. All rights reserved.
 
 #include "DataAsset/CharacterCustomizationDataAsset.h"
 #include "Common/CommonEnum.h"

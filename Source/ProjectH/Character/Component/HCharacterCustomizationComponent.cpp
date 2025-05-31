@@ -1,4 +1,4 @@
-// Copyright 2024. Unique Turtle. All rights reserved.
+// Copyright 2025. Unique Turtle. All rights reserved.
 
 #include "Character/Component/HCharacterCustomizationComponent.h"
 #include "Character/Base/HCharacter.h"
