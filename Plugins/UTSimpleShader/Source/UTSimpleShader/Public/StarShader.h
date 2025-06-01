@@ -23,21 +23,28 @@ public:
 	void InitRHI(FRHICommandListBase& RHICmcList) override 
 	{
 		TResourceArray<FColorVertex, VERTEXBUFFER_ALIGNMENT> Vertices;
-		Vertices.SetNumUninitialized(10);
+		Vertices.SetNumUninitialized(11);
 
-		for (int i = 0; i < 10; i++)
+		for (int i = 0; i < 11; i++)
 		{
-			float Angle = i * 36.f;
-			float Radius = i % 2 == 0 ? 0.75f : 0.5f;
-			Vertices[i].Position = FVector2f(Radius * FMath::Cos(FMath::DegreesToRadians(Angle)), Radius * FMath::Sin(FMath::DegreesToRadians(Angle)));
+			if (i == 0)
+			{
+				Vertices[i].Position = FVector2f(0.f, 0.f);
+				Vertices[i].Color = FLinearColor::White;
+			}
+			else
+			{
+				const int point = i - 1;
+				float Angle = 90.f + point * 36.f;
+				float Radius = point % 2 == 0 ? 0.75f : 0.5f;
+				Vertices[i].Position = FVector2f(Radius * FMath::Cos(FMath::DegreesToRadians(Angle)), Radius * FMath::Sin(FMath::DegreesToRadians(Angle)));
 
-			float Hue = FMath::Fmod(i * 36.f, 360.f) / 360.f;
-			Vertices[i].Color = FLinearColor::MakeFromHSV8(Hue, 255, 255);
+				float Hue = FMath::GetMappedRangeValueClamped<float>(TRange<float>(0, 360), TRange<float>(0, 255), Angle);
+				Vertices[i].Color = FLinearColor::MakeFromHSV8(Hue, 255, 255);
+			}
 		}
 
 		FRHIResourceCreateInfo CreateInfo(TEXT("FStarVertexBuffer"), &Vertices);
-		// Create Vertex Buffer
-		// Since this is Statically allocated once to the GPU, we don't need to lock it on the Render Thread to wait for it to be dealt with.
 		VertexBufferRHI = RHICmcList.CreateVertexBuffer(Vertices.GetResourceDataSize(), EBufferUsageFlags::Static, CreateInfo);
 
 	}
@@ -46,43 +53,36 @@ extern UTSIMPLESHADER_API TGlobalResource<FStarVertexBuffer> GStarVertexBuffer;
 class FStarIndexBuffer : public FIndexBuffer
 {
 public:
-	/** Initialize the RHI for this rendering resource */
 	void InitRHI(FRHICommandListBase& RHICmdList) override
 	{
 		const uint32 Indices[] =
 		{
 			0, 1, 2,
-			0, 5, 4,
-			0, 4, 3,
-			0, 3, 2,
-			0, 2, 1,
-			1, 6, 5,
-			2, 7, 6,
-			3, 8, 7,
-			4, 9, 8,
-			5, 10, 9
+			0, 2, 3,
+			0, 3, 4,
+			0, 4, 5,
+			0, 5, 6,
+			0, 6, 7,
+			0, 7, 8,
+			0, 8, 9,
+			0, 9, 10,
+			0, 10, 1
 		};
 
 		TResourceArray<uint32, INDEXBUFFER_ALIGNMENT> IndexBuffer;
 		uint32 NumIndices = UE_ARRAY_COUNT(Indices);
 		IndexBuffer.AddUninitialized(NumIndices);
 		FMemory::Memcpy(IndexBuffer.GetData(), Indices, NumIndices * sizeof(uint32));
-		// RHICreateIndexBuffer
 		FRHIResourceCreateInfo CreateInfo(TEXT("FStarIndexBuffer"), &IndexBuffer);
 		IndexBufferRHI = RHICmdList.CreateIndexBuffer(sizeof(uint32), IndexBuffer.GetResourceDataSize(), BUF_Static, CreateInfo);
-
 	}
 };
 extern UTSIMPLESHADER_API TGlobalResource<FStarIndexBuffer> GStarIndexBuffer;
 
-/*Define a Render Resource for our buffer, since the draw primitive uses it*/
-/** The filter vertex declaration resource type. */
 class FStarVertexDeclaration : public FRenderResource
 {
 public:
 	FVertexDeclarationRHIRef VertexDeclarationRHI;
-
-	/** Destructor. */
 	virtual ~FStarVertexDeclaration() {}
 
 	virtual void InitRHI(FRHICommandListBase& RHICmdList)
@@ -101,10 +101,7 @@ public:
 };
 extern UTSIMPLESHADER_API TGlobalResource<FStarVertexDeclaration> GStarVertexDeclaration;
 
-// Defined here so we can access it in View Extension.
 BEGIN_SHADER_PARAMETER_STRUCT(FStarVSParams,)
-	//SHADER_PARAMETER_STRUCT_ARRAY(FStarVertParams,Verticies)
-	//RENDER_TARGET_BINDING_SLOTS()
 END_SHADER_PARAMETER_STRUCT()
 class FStarVS : public FGlobalShader
 {

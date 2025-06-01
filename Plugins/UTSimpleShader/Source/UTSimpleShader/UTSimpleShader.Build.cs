@@ -9,15 +9,17 @@ public class UTSimpleShader : ModuleRules
 		PCHUsage = ModuleRules.PCHUsageMode.UseExplicitOrSharedPCHs;
 		
 		PublicIncludePaths.AddRange(
-			new string[] {
+			new string[]
+			{
 				EngineDirectory + "/Source/Runtime/Renderer/Private",
 			}
 			);
 				
 		
 		PrivateIncludePaths.AddRange(
-			new string[] {
-				// ... add other private include paths required here ...
+			new string[] 
+			{
+				
 			}
 			);
 			
@@ -26,7 +28,7 @@ public class UTSimpleShader : ModuleRules
 			new string[]
 			{
 				"Core",
-				// ... add other public dependencies that you statically link with here ...
+				
 			}
 			);
 			
@@ -40,7 +42,6 @@ public class UTSimpleShader : ModuleRules
 				"RenderCore",
 				"RHI",
 				"Projects",
-				// ... add private dependencies that you statically link with here ...	
 			}
 			);
 		
@@ -48,7 +49,7 @@ public class UTSimpleShader : ModuleRules
 		DynamicallyLoadedModuleNames.AddRange(
 			new string[]
 			{
-				// ... add any modules that your module loads dynamically here ...
+
 			}
 			);
 	}

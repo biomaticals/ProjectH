@@ -23,7 +23,6 @@ public:
 	//~ End FSceneViewExtensionBase Interface
 protected:
 
-	// Copied from PixelShaderUtils
 	template <typename TShaderClass>
 	static void AddFullscreenPass(
 		FRDGBuilder& GraphBuilder,
@@ -56,16 +55,13 @@ protected:
 			GStarIndexBuffer.IndexBufferRHI,
 			/*BaseVertexIndex=*/ 0,
 			/*MinIndex=*/ 0,
-			/*NumVertices=*/ 3,
+			/*NumVertices=*/ 11,
 			/*StartIndex=*/ 0,
-			/*NumPrimitives=*/ 1,
+			/*NumPrimitives=*/ 10,
 			/*NumInstances=*/ InstanceCount);
 	}
 
-	// A delegate that is called when the Tone mapper pass finishes
 	FScreenPassTexture StarPass_RenderThread(FRDGBuilder& GraphBuilder, const FSceneView& View, const FPostProcessMaterialInputs& Inputs);
-
-	// For now we try to build a vertex buffer and see if it puts some shit in it
 
 public:
 	static void RenderStar
