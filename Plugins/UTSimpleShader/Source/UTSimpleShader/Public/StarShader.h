@@ -123,6 +123,6 @@ END_SHADER_PARAMETER_STRUCT()
 class FStarPS: public FGlobalShader
 {
 	DECLARE_GLOBAL_SHADER(FStarPS);
-	using FParameters = FStarPSParams;
 	SHADER_USE_PARAMETER_STRUCT(FStarPS, FGlobalShader)
+	using FParameters = FStarPSParams;
 };

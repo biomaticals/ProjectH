@@ -8,6 +8,6 @@ void UUTSimpleShaderSubsystem::Initialize(FSubsystemCollectionBase& Collection)
 {
 	Super::Initialize(Collection);
 	
-	UE_LOG(LogTemp, Warning, TEXT("Star View Extension Subsystem Init"));
+	UE_LOG(LogTemp, Display, TEXT("UTSimpleShaderSubsystem Initialized"));
 	this->StarPass = FSceneViewExtensions::NewExtension<FStarViewExtension>();
 }
